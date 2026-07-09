@@ -725,7 +725,7 @@ class PaperExplorerWindow(QMainWindow):
         self.cards = []
         self.removed_papers = []
         self.setWindowTitle("📚 Paper Explorer")
-        self.setMinimumSize(1210, 800)
+        self.setMinimumSize(1400, 800)
         
         self.setup_ui()
         self.apply_theme()
