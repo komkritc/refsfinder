@@ -2,7 +2,8 @@
 
 """
 OpenAlex Paper Fetcher - Modern GUI with PyQt6
-Features: Keyword search, year filter, progress tracking, file management, Dark/Light theme
+Version: 1.0
+Features: Keyword search, year filter, progress tracking, file management, Dark/Light theme, Paper Explorer with removal
 """
 
 import sys
@@ -16,14 +17,17 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from tqdm import tqdm
 import threading
+import webbrowser
 from queue import Queue
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 
 # ==========================================================
-# Backend Functions (from original script)
+# Backend Functions
 # ==========================================================
+
+VERSION = "1.0"
 
 def abstract_from_index(inv):
     """Reconstruct abstract from OpenAlex inverted index"""
@@ -316,7 +320,7 @@ def save_all_outputs(papers, output_dir, query, only_with_abstract=False):
     # Save files
     files = {}
     files['filtered_count'] = len(papers)
-    files['original_count'] = len(papers)  # This will be updated if filtering was applied
+    files['original_count'] = len(papers)
     
     clean_file = os.path.join(output_dir, "refs.bib")
     with open(clean_file, 'w', encoding='utf8') as f:
@@ -461,18 +465,648 @@ def save_all_outputs(papers, output_dir, query, only_with_abstract=False):
     return files
 
 # ==========================================================
-# PyQt6 GUI Application with Theme Support
+# Paper Explorer Window
+# ==========================================================
+
+class PaperCard(QFrame):
+    """Modern card widget for displaying paper information with remove button"""
+    
+    remove_requested = pyqtSignal(object)  # Emits the paper object
+    
+    def __init__(self, paper, theme='light', parent=None):
+        super().__init__(parent)
+        self.paper = paper
+        self.theme = theme
+        self.setup_ui()
+        self.apply_styling()
+    
+    def setup_ui(self):
+        layout = QVBoxLayout()
+        layout.setSpacing(8)
+        layout.setContentsMargins(15, 15, 15, 15)
+        
+        # Title
+        title = self.paper.get("title", "Untitled")
+        title_label = QLabel(title)
+        title_label.setWordWrap(True)
+        title_label.setStyleSheet("font-size: 14px; font-weight: bold;")
+        layout.addWidget(title_label)
+        
+        # Authors
+        authorships = self.paper.get("authorships", [])
+        authors = []
+        for auth in authorships[:5]:
+            if auth and isinstance(auth, dict):
+                name = auth.get("author", {}).get("display_name", "")
+                if name:
+                    authors.append(name)
+        author_str = ", ".join(authors)
+        if len(authorships) > 5:
+            author_str += f" et al."
+        
+        author_label = QLabel(f"👤 {author_str}" if author_str else "👤 Unknown")
+        author_label.setStyleSheet("font-size: 12px;")
+        author_label.setWordWrap(True)
+        layout.addWidget(author_label)
+        
+        # Year, Journal, Citations
+        info_layout = QHBoxLayout()
+        info_layout.setSpacing(15)
+        
+        year = self.paper.get("publication_year", "N/A")
+        year_label = QLabel(f"📅 {year}")
+        year_label.setStyleSheet("font-size: 11px;")
+        info_layout.addWidget(year_label)
+        
+        # Journal
+        primary_location = self.paper.get("primary_location")
+        source = primary_location.get("source") if primary_location and isinstance(primary_location, dict) else None
+        journal = source.get("display_name", "") if source and isinstance(source, dict) else ""
+        if journal:
+            journal_label = QLabel(f"📄 {journal}")
+            journal_label.setStyleSheet("font-size: 11px;")
+            info_layout.addWidget(journal_label)
+        
+        info_layout.addStretch()
+        
+        citedby = self.paper.get("cited_by_count", 0)
+        cited_label = QLabel(f"⭐ {citedby} citations")
+        cited_label.setStyleSheet("font-size: 11px; font-weight: bold;")
+        info_layout.addWidget(cited_label)
+        
+        layout.addLayout(info_layout)
+        
+        # Keywords
+        keywords = extract_keywords_from_paper(self.paper)
+        if keywords:
+            keywords_text = " ".join([f"#{kw}" for kw in keywords[:4]])
+            keywords_label = QLabel(keywords_text)
+            keywords_label.setStyleSheet("font-size: 11px;")
+            layout.addWidget(keywords_label)
+        
+        # Abstract (truncated)
+        abstract = abstract_from_index(self.paper.get("abstract_inverted_index"))
+        if abstract:
+            abstract_preview = abstract[:150] + "..." if len(abstract) > 150 else abstract
+            abstract_label = QLabel(abstract_preview)
+            abstract_label.setWordWrap(True)
+            abstract_label.setStyleSheet("font-size: 12px; padding-top: 5px;")
+            layout.addWidget(abstract_label)
+        
+        # Action buttons
+        button_layout = QHBoxLayout()
+        button_layout.setSpacing(10)
+        
+        # DOI button
+        doi = self.paper.get("doi", "")
+        if doi:
+            doi_btn = QPushButton("🔗 Open Paper")
+            doi_btn.setObjectName("primary")
+            doi_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+            doi_btn.clicked.connect(lambda: self.open_doi(doi))
+            button_layout.addWidget(doi_btn)
+        
+        # OpenAlex button
+        openalex_id = self.paper.get("id", "")
+        if openalex_id:
+            oa_btn = QPushButton("📚 OpenAlex")
+            oa_btn.setObjectName("secondary")
+            oa_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+            oa_btn.clicked.connect(lambda: self.open_openalex(openalex_id))
+            button_layout.addWidget(oa_btn)
+        
+        # Remove button
+        remove_btn = QPushButton("🗑️ Remove")
+        remove_btn.setObjectName("danger")
+        remove_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        remove_btn.setToolTip("Remove this paper from your collection")
+        remove_btn.clicked.connect(self.request_remove)
+        button_layout.addWidget(remove_btn)
+        
+        button_layout.addStretch()
+        layout.addLayout(button_layout)
+        
+        self.setLayout(layout)
+    
+    def apply_styling(self):
+        """Apply styling based on current theme"""
+        if self.theme == 'dark':
+            self.setStyleSheet("""
+                PaperCard {
+                    background-color: #313244;
+                    border-radius: 10px;
+                    border: 1px solid #45475a;
+                    margin: 5px;
+                }
+                PaperCard:hover {
+                    background-color: #45475a;
+                    border: 1px solid #89b4fa;
+                }
+                QLabel {
+                    color: #cdd6f4;
+                }
+                QPushButton#primary {
+                    background-color: #89b4fa;
+                    color: #1e1e2e;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 6px 12px;
+                    font-size: 11px;
+                    font-weight: bold;
+                }
+                QPushButton#primary:hover {
+                    background-color: #74c7ec;
+                }
+                QPushButton#secondary {
+                    background-color: #45475a;
+                    color: #cdd6f4;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 6px 12px;
+                    font-size: 11px;
+                }
+                QPushButton#secondary:hover {
+                    background-color: #585b70;
+                }
+                QPushButton#danger {
+                    background-color: #f38ba8;
+                    color: #1e1e2e;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 6px 12px;
+                    font-size: 11px;
+                    font-weight: bold;
+                }
+                QPushButton#danger:hover {
+                    background-color: #eba0ac;
+                }
+            """)
+        else:  # Light theme
+            self.setStyleSheet("""
+                PaperCard {
+                    background-color: #ffffff;
+                    border-radius: 10px;
+                    border: 1px solid #d4d4d9;
+                    margin: 5px;
+                }
+                PaperCard:hover {
+                    background-color: #f0f0f5;
+                    border: 1px solid #1e66f5;
+                }
+                QLabel {
+                    color: #1a1b26;
+                }
+                QPushButton#primary {
+                    background-color: #1e66f5;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 6px 12px;
+                    font-size: 11px;
+                    font-weight: bold;
+                }
+                QPushButton#primary:hover {
+                    background-color: #1a5bdb;
+                }
+                QPushButton#secondary {
+                    background-color: #e8e8ed;
+                    color: #1a1b26;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 6px 12px;
+                    font-size: 11px;
+                }
+                QPushButton#secondary:hover {
+                    background-color: #d4d4d9;
+                }
+                QPushButton#danger {
+                    background-color: #c62828;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 6px 12px;
+                    font-size: 11px;
+                    font-weight: bold;
+                }
+                QPushButton#danger:hover {
+                    background-color: #b71c1c;
+                }
+            """)
+    
+    def update_theme(self, theme):
+        """Update the card theme"""
+        self.theme = theme
+        self.apply_styling()
+    
+    def request_remove(self):
+        """Emit signal to request removal of this paper"""
+        self.remove_requested.emit(self.paper)
+    
+    def open_doi(self, doi):
+        """Open DOI link in browser"""
+        if doi:
+            doi = doi.replace("https://doi.org/", "")
+            webbrowser.open(f"https://doi.org/{doi}")
+    
+    def open_openalex(self, openalex_id):
+        """Open OpenAlex link in browser"""
+        if openalex_id:
+            webbrowser.open(openalex_id)
+
+
+class PaperExplorerWindow(QMainWindow):
+    """Modern paper explorer window with card-based layout and removal support"""
+    
+    def __init__(self, papers, parent=None):
+        super().__init__(parent)
+        self.papers = papers
+        self.filtered_papers = papers.copy()
+        self.current_theme = 'light'
+        self.cards = []
+        self.removed_papers = []
+        self.setWindowTitle("📚 Paper Explorer")
+        self.setMinimumSize(1210, 800)
+        
+        self.setup_ui()
+        self.apply_theme()
+        self.display_papers()
+    
+    def setup_ui(self):
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        main_layout = QVBoxLayout(central_widget)
+        main_layout.setSpacing(10)
+        main_layout.setContentsMargins(15, 15, 15, 15)
+        
+        # Header
+        header_layout = QHBoxLayout()
+        
+        title = QLabel("📚 Paper Explorer")
+        title.setStyleSheet("font-size: 20px; font-weight: bold;")
+        header_layout.addWidget(title)
+        
+        header_layout.addStretch()
+        
+        # Search bar
+        self.search_input = QLineEdit()
+        self.search_input.setPlaceholderText("🔍 Search papers...")
+        self.search_input.setMinimumWidth(300)
+        self.search_input.textChanged.connect(self.filter_papers)
+        header_layout.addWidget(self.search_input)
+        
+        # Theme toggle
+        self.theme_toggle = QPushButton("🌙 Dark")
+        self.theme_toggle.setObjectName("primary")
+        self.theme_toggle.setFixedWidth(100)
+        self.theme_toggle.clicked.connect(self.toggle_theme)
+        header_layout.addWidget(self.theme_toggle)
+        
+        # Close button
+        close_btn = QPushButton("✕ Close")
+        close_btn.setObjectName("danger")
+        close_btn.clicked.connect(self.close)
+        header_layout.addWidget(close_btn)
+        
+        main_layout.addLayout(header_layout)
+        
+        # Stats bar with remove info
+        self.stats_label = QLabel()
+        self.stats_label.setStyleSheet("padding: 5px;")
+        main_layout.addWidget(self.stats_label)
+        
+        # Scroll area for cards
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setStyleSheet("border: none;")
+        
+        self.card_container = QWidget()
+        self.card_container.setStyleSheet("background-color: transparent;")
+        self.card_layout = QGridLayout(self.card_container)
+        self.card_layout.setSpacing(15)
+        self.card_layout.setContentsMargins(10, 10, 10, 10)
+        
+        scroll_area.setWidget(self.card_container)
+        main_layout.addWidget(scroll_area)
+        
+        # Bottom action bar
+        bottom_layout = QHBoxLayout()
+        bottom_layout.addStretch()
+        
+        # Save changes button
+        self.save_btn = QPushButton("💾 Save Changes")
+        self.save_btn.setObjectName("success")
+        self.save_btn.setMinimumWidth(150)
+        self.save_btn.clicked.connect(self.save_changes)
+        bottom_layout.addWidget(self.save_btn)
+        
+        main_layout.addLayout(bottom_layout)
+    
+    def apply_theme(self):
+        """Apply the current theme to all elements"""
+        if self.current_theme == 'dark':
+            self.setStyleSheet("""
+                QMainWindow {
+                    background-color: #1e1e2e;
+                }
+                QLabel {
+                    color: #cdd6f4;
+                }
+                QLineEdit {
+                    background-color: #1a1b26;
+                    color: #cdd6f4;
+                    border: 1px solid #45475a;
+                    border-radius: 6px;
+                    padding: 8px;
+                }
+                QLineEdit:focus {
+                    border: 2px solid #89b4fa;
+                }
+                QPushButton#primary {
+                    background-color: #89b4fa;
+                    color: #1e1e2e;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 8px 16px;
+                    font-weight: bold;
+                }
+                QPushButton#primary:hover {
+                    background-color: #74c7ec;
+                }
+                QPushButton#success {
+                    background-color: #a6e3a1;
+                    color: #1e1e2e;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 8px 16px;
+                    font-weight: bold;
+                }
+                QPushButton#success:hover {
+                    background-color: #94e2d5;
+                }
+                QPushButton#danger {
+                    background-color: #f38ba8;
+                    color: #1e1e2e;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 8px 16px;
+                    font-weight: bold;
+                }
+                QPushButton#danger:hover {
+                    background-color: #eba0ac;
+                }
+                QScrollBar:vertical {
+                    background-color: #313244;
+                    width: 12px;
+                    border-radius: 6px;
+                }
+                QScrollBar::handle:vertical {
+                    background-color: #45475a;
+                    border-radius: 6px;
+                    min-height: 20px;
+                }
+                QScrollBar::handle:vertical:hover {
+                    background-color: #585b70;
+                }
+            """)
+            self.theme_toggle.setText("☀️ Light")
+        else:
+            self.setStyleSheet("""
+                QMainWindow {
+                    background-color: #f5f5f7;
+                }
+                QLabel {
+                    color: #1a1b26;
+                }
+                QLineEdit {
+                    background-color: #ffffff;
+                    color: #1a1b26;
+                    border: 1px solid #c4c4c9;
+                    border-radius: 6px;
+                    padding: 8px;
+                }
+                QLineEdit:focus {
+                    border: 2px solid #1e66f5;
+                }
+                QPushButton#primary {
+                    background-color: #1e66f5;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 8px 16px;
+                    font-weight: bold;
+                }
+                QPushButton#primary:hover {
+                    background-color: #1a5bdb;
+                }
+                QPushButton#success {
+                    background-color: #2e7d32;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 8px 16px;
+                    font-weight: bold;
+                }
+                QPushButton#success:hover {
+                    background-color: #1b5e20;
+                }
+                QPushButton#danger {
+                    background-color: #c62828;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 8px 16px;
+                    font-weight: bold;
+                }
+                QPushButton#danger:hover {
+                    background-color: #b71c1c;
+                }
+                QScrollBar:vertical {
+                    background-color: #e8e8ed;
+                    width: 12px;
+                    border-radius: 6px;
+                }
+                QScrollBar::handle:vertical {
+                    background-color: #c4c4c9;
+                    border-radius: 6px;
+                    min-height: 20px;
+                }
+                QScrollBar::handle:vertical:hover {
+                    background-color: #a8a8b0;
+                }
+            """)
+            self.theme_toggle.setText("🌙 Dark")
+        
+        for card in self.cards:
+            card.update_theme(self.current_theme)
+        
+        self.update_stats()
+    
+    def toggle_theme(self):
+        """Toggle between dark and light themes"""
+        if self.current_theme == 'dark':
+            self.current_theme = 'light'
+        else:
+            self.current_theme = 'dark'
+        self.apply_theme()
+    
+    def update_stats(self):
+        """Update the statistics label"""
+        total = len(self.papers)
+        shown = len(self.filtered_papers)
+        removed = len(self.removed_papers)
+        stats_text = f"📊 Showing {shown} of {total} papers"
+        if removed > 0:
+            stats_text += f" | 🗑️ Removed: {removed}"
+        self.stats_label.setText(stats_text)
+    
+    def display_papers(self, papers=None):
+        """Display papers in card layout"""
+        for i in reversed(range(self.card_layout.count())):
+            widget = self.card_layout.itemAt(i).widget()
+            if widget:
+                widget.setParent(None)
+        self.cards = []
+        
+        if papers is None:
+            papers = self.filtered_papers
+        
+        if not papers:
+            empty_label = QLabel("No papers found matching your search.")
+            empty_label.setStyleSheet("font-size: 16px; padding: 50px;")
+            empty_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.card_layout.addWidget(empty_label, 0, 0)
+        else:
+            columns = 2
+            row = 0
+            col = 0
+            
+            for paper in papers:
+                card = PaperCard(paper, theme=self.current_theme)
+                card.remove_requested.connect(self.remove_paper)
+                self.card_layout.addWidget(card, row, col)
+                self.cards.append(card)
+                
+                col += 1
+                if col >= columns:
+                    col = 0
+                    row += 1
+        
+        self.update_stats()
+    
+    def remove_paper(self, paper):
+        """Remove a paper from the collection"""
+        title = paper.get("title", "Untitled")
+        reply = QMessageBox.question(
+            self,
+            "Remove Paper",
+            f"Are you sure you want to remove:\n\n\"{title}\"\n\nThis will remove it from your collection.",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        
+        if reply == QMessageBox.StandardButton.Yes:
+            if paper in self.papers:
+                self.papers.remove(paper)
+                self.removed_papers.append(paper)
+            
+            if paper in self.filtered_papers:
+                self.filtered_papers.remove(paper)
+            
+            self.display_papers()
+            
+            if self.parent():
+                self.parent().log_message(f"🗑️ Removed: {title[:60]}...")
+    
+    def filter_papers(self, text):
+        """Filter papers based on search text"""
+        if not text:
+            self.filtered_papers = self.papers.copy()
+            self.display_papers()
+            return
+        
+        text = text.lower()
+        filtered = []
+        for paper in self.papers:
+            title = paper.get("title", "").lower()
+            
+            authors = []
+            for auth in paper.get("authorships", []):
+                name = auth.get("author", {}).get("display_name", "")
+                if name:
+                    authors.append(name.lower())
+            author_str = " ".join(authors)
+            
+            year = str(paper.get("publication_year", ""))
+            
+            primary_location = paper.get("primary_location")
+            source = primary_location.get("source") if primary_location and isinstance(primary_location, dict) else None
+            journal = source.get("display_name", "").lower() if source and isinstance(source, dict) else ""
+            
+            abstract = abstract_from_index(paper.get("abstract_inverted_index")).lower()
+            keywords = " ".join(extract_keywords_from_paper(paper)).lower()
+            
+            search_text = f"{title} {author_str} {year} {journal} {abstract} {keywords}"
+            
+            if text in search_text:
+                filtered.append(paper)
+        
+        self.filtered_papers = filtered
+        self.display_papers()
+    
+    def save_changes(self):
+        """Save the changes (regenerate files without removed papers)"""
+        if not self.removed_papers:
+            QMessageBox.information(self, "No Changes", 
+                                   "No papers have been removed. Nothing to save.")
+            return
+        
+        reply = QMessageBox.question(
+            self,
+            "Save Changes",
+            f"You have removed {len(self.removed_papers)} papers.\n\n"
+            "This will regenerate all output files without the removed papers.\n\n"
+            "Do you want to continue?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        
+        if reply == QMessageBox.StandardButton.Yes:
+            if self.parent() and hasattr(self.parent(), 'output_dir'):
+                output_dir = self.parent().output_dir
+                query = " ".join(self.parent().keywords_edit.toPlainText().strip().split('\n')) if self.parent() else "HVAC YOLO"
+                
+                files = save_all_outputs(
+                    self.papers, 
+                    output_dir, 
+                    query, 
+                    self.parent().abstract_filter_checkbox.isChecked() if self.parent() else True
+                )
+                
+                QMessageBox.information(
+                    self,
+                    "Success",
+                    f"✅ Successfully regenerated {len(files)-3} files!\n\n"
+                    f"Removed papers: {len(self.removed_papers)}\n"
+                    f"Remaining papers: {len(self.papers)}\n\n"
+                    f"All files updated in: {output_dir}"
+                )
+                
+                self.removed_papers = []
+                self.update_stats()
+            else:
+                QMessageBox.warning(self, "Error", 
+                                   "Could not save changes. Parent window not found.")
+
+
+# ==========================================================
+# Main GUI Application
 # ==========================================================
 
 class WorkerSignals(QObject):
-    """Defines signals available from running worker thread"""
-    progress = pyqtSignal(int, int)  # current, total
-    log = pyqtSignal(str)  # log message
-    finished = pyqtSignal(dict)  # results
-    error = pyqtSignal(str)  # error message
+    progress = pyqtSignal(int, int)
+    log = pyqtSignal(str)
+    finished = pyqtSignal(dict)
+    error = pyqtSignal(str)
 
 class FetchWorker(QRunnable):
-    """Worker thread for fetching papers"""
     def __init__(self, keywords, max_results, year_start, year_end, output_dir, only_with_abstract):
         super().__init__()
         self.keywords = keywords
@@ -486,7 +1120,6 @@ class FetchWorker(QRunnable):
     
     def run(self):
         try:
-            # Build query
             query = " ".join(self.keywords)
             self.signals.log.emit(f"🔍 Searching: {query}")
             
@@ -499,13 +1132,12 @@ class FetchWorker(QRunnable):
                 self.signals.log.emit(f"📝 Filter: Only papers with abstracts")
             self.signals.log.emit("-" * 50)
             
-            # Fetch papers with progress
             def progress_callback(current, total, error=None):
                 if error:
                     self.signals.error.emit(error)
                 else:
                     self.signals.progress.emit(current, total)
-                    if current % 5 == 0:  # Log every 5 papers
+                    if current % 5 == 0:
                         self.signals.log.emit(f"📄 Fetched {current} papers...")
             
             papers = fetch_papers_with_filters(
@@ -523,7 +1155,6 @@ class FetchWorker(QRunnable):
             original_count = len(papers)
             self.signals.log.emit(f"\n✅ Found {original_count} papers")
             
-            # Apply abstract filter if requested
             if self.only_with_abstract:
                 papers = filter_papers_with_abstract(papers)
                 filtered_count = len(papers)
@@ -531,16 +1162,15 @@ class FetchWorker(QRunnable):
             
             self.signals.log.emit("📝 Generating output files...")
             
-            # Generate outputs
             files = save_all_outputs(papers, self.output_dir, query, self.only_with_abstract)
             
-            # Add filter info to files
             files['original_count'] = original_count
             files['filtered_count'] = len(papers)
+            files['papers'] = papers
             
             self.signals.log.emit("\n📄 Generated files:")
             for key, path in files.items():
-                if key not in ['original_count', 'filtered_count']:
+                if key not in ['original_count', 'filtered_count', 'papers']:
                     self.signals.log.emit(f"   • {os.path.basename(path)}")
             
             self.signals.finished.emit(files)
@@ -549,9 +1179,6 @@ class FetchWorker(QRunnable):
             self.signals.error.emit(f"Error: {str(e)}")
 
 class ThemeManager:
-    """Theme management for the application"""
-    
-    # Dark Theme Colors
     DARK = {
         'bg': '#1e1e2e',
         'bg_secondary': '#313244',
@@ -571,7 +1198,6 @@ class ThemeManager:
         'scrollbar_hover': '#585b70'
     }
     
-    # Light Theme Colors
     LIGHT = {
         'bg': '#f5f5f7',
         'bg_secondary': '#e8e8ed',
@@ -592,9 +1218,8 @@ class ThemeManager:
     }
     
     @staticmethod
-    def get_stylesheet(theme='dark'):
-        """Get the complete stylesheet for the selected theme"""
-        colors = ThemeManager.DARK if theme == 'dark' else ThemeManager.LIGHT
+    def get_stylesheet(theme='light'):
+        colors = ThemeManager.LIGHT if theme == 'light' else ThemeManager.DARK
         
         return f"""
             QMainWindow {{
@@ -797,28 +1422,22 @@ class ThemeManager:
 class OpenAlexGUI(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("📚 OpenAlex Paper Fetcher")
+        self.setWindowTitle(f"📚 OpenAlex Paper Fetcher v{VERSION}")
         self.setMinimumSize(1000, 750)
         
-        # Initialize theme
-        self.current_theme = 'dark'  # 'dark' or 'light'
-        
-        # Initialize variables
+        self.current_theme = 'light'
         self.output_dir = os.path.join(os.getcwd(), "refsfinder")
         self.generated_files = {}
+        self.fetched_papers = []
         
-        # Setup UI
         self.setup_ui()
-        
-        # Apply theme
         self.apply_theme()
         
-        # Thread pool
         self.threadpool = QThreadPool()
         
-        # Log initial message
-        self.log_message("🚀 Welcome to OpenAlex Paper Fetcher!")
+        self.log_message("🚀 Welcome to OpenAlex Paper Fetcher v" + VERSION + "!")
         self.log_message("💡 Enter keywords and click 'Fetch Papers' to start")
+        self.log_message("☀️ Light theme is active by default")
     
     def setup_ui(self):
         central_widget = QWidget()
@@ -827,41 +1446,32 @@ class OpenAlexGUI(QMainWindow):
         main_layout.setSpacing(15)
         main_layout.setContentsMargins(20, 20, 20, 20)
         
-        # Header with theme toggle
         header_layout = QHBoxLayout()
         
-        title = QLabel("📚 OpenAlex Paper Fetcher")
+        title = QLabel(f"📚 OpenAlex Paper Fetcher v{VERSION}")
         title.setStyleSheet("font-size: 24px; font-weight: bold;")
         header_layout.addWidget(title)
         header_layout.addStretch()
         
-        # Theme toggle
         self.theme_toggle = QPushButton("🌙 Dark")
         self.theme_toggle.setObjectName("primary")
         self.theme_toggle.setFixedWidth(100)
         self.theme_toggle.clicked.connect(self.toggle_theme)
         header_layout.addWidget(self.theme_toggle)
         
-        version = QLabel("v2.2")
-        version.setStyleSheet("color: #6c7086; font-size: 12px;")
-        header_layout.addWidget(version)
         main_layout.addLayout(header_layout)
         
-        # Main content - Tab widget
         tabs = QTabWidget()
         main_layout.addWidget(tabs)
         
-        # Tab 1: Search
         search_tab = QWidget()
         tabs.addTab(search_tab, "🔍 Search")
         search_layout = QVBoxLayout(search_tab)
         
-        # Search group
         search_group = QGroupBox("Search Parameters")
         search_group_layout = QGridLayout()
         search_group_layout.setSpacing(10)
         
-        # Keywords
         search_group_layout.addWidget(QLabel("Keywords:"), 0, 0)
         self.keywords_edit = QTextEdit()
         self.keywords_edit.setPlaceholderText("Enter keywords, one per line\nExample:\nHVAC\nYOLO\noccupancy detection")
@@ -869,7 +1479,6 @@ class OpenAlexGUI(QMainWindow):
         self.keywords_edit.setText("HVAC\nYOLO\noccupancy detection\nenergy efficiency")
         search_group_layout.addWidget(self.keywords_edit, 0, 1)
         
-        # Max results
         search_group_layout.addWidget(QLabel("Max Results:"), 1, 0)
         self.max_results_spin = QSpinBox()
         self.max_results_spin.setRange(1, 500)
@@ -877,7 +1486,6 @@ class OpenAlexGUI(QMainWindow):
         self.max_results_spin.setStyleSheet("padding: 5px;")
         search_group_layout.addWidget(self.max_results_spin, 1, 1)
         
-        # Year range
         search_group_layout.addWidget(QLabel("Year Range:"), 2, 0)
         year_layout = QHBoxLayout()
         self.year_start_spin = QSpinBox()
@@ -885,31 +1493,24 @@ class OpenAlexGUI(QMainWindow):
         self.year_start_spin.setValue(2000)
         self.year_start_spin.setSpecialValueText("Any")
         year_layout.addWidget(self.year_start_spin)
-        
         year_layout.addWidget(QLabel("to"))
-        
         self.year_end_spin = QSpinBox()
         self.year_end_spin.setRange(1900, 2026)
         self.year_end_spin.setValue(2025)
         self.year_end_spin.setSpecialValueText("Any")
         year_layout.addWidget(self.year_end_spin)
-        
         year_layout.addStretch()
         search_group_layout.addLayout(year_layout, 2, 1)
         
-        # Filter options
         search_group_layout.addWidget(QLabel("Filters:"), 3, 0)
         filter_layout = QHBoxLayout()
-        
         self.abstract_filter_checkbox = QCheckBox("Only include papers with abstracts")
-        self.abstract_filter_checkbox.setChecked(True) 
+        self.abstract_filter_checkbox.setChecked(True)
         self.abstract_filter_checkbox.setToolTip("Filter out papers that don't have an abstract")
         filter_layout.addWidget(self.abstract_filter_checkbox)
-        
         filter_layout.addStretch()
         search_group_layout.addLayout(filter_layout, 3, 1)
         
-        # Output directory
         search_group_layout.addWidget(QLabel("Output Folder:"), 4, 0)
         output_layout = QHBoxLayout()
         self.output_dir_edit = QLineEdit()
@@ -932,7 +1533,6 @@ class OpenAlexGUI(QMainWindow):
         search_group.setLayout(search_group_layout)
         search_layout.addWidget(search_group)
         
-        # Action buttons
         action_layout = QHBoxLayout()
         action_layout.addStretch()
         
@@ -942,21 +1542,25 @@ class OpenAlexGUI(QMainWindow):
         self.fetch_btn.clicked.connect(self.start_fetch)
         action_layout.addWidget(self.fetch_btn)
         
+        self.explore_btn = QPushButton("📚 Explore Papers")
+        self.explore_btn.setObjectName("success")
+        self.explore_btn.setMinimumWidth(150)
+        self.explore_btn.setEnabled(True)
+        self.explore_btn.clicked.connect(self.open_explorer)
+        action_layout.addWidget(self.explore_btn)
+        
         self.clear_btn = QPushButton("🗑️ Clear Log")
         self.clear_btn.clicked.connect(self.clear_log)
         action_layout.addWidget(self.clear_btn)
         
         search_layout.addLayout(action_layout)
         
-        # Progress bar
         self.progress_bar = QProgressBar()
         self.progress_bar.setVisible(False)
         search_layout.addWidget(self.progress_bar)
         
-        # Log output
         log_group = QGroupBox("Terminal Log")
         log_layout = QVBoxLayout()
-        
         self.log_text = QTextEdit()
         self.log_text.setReadOnly(True)
         self.log_text.setFont(QFont("Courier New", 10))
@@ -964,7 +1568,6 @@ class OpenAlexGUI(QMainWindow):
         log_group.setLayout(log_layout)
         search_layout.addWidget(log_group)
         
-        # Tab 2: About
         about_tab = QWidget()
         tabs.addTab(about_tab, "ℹ️ About")
         about_layout = QVBoxLayout(about_tab)
@@ -972,9 +1575,9 @@ class OpenAlexGUI(QMainWindow):
         about_text = QTextEdit()
         about_text.setReadOnly(True)
         about_text.setStyleSheet("background-color: transparent; border: none; font-size: 14px;")
-        about_text.setHtml("""
+        about_text.setHtml(f"""
             <h2>OpenAlex Paper Fetcher</h2>
-            <p><b>Version:</b> 2.2</p>
+            <p><b>Version:</b> {VERSION}</p>
             <p><b>Description:</b></p>
             <p>This tool fetches academic papers from OpenAlex and generates multiple output formats for literature review and citation management.</p>
             
@@ -1000,6 +1603,10 @@ class OpenAlexGUI(QMainWindow):
                 <li>✓ Terminal-like log output</li>
                 <li>✓ Custom output folder selection</li>
                 <li>✓ Open folder with one click</li>
+                <li>✓ Paper Explorer with modern card layout</li>
+                <li>✓ Click DOI to open paper in browser</li>
+                <li>✓ Remove papers from collection</li>
+                <li>✓ Save changes after removal</li>
             </ul>
             
             <h3 style="margin-top: 20px;">Tips:</h3>
@@ -1007,39 +1614,35 @@ class OpenAlexGUI(QMainWindow):
                 <li>Enter one keyword per line for better results</li>
                 <li>Use year filters to narrow down results</li>
                 <li>Enable "Only include papers with abstracts" for cleaner results</li>
-                <li>Results are cached for 24 hours</li>
-                <li>Generated files include AI summaries for LLM-assisted writing</li>
+                <li>Click "Explore Papers" to browse results in a modern card view</li>
+                <li>Click "Remove" to delete papers from your collection</li>
+                <li>Click "Save Changes" to regenerate files without removed papers</li>
                 <li>Toggle between Dark and Light themes using the button in the header</li>
             </ul>
         """)
         about_layout.addWidget(about_text)
         
-        # Status bar
         self.status_bar = self.statusBar()
         self.status_bar.showMessage("Ready")
     
     def apply_theme(self):
-        """Apply the current theme"""
         stylesheet = ThemeManager.get_stylesheet(self.current_theme)
         self.setStyleSheet(stylesheet)
         
-        # Update theme toggle button text
-        if self.current_theme == 'dark':
-            self.theme_toggle.setText("☀️ Light")
-        else:
+        if self.current_theme == 'light':
             self.theme_toggle.setText("🌙 Dark")
+        else:
+            self.theme_toggle.setText("☀️ Light")
     
     def toggle_theme(self):
-        """Toggle between dark and light themes"""
-        if self.current_theme == 'dark':
-            self.current_theme = 'light'
-        else:
+        if self.current_theme == 'light':
             self.current_theme = 'dark'
+        else:
+            self.current_theme = 'light'
         self.apply_theme()
         self.log_message(f"🎨 Switched to {self.current_theme.capitalize()} theme")
     
     def browse_output_dir(self):
-        """Browse for output directory"""
         dir_path = QFileDialog.getExistingDirectory(
             self, 
             "Select Output Directory",
@@ -1051,7 +1654,6 @@ class OpenAlexGUI(QMainWindow):
             self.log_message(f"📁 Output directory set to: {dir_path}")
     
     def open_output_folder(self):
-        """Open the output folder in file manager"""
         if os.path.exists(self.output_dir):
             if sys.platform == 'win32':
                 os.startfile(self.output_dir)
@@ -1064,21 +1666,17 @@ class OpenAlexGUI(QMainWindow):
                                f"The folder does not exist yet.\nPlease fetch papers first.")
     
     def log_message(self, message):
-        """Add message to log"""
         timestamp = datetime.now().strftime("%H:%M:%S")
         self.log_text.append(f"[{timestamp}] {message}")
-        # Auto-scroll to bottom
         cursor = self.log_text.textCursor()
         cursor.movePosition(QTextCursor.MoveOperation.End)
         self.log_text.setTextCursor(cursor)
     
     def clear_log(self):
-        """Clear the log"""
         self.log_text.clear()
         self.log_message("🗑️ Log cleared")
     
     def update_progress(self, current, total):
-        """Update progress bar"""
         if current < 0:
             self.progress_bar.setVisible(False)
             return
@@ -1091,8 +1689,6 @@ class OpenAlexGUI(QMainWindow):
             self.progress_bar.setVisible(False)
     
     def start_fetch(self):
-        """Start the fetch process in a worker thread"""
-        # Get keywords
         keywords_text = self.keywords_edit.toPlainText().strip()
         if not keywords_text:
             QMessageBox.warning(self, "Missing Keywords", 
@@ -1101,34 +1697,29 @@ class OpenAlexGUI(QMainWindow):
         
         keywords = [k.strip() for k in keywords_text.split('\n') if k.strip()]
         
-        # Get parameters
         max_results = self.max_results_spin.value()
         year_start = self.year_start_spin.value() if self.year_start_spin.value() > 1900 else None
         year_end = self.year_end_spin.value() if self.year_end_spin.value() < 2026 else None
         only_with_abstract = self.abstract_filter_checkbox.isChecked()
         
-        # Disable fetch button
         self.fetch_btn.setEnabled(False)
         self.fetch_btn.setText("⏳ Fetching...")
+        self.explore_btn.setEnabled(False)
         self.status_bar.showMessage("Fetching papers...")
         
-        # Clear log
         self.log_message("")
         self.log_message("🚀 Starting paper fetch...")
         self.log_message("=" * 60)
         
-        # Create worker
         worker = FetchWorker(keywords, max_results, year_start, year_end, self.output_dir, only_with_abstract)
         worker.signals.progress.connect(self.update_progress)
         worker.signals.log.connect(self.log_message)
         worker.signals.error.connect(self.on_error)
         worker.signals.finished.connect(self.on_finished)
         
-        # Start worker
         self.threadpool.start(worker)
     
     def on_error(self, error_msg):
-        """Handle error from worker"""
         self.log_message(f"\n❌ Error: {error_msg}")
         self.status_bar.showMessage(f"Error: {error_msg}")
         self.fetch_btn.setEnabled(True)
@@ -1138,15 +1729,18 @@ class OpenAlexGUI(QMainWindow):
         QMessageBox.critical(self, "Error", error_msg)
     
     def on_finished(self, files):
-        """Handle completion of fetch"""
         self.generated_files = files
+        
+        if 'papers' in files and files['papers']:
+            self.fetched_papers = files['papers']
+            self.explore_btn.setEnabled(True)
+            self.log_message(f"📚 {len(self.fetched_papers)} papers available for exploration")
         
         self.log_message("\n" + "=" * 60)
         self.log_message("✅ COMPLETE! All files saved to:")
         self.log_message(f"   📁 {self.output_dir}/")
         self.log_message("-" * 60)
         
-        # Show filter stats if available
         if 'original_count' in files and 'filtered_count' in files:
             self.log_message(f"📊 Statistics:")
             self.log_message(f"   • Original papers: {files['original_count']}")
@@ -1157,29 +1751,59 @@ class OpenAlexGUI(QMainWindow):
         
         self.log_message("📄 Generated Files:")
         for key, path in files.items():
-            if key not in ['original_count', 'filtered_count']:
+            if key not in ['original_count', 'filtered_count', 'papers']:
                 self.log_message(f"   • {os.path.basename(path)}")
         
-        self.status_bar.showMessage(f"✅ Complete! Generated {len(files)-2} files")
+        self.status_bar.showMessage(f"✅ Complete! Generated {len(files)-3} files")
         self.fetch_btn.setEnabled(True)
         self.fetch_btn.setText("🚀 Fetch Papers")
         self.progress_bar.setVisible(False)
         
-        # Ask if user wants to open folder
-        reply = QMessageBox.question(
-            self, 
-            "Success", 
-            f"✅ Successfully generated {len(files)-2} files!\n\nDo you want to open the output folder?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-        )
-        if reply == QMessageBox.StandardButton.Yes:
-            self.open_output_folder()
+        if self.fetched_papers:
+            reply = QMessageBox.question(
+                self, 
+                "Success", 
+                f"✅ Successfully generated {len(files)-3} files!\n\nDo you want to explore the papers in the Paper Explorer?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+            if reply == QMessageBox.StandardButton.Yes:
+                self.open_explorer()
+    
+    def open_explorer(self):
+        """Open the Paper Explorer window"""
+        # If no papers in memory, try to load from JSON
+        if not self.fetched_papers:
+            json_file = os.path.join(self.output_dir, "papers.json")
+            if os.path.exists(json_file):
+                try:
+                    with open(json_file, 'r', encoding='utf8') as f:
+                        self.fetched_papers = json.load(f)
+                        self.explore_btn.setEnabled(True)
+                        self.log_message(f"📚 Loaded {len(self.fetched_papers)} papers from JSON")
+                except Exception as e:
+                    self.log_message(f"⚠️ Could not load papers from JSON: {e}")
+        
+        # If still no papers, show message with helpful info
+        if not self.fetched_papers:
+            QMessageBox.information(
+                self, 
+                "No Papers Found", 
+                "No papers to explore.\n\n"
+                "Please follow these steps:\n"
+                "1. Click 'Fetch Papers' to search for papers\n"
+                "2. Wait for the search to complete\n"
+                "3. Then click 'Explore Papers' again\n\n"
+                f"Output folder: {self.output_dir}"
+            )
+            return
+        
+        # Open explorer with papers
+        explorer = PaperExplorerWindow(self.fetched_papers, self)
+        explorer.show()
 
 def main():
     app = QApplication(sys.argv)
     app.setStyle('Fusion')
-    
-    # Set application icon
     app.setWindowIcon(QIcon())
     
     window = OpenAlexGUI()

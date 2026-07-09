@@ -1,8 +1,8 @@
 # Literature Review Notes
 
-*Generated: 2026-07-09 08:12:51*
+*Generated: 2026-07-09 08:50:20*
 
-**Total Papers:** 46
+**Total Papers:** 43
 
 **Filtered:** Only papers with abstracts included
 
@@ -128,31 +128,7 @@ Despite the tightening of energy performance standards for buildings in various 
 
 ---
 
-## 6. A review of the Digital Twin technology for fault detection in buildings
-
-**Authors:** Haidar Hosamo, Henrik Kofoed Nielsen, Ammar Alnmr et al.
-
-**Year:** 2022
-
-**Journal:** Frontiers in Built Environment
-
-**Citations:** 83
-
-**DOI:** [https://doi.org/10.3389/fbuil.2022.1013196](https://doi.org/https://doi.org/10.3389/fbuil.2022.1013196)
-
-**Keywords:** Fault detection and isolation, Fault (geology), Incentive, Engineering, Computer science, Data science
-
-**Abstract:**
-
-This study aims to evaluate the utilization of technology known as Digital Twin for fault detection in buildings. The strategy consisted of studying existing applications, difficulties, and possibilities that come with it. The Digital Twin technology is one of the most intriguing newly discovered technologies rapidly evolving; however, some problems still need to be addressed. First, using Digital Twins to detect building faults to prevent future failures and cutting overall costs by improving building maintenance is still ambiguous. Second, how Digital Twin technology may be applied to discover inefficiencies inside the building to optimize energy usage is not well defined. To address these issues, we reviewed 326 documents related to Digital Twin, BIM, and fault detection in civil engineering. Then out of the 326 documents, we reviewed 115 documents related to Digital Twin for fault detection in detail. This study used a qualitative assessment to uncover Digital Twin technology’s full fault detection capabilities. Our research concludes that Digital Twins need more development in areas such as scanner hardware and software, detection and prediction algorithms, modeling, and twinning programs before they will be convincing enough for fault detection and prediction. In addition, more building owners, architects, and engineers need substantial financial incentives to invest in condition monitoring before many of the strategies discussed in the reviewed papers will be used in the construction industry. For future investigation, more research needs to be devoted to exploring how machine learning may be integrated with other Digital Twin components to develop new fault detection methods.
-
-**AI Summary:**
-
-> This study aims to evaluate the utilization of technology known as Digital Twin for fault detection in buildings Keywords: Fault detection and isolation, Fault (geology), Incentive.
-
----
-
-## 7. Enhancing Energy Efficiency in Commercial Office Buildings: A Smart IoT and Machine Vision Approach
+## 6. Enhancing Energy Efficiency in Commercial Office Buildings: A Smart IoT and Machine Vision Approach
 
 **Authors:** Sushrut Madhav Patankar, Raju Kumar Swami, Sameer Nanivadekar
 
@@ -176,7 +152,7 @@ Commercial office buildings often waste substantial energy due to the inefficien
 
 ---
 
-## 8. Data-Driven Ventilation and Energy Optimization in Smart Office Buildings: Insights from a High-Resolution Occupancy and Indoor Climate Dataset
+## 7. Data-Driven Ventilation and Energy Optimization in Smart Office Buildings: Insights from a High-Resolution Occupancy and Indoor Climate Dataset
 
 **Authors:** Haidar Hosamo, Silvia Mazzetto
 
@@ -200,7 +176,7 @@ This paper explores innovative approaches to reducing energy consumption in buil
 
 ---
 
-## 9. A Practical Multi-Sensor Cooling Demand Estimation Approach Based on Visual, Indoor and Outdoor Information Sensing
+## 8. A Practical Multi-Sensor Cooling Demand Estimation Approach Based on Visual, Indoor and Outdoor Information Sensing
 
 **Authors:** Junqi Wang, Norman C. F. Tse, Tin Yan Poon et al.
 
@@ -224,7 +200,7 @@ The operating efficiency of heating, ventilation and air conditioning (HVAC) sys
 
 ---
 
-## 10. Occupancy Measurement in Under-Actuated Zones: YOLO-based Deep Learning Approach
+## 9. Occupancy Measurement in Under-Actuated Zones: YOLO-based Deep Learning Approach
 
 **Authors:** Ade Syahputra, Yaddarabullah, Mohammad Faiz Azhary et al.
 
@@ -248,7 +224,7 @@ The challenge of accurately detecting and identifying individuals within under-a
 
 ---
 
-## 11. Development of CNN-based visual recognition air conditioner for smart buildings
+## 10. Development of CNN-based visual recognition air conditioner for smart buildings
 
 **Authors:** Qian Huang, Kangli Hao
 
@@ -272,7 +248,7 @@ Demand-driven heating, ventilation, and air conditioning (HVAC) operations have 
 
 ---
 
-## 12. Modified Lightweight YOLO v8 Model for Fast and Precise Indoor Occupancy Detection
+## 11. Modified Lightweight YOLO v8 Model for Fast and Precise Indoor Occupancy Detection
 
 **Authors:** Hanyuan Zhang, Luyan Liu, Jingxue Bi et al.
 
@@ -296,7 +272,7 @@ Fast and accurate indoor occupancy detection is critical for energy efficiency a
 
 ---
 
-## 13. Review of modern demand control solutions and technologies for HVAC operation
+## 12. Review of modern demand control solutions and technologies for HVAC operation
 
 **Authors:** Anatolijs Borodiņecs, Jurģis Zemītis, Arturs Palcikovskis et al.
 
@@ -320,7 +296,7 @@ HVAC systems, which use traditional control strategies with fixed ventilation ra
 
 ---
 
-## 14. Deep Learning for Edge Computing Applications: A State-of-the-Art Survey
+## 13. Deep Learning for Edge Computing Applications: A State-of-the-Art Survey
 
 **Authors:** Fangxin Wang, Miao Zhang, Xiangxiang Wang et al.
 
@@ -344,31 +320,7 @@ With the booming development of Internet-of-Things (IoT) and communication techn
 
 ---
 
-## 15. Dynamic HVAC Operations Based on Occupancy Patterns With Real-Time Vision- Based System
-
-**Authors:** Siliang Lu
-
-**Year:** 2017
-
-**Journal:** Research Showcase @ Carnegie Mellon University (Carnegie Mellon University)
-
-**Citations:** 1
-
-**DOI:** [https://doi.org/10.1184/r1/6723290](https://doi.org/https://doi.org/10.1184/r1/6723290)
-
-**Keywords:** Occupancy, HVAC, Computer science, Real-time computing, Computer vision, Real-time operating system
-
-**Abstract:**
-
-An integrated heating, ventilation and air-conditioning (HVAC) system is one of the most important components to determining the energy consumption of the entire building. For commercial buildings, particularly office buildings and schools, the heating and cooling loads are largely dependent on the occupant behavioral patterns such as occupancy rates and their activities. Therefore, if HVAC systems can respond to dynamic occupancy profiles, there is a large potential to reduce energy consumption. However, currently, most of existing HVAC systems operate without the ability to adjust supply air rate accordingly in response to the dynamic profiles of occupants. Due to this inefficiency, much of the HVAC energy use is wasted, particularly when the conditioned spaces are unoccupied or under-occupied (less occupants than the intended design). The solution to this inefficiency is to control HVAC system based on dynamic occupant profiles. Motivated by this, the research provides a real-time vision-based occupant pattern recognition system for occupancy counting as well as activity level classification. The proposed vision-based system is integrated into the existing HVAC simulation model of a U.S. office building to investigate the level of energy savings as well as thermal comfort improvement compared to traditional existing HVAC control system. The research is divided into two parts. The first part is to use an open source library based on neural network for real-time occupant counting and background subtraction method for activity level classification with a common static RGB camera. The second part utilizes a DOE reference office building model with customized dynamic occupancy schedule, including the number of occupant schedule, activity schedule and clothing insulation schedule to identify the potential energy savings compared with conventional HVAC control system. The research results revealed that vision-based systems can detect occupants and classify activity level in real time with accuracy around 90% when there are not many occlusions. Additionally, the dynamic occupant schedules indeed can bring about energy savings. Details of vision-based system, methodology, simulation configurations and results will be presented in the paper as well as potential opportunities for use throughout multiple types of commercial buildings, specifically focused on office and educational institutes.
-
-**AI Summary:**
-
-> An integrated heating, ventilation and air-conditioning (HVAC) system is one of the most important components to determining the energy consumption of the entire building Keywords: Occupancy, HVAC, Computer science.
-
----
-
-## 16. An IoT-Based Smart Building Solution for Indoor Environment Management and Occupants Prediction
+## 14. An IoT-Based Smart Building Solution for Indoor Environment Management and Occupants Prediction
 
 **Authors:** Alessandro Floris, Simone Porcu, Roberto Girau et al.
 
@@ -392,7 +344,7 @@ Smart buildings use Internet of Things (IoT) sensors for monitoring indoor envir
 
 ---
 
-## 17. ODDS: Real-Time Object Detection Using Depth Sensors on Embedded GPUs
+## 15. ODDS: Real-Time Object Detection Using Depth Sensors on Embedded GPUs
 
 **Authors:** Niluthpol Chowdhury Mithun, Sirajum Munir, Karen Guo et al.
 
@@ -416,7 +368,7 @@ Detecting objects that are carried when someone enters or exits a room is very u
 
 ---
 
-## 18. Privacy‐preserving labeling‐free occupancy counting sensor based on ToF camera and clustering
+## 16. Privacy‐preserving labeling‐free occupancy counting sensor based on ToF camera and clustering
 
 **Authors:** Jaeik Jeong, Wan‐Ki Park
 
@@ -440,7 +392,7 @@ Abstract Occupancy detection systems are crucial for optimizing energy efficienc
 
 ---
 
-## 19. An occupancy-based strategy employing computer vision for reducing cooling energy consumed in buildings
+## 17. An occupancy-based strategy employing computer vision for reducing cooling energy consumed in buildings
 
 **Authors:** Rania A. AlQadi, Alaa Zaghloul, Shereen A. Taie
 
@@ -464,31 +416,7 @@ The energy expended to cool the occupied areas by air conditioners represents a 
 
 ---
 
-## 20. Using Deep Learning in Real-Time for Clothing Classification with Connected Thermostats
-
-**Authors:** Adán Medina, Juana Isabel Méndez, Pedro Ponce et al.
-
-**Year:** 2022
-
-**Journal:** Energies
-
-**Citations:** 36
-
-**DOI:** [https://doi.org/10.3390/en15051811](https://doi.org/https://doi.org/10.3390/en15051811)
-
-**Keywords:** Clothing, Overfitting, MNIST database, Artificial intelligence, Computer science, Convolutional neural network
-
-**Abstract:**
-
-Thermal comfort is associated with clothing insulation, conveying a level of satisfaction with the thermal surroundings. Besides, clothing insulation is commonly associated with indoor thermal comfort. However, clothing classification in smart homes might save energy when the end-user wears appropriate clothes to save energy and obtain thermal comfort. Furthermore, object detection and classification through Convolutional Neural Networks has increased over the last decade. There are real-time clothing garment classifiers, but these are oriented towards single garment recognition for texture, fabric, shape, or style. Consequently, this paper proposes a CNN model classification for the implementation of these classifiers on cameras. First, the Fashion MNIST was analyzed and compared with the VGG16, Inceptionvv4, TinyYOLOv3, and ResNet18 classification algorithms to determine the best clo classifier. Then, for real-time analysis, a new dataset with 12,000 images was created and analyzed with the YOLOv3 and TinyYOLO. Finally, an Azure Kinect DT was employed to analyze the clo value in real-time. Moreover, real-time analysis can be employed with any other webcam. The model recognizes at least three garments of a clothing ensemble, proving that it identifies more than a single clothing garment. Besides, the model has at least 90% accuracy in the test dataset, ensuring that it can be generalized and is not overfitting.
-
-**AI Summary:**
-
-> Thermal comfort is associated with clothing insulation, conveying a level of satisfaction with the thermal surroundings Keywords: Clothing, Overfitting, MNIST database.
-
----
-
-## 21. Occupant-Detection-Based Individual Control of Four-Way Air Conditioner for Sustainable Building Energy Management
+## 18. Occupant-Detection-Based Individual Control of Four-Way Air Conditioner for Sustainable Building Energy Management
 
 **Authors:** J H Ham, Bum‐Soo Kim, In-Woo Bae et al.
 
@@ -512,7 +440,7 @@ In this study, individual control of a four-way air conditioner was developed ba
 
 ---
 
-## 22. Clothing Insulation Rate and Metabolic Rate Estimation for Individual Thermal Comfort Assessment in Real Life
+## 19. Clothing Insulation Rate and Metabolic Rate Estimation for Individual Thermal Comfort Assessment in Real Life
 
 **Authors:** Jinsong Liu, Isak Worre Foged, Thomas B. Moeslund
 
@@ -536,7 +464,7 @@ Satisfactory indoor thermal environments can improve working efficiencies of off
 
 ---
 
-## 23. Design and Validation of an Edge-AI Fire Safety System with SmartThings Integration for Accelerated Detection and Targeted Suppression
+## 20. Design and Validation of an Edge-AI Fire Safety System with SmartThings Integration for Accelerated Detection and Targeted Suppression
 
 **Authors:** Seung-Jun Lee, Hong‐Sik Yun, Hong-Sik Yun et al.
 
@@ -560,7 +488,7 @@ This study presents the design and validation of an integrated fire safety syste
 
 ---
 
-## 24. Embedded Real-Time Clothing Classifier Using One-Stage Methods for Saving Energy in Thermostats
+## 21. Embedded Real-Time Clothing Classifier Using One-Stage Methods for Saving Energy in Thermostats
 
 **Authors:** Adán Medina, Juana Isabel Méndez, Pedro Ponce et al.
 
@@ -584,7 +512,7 @@ Energy-saving is a mandatory research topic since the growing population demands
 
 ---
 
-## 25. IoB Internet of Things (IoT) for Smart Built Environment (SBE): Understanding the Complexity and Contributing to Energy Efficiency; A Case Study in Mediterranean Climates
+## 22. IoB Internet of Things (IoT) for Smart Built Environment (SBE): Understanding the Complexity and Contributing to Energy Efficiency; A Case Study in Mediterranean Climates
 
 **Authors:** Ignacio Martínez Ruiz, Enrique Cano-Suñén, Álvaro Marco et al.
 
@@ -608,7 +536,7 @@ To meet the 2050 targets about climate change and decarbonization, accomplishing
 
 ---
 
-## 26. Artificial intelligence in construction asset management: a review of present status, challenges and future opportunities
+## 23. Artificial intelligence in construction asset management: a review of present status, challenges and future opportunities
 
 **Authors:** Luca Rampini, Fulvio Re Cecconi
 
@@ -632,7 +560,7 @@ The built environment is responsible for roughly 40% of global greenhouse emissi
 
 ---
 
-## 27. Real operational labeled data of air handling units from office, auditorium, and hospital buildings
+## 24. Real operational labeled data of air handling units from office, auditorium, and hospital buildings
 
 **Authors:** Seunghyeon Wang
 
@@ -656,7 +584,7 @@ This study aims to develop comprehensive real operational datasets from three di
 
 ---
 
-## 28. A Lightweight Electronic Water Pump Shell Defect Detection Method Based on Improved YOLOv5s
+## 25. A Lightweight Electronic Water Pump Shell Defect Detection Method Based on Improved YOLOv5s
 
 **Authors:** Qunbiao Wu, Zhen Wang, Haifeng Fang et al.
 
@@ -680,7 +608,7 @@ For surface defects in electronic water pump shells, the manual detection effici
 
 ---
 
-## 29. Testing and Evaluation of Low-Cost Sensors for Developing Open Smart Campus Systems Based on IoT
+## 26. Testing and Evaluation of Low-Cost Sensors for Developing Open Smart Campus Systems Based on IoT
 
 **Authors:** Pascal Neis, Dominik Warch, Max Hoppe
 
@@ -704,7 +632,7 @@ Urbanization has led to the need for the intelligent management of various urban
 
 ---
 
-## 30. A Survey of FPGA-Based Vision Systems for Autonomous Cars
+## 27. A Survey of FPGA-Based Vision Systems for Autonomous Cars
 
 **Authors:** David Castells‐Rufas, Vinh Ngo, Juan Borrego-Carazo et al.
 
@@ -728,7 +656,7 @@ On the road to making self-driving cars a reality, academic and industrial resea
 
 ---
 
-## 31. A Cost-Effective System for Indoor Three-Dimensional Occupant Positioning and Trajectory Reconstruction
+## 28. A Cost-Effective System for Indoor Three-Dimensional Occupant Positioning and Trajectory Reconstruction
 
 **Authors:** Xiaomei Zhao, Shuo Li, Zhan Zhao et al.
 
@@ -752,7 +680,7 @@ Accurate indoor occupancy information extraction plays a crucial role in buildin
 
 ---
 
-## 32. A novel lightweight skeletal temporal model for real-time, computationally efficient recognition of occupant thermal adaptation behavior
+## 29. A novel lightweight skeletal temporal model for real-time, computationally efficient recognition of occupant thermal adaptation behavior
 
 **Authors:** Zhe Wang, Hao Sun, John Kaiser Calautit et al.
 
@@ -776,7 +704,7 @@ Abstract Optimizing building energy systems based on real-time occupant behavior
 
 ---
 
-## 33. A ventilation early warning system (VEWS) for diaphanous workspaces considering COVID-19 and future pandemics scenarios
+## 30. A ventilation early warning system (VEWS) for diaphanous workspaces considering COVID-19 and future pandemics scenarios
 
 **Authors:** Gonçal Costa, Oriol Arroyo, Pablo Rueda et al.
 
@@ -800,7 +728,7 @@ The COVID-19 pandemic has generated new needs due to the associated health risks
 
 ---
 
-## 34. Advanced Power Converters and Learning in Diverse Robotic Innovation: A Review
+## 31. Advanced Power Converters and Learning in Diverse Robotic Innovation: A Review
 
 **Authors:** Rupam Singh, Varaha Satya Bharath Kurukuru, Mohammed Ali Khan
 
@@ -824,7 +752,7 @@ This paper provides a comprehensive review of the integration of advanced power 
 
 ---
 
-## 35. A pilot study of occupant centric control stratum ventilation based on computer vision
+## 32. A pilot study of occupant centric control stratum ventilation based on computer vision
 
 **Authors:** Yihang Liu, Bin Yang, Zhang Lin
 
@@ -848,7 +776,7 @@ Indoor occupant information has an obvious influence on operating parameters of 
 
 ---
 
-## 36. Towards the application of machine learning in digital twin technology: a multi-scale review
+## 33. Towards the application of machine learning in digital twin technology: a multi-scale review
 
 **Authors:** Luigi Nele, Giulio Mattera, Emily W. Yap et al.
 
@@ -872,7 +800,7 @@ This review article delves into the conceptual framework of digital twins and th
 
 ---
 
-## 37. Human Action Recognition in Smart Living Services and Applications: Context Awareness, Data Availability, Personalization, and Privacy
+## 34. Human Action Recognition in Smart Living Services and Applications: Context Awareness, Data Availability, Personalization, and Privacy
 
 **Authors:** Giovanni Diraco, Gabriele Rescio, Andrea Caroppo et al.
 
@@ -896,7 +824,7 @@ Smart living, an increasingly prominent concept, entails incorporating sophistic
 
 ---
 
-## 38. Deep Learning for IoT Big Data and Streaming Analytics: A Survey
+## 35. Deep Learning for IoT Big Data and Streaming Analytics: A Survey
 
 **Authors:** Mehdi Mohammadi, Ala Al‐Fuqaha, Sameh Sorour et al.
 
@@ -920,7 +848,7 @@ In the era of the Internet of Things (IoT), an enormous amount of sensing device
 
 ---
 
-## 39. Scan-to-EDTs: Automated Generation of Energy Digital Twins from 3D Point Clouds
+## 36. Scan-to-EDTs: Automated Generation of Energy Digital Twins from 3D Point Clouds
 
 **Authors:** O. V. Roman, Maarten Bassier, Giorgio Agugiaro et al.
 
@@ -944,7 +872,7 @@ Digital Twins (DTs) are transforming construction and energy management sectors 
 
 ---
 
-## 40. Privacy-Preserving Person Detection Using Low-Resolution Infrared Cameras
+## 37. Privacy-Preserving Person Detection Using Low-Resolution Infrared Cameras
 
 **Authors:** Thomas Dubail, Fidel A. Guerrero Peña, Heitor R. Medeiros et al.
 
@@ -968,7 +896,7 @@ In intelligent building management, knowing the number of people and their locat
 
 ---
 
-## 41. Building Ventilation Optimization Through Occupant-Centered Computer Vision Analysis
+## 38. Building Ventilation Optimization Through Occupant-Centered Computer Vision Analysis
 
 **Authors:** Jevgēnijs Teličko, Kirill I. Bolotin
 
@@ -992,7 +920,7 @@ Abstract Buildings consume about 40 % of all energy. Ventilation plays a signifi
 
 ---
 
-## 42. Real-time Occupancy Detection and Tracking for HVAC Control in an Office Building
+## 39. Real-time Occupancy Detection and Tracking for HVAC Control in an Office Building
 
 **Authors:** Jun-Sub Kim, Sun Ho Kim, Moon Hyeun Jun
 
@@ -1016,7 +944,7 @@ The efficient management of energy in office buildings is contingent upon the ac
 
 ---
 
-## 43. A Review of the Potential of Drone-Based Approaches for Integrated Building Envelope Assessment
+## 40. A Review of the Potential of Drone-Based Approaches for Integrated Building Envelope Assessment
 
 **Authors:** Shayan Mirzabeigi, Ryan Razkenari, Paul Crovella
 
@@ -1040,7 +968,7 @@ The urgent need for affordable and scalable building retrofit solutions has inte
 
 ---
 
-## 44. A Review of Prospects and Opportunities in Disassembly With Human–Robot Collaboration
+## 41. A Review of Prospects and Opportunities in Disassembly With Human–Robot Collaboration
 
 **Authors:** Meng-Lun Lee, Xiao Liang, Boyi Hu et al.
 
@@ -1064,7 +992,7 @@ Abstract Product disassembly plays a crucial role in the recycling, remanufactur
 
 ---
 
-## 45. BIM and IFC Data Readiness for AI Integration in the Construction Industry: A Review Approach
+## 42. BIM and IFC Data Readiness for AI Integration in the Construction Industry: A Review Approach
 
 **Authors:** Shuzhang Du, Lei Hou, Guomin Zhang et al.
 
@@ -1088,7 +1016,7 @@ Building Information Modelling (BIM) has been increasingly integrated with Artif
 
 ---
 
-## 46. Real-Time Customer Density Analysis Using Fine-Tuned YOLOv11 for Optimized HVAC Management in Supermarkets
+## 43. Real-Time Customer Density Analysis Using Fine-Tuned YOLOv11 for Optimized HVAC Management in Supermarkets
 
 **Authors:** C Santhosh, Santhiya Kalimuthu, N Adhithyaa et al.
 
