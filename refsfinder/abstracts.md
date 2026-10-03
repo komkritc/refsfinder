@@ -1,830 +1,14 @@
 # Literature Review Notes
 
-*Generated: 2026-07-09 08:50:20*
+*Generated: 2026-10-03 15:10:12*
 
-**Total Papers:** 43
+**Total Papers:** 46
 
 **Filtered:** Only papers with abstracts included
 
 ---
 
-## 1. Thermal Imagery Feature Extraction Techniques and the Effects on Machine Learning Models for Smart HVAC Efficiency in Building Energy
-
-**Authors:** Yaa Takyiwaa Acquaah, Balakrishna Gokaraju, Raymond Tesiero et al.
-
-**Year:** 2021
-
-**Journal:** Remote Sensing
-
-**Citations:** 27
-
-**DOI:** [https://doi.org/10.3390/rs13193847](https://doi.org/https://doi.org/10.3390/rs13193847)
-
-**Keywords:** Artificial intelligence, Computer science, Pattern recognition (psychology), Wavelet, Support vector machine, Transfer of learning
-
-**Abstract:**
-
-The control of thermostats of a heating, ventilation, and air-conditioning (HVAC) system installed in commercial and residential buildings remains a pertinent problem in building energy efficiency and thermal comfort research. The ability to determine the number of people at a particular time in an area is imperative for energy efficiency in order to condition only occupied regions and thermally deficient regions. In this study of the best features comparison for detecting the number of people in an area, feature extraction techniques including wavelet scattering, wavelet decomposition, grey-level co-occurrence matrix (GLCM) and feature maps convolution neural network (CNN) layers were explored using thermal camera imagery. Specifically, the pretrained CNN networks explored are the deep residual (Resnet-50) and visual geometry group (VGG-16) networks. The discriminating potential of Haar, Daubechies and Symlets wavelet statistics on different distributions of data were investigated. The performance of VGG-16 and ResNet-50 in an end-to-end manner utilizing transfer learning approach was investigated. Experimental results showed the classification and regression trees (CART) model trained on only GLCM and Haar wavelet statistic features, individually achieved accuracies of approximately 80% and 84%, respectively, in the detection problem. Moreover, k-nearest neighbors (KNN) trained on the combined features of GLCM and Haar wavelet statistics achieved an accuracy of approximately 86%. In addition, the performance accuracy of the multi classification support vector machine (SVM) trained on deep features obtained from layers of pretrained ResNet-50 and VGG-16 was between 96% and 97%. Furthermore, ResNet-50 transfer learning outperformed the VGG-16 transfer learning model for occupancy detection using thermal imagery. Overall, the SVM model trained on features extracted from wavelet scattering emerged as the best performing classifier with an accuracy of 100%. A principal component analysis (PCA) on the wavelet scattering features proved that the first twenty (20) principal components achieved a similar accuracy level instead of training on the whole feature set to reduce the execution time. The occupancy detection models can be integrated into HVAC control systems for energy efficiency and security systems, and aid in the distribution of resources to people in an area.
-
-**AI Summary:**
-
-> The control of thermostats of a heating, ventilation, and air-conditioning (HVAC) system installed in commercial and residential buildings remains a pertinent problem in building energy efficiency and... Keywords: Artificial intelligence, Computer science, Pattern recognition (psychology).
-
----
-
-## 2. A high-fidelity residential building occupancy detection dataset
-
-**Authors:** Margarite Jacoby, Sin Yong Tan, Gregor P. Henze et al.
-
-**Year:** 2021
-
-**Journal:** Scientific Data
-
-**Citations:** 30
-
-**DOI:** [https://doi.org/10.1038/s41597-021-01055-x](https://doi.org/https://doi.org/10.1038/s41597-021-01055-x)
-
-**Keywords:** Occupancy, Computer science, Ground truth, Fidelity, Modalities, Ranging
-
-**Abstract:**
-
-This paper describes development of a data acquisition system used to capture a range of occupancy related modalities from single-family residences, along with the dataset that was generated. The publicly available dataset includes: grayscale images at 32-by-32 pixels, captured every second; audio files, which have undergone processing to remove personally identifiable information; indoor environmental readings, captured every ten seconds; and ground truth binary occupancy status. The data acquisition system, coined the mobile human presence detection (HPDmobile) system, was deployed in six homes for a minimum duration of one month each, and captured all modalities from at least four different locations concurrently inside each home. The environmental modalities are available as captured, but to preserve the privacy and identity of the occupants, images were downsized and audio files went through a series of processing steps, as described in this paper. This dataset adds to a very small body of existing data, with applications to energy efficiency and indoor environmental quality.
-
-**AI Summary:**
-
-> This paper describes development of a data acquisition system used to capture a range of occupancy related modalities from single-family residences, along with the dataset that was generated Keywords: Occupancy, Computer science, Ground truth.
-
----
-
-## 3. Deep Learning-Based Industry 4.0 and Internet of Things towards Effective Energy Management for Smart Buildings
-
-**Authors:** Mahmoud Elsisi, Minh‐Quang Tran, Karar Mahmoud et al.
-
-**Year:** 2021
-
-**Journal:** Sensors
-
-**Citations:** 171
-
-**DOI:** [https://doi.org/10.3390/s21041038](https://doi.org/https://doi.org/10.3390/s21041038)
-
-**Keywords:** Energy consumption, Computer science, Deep learning, Dashboard, Air conditioning, Internet of Things
-
-**Abstract:**
-
-Worldwide, energy consumption and saving represent the main challenges for all sectors, most importantly in industrial and domestic sectors. The internet of things (IoT) is a new technology that establishes the core of Industry 4.0. The IoT enables the sharing of signals between devices and machines via the internet. Besides, the IoT system enables the utilization of artificial intelligence (AI) techniques to manage and control the signals between different machines based on intelligence decisions. The paper's innovation is to introduce a deep learning and IoT based approach to control the operation of air conditioners in order to reduce energy consumption. To achieve such an ambitious target, we have proposed a deep learning-based people detection system utilizing the YOLOv3 algorithm to count the number of persons in a specific area. Accordingly, the operation of the air conditioners could be optimally managed in a smart building. Furthermore, the number of persons and the status of the air conditioners are published via the internet to the dashboard of the IoT platform. The proposed system enhances decision making about energy consumption. To affirm the efficacy and effectiveness of the proposed approach, intensive test scenarios are simulated in a specific smart building considering the existence of air conditioners. The simulation results emphasize that the proposed deep learning-based recognition algorithm can accurately detect the number of persons in the specified area, thanks to its ability to model highly non-linear relationships in data. The detection status can also be successfully published on the dashboard of the IoT platform. Another vital application of the proposed promising approach is in the remote management of diverse controllable devices.
-
-**AI Summary:**
-
-> Worldwide, energy consumption and saving represent the main challenges for all sectors, most importantly in industrial and domestic sectors Keywords: Energy consumption, Computer science, Deep learning.
-
----
-
-## 4. Occupancy heat gain detection and prediction using deep learning approach for reducing building energy demand
-
-**Authors:** Paige Wenbin Tien, Shuangyu Wei, John Kaiser Calautit et al.
-
-**Year:** 2020
-
-**Journal:** Journal of Sustainable Development of Energy Water and Environment Systems
-
-**Citations:** 21
-
-**DOI:** [https://doi.org/10.13044/j.sdewes.d8.0378](https://doi.org/https://doi.org/10.13044/j.sdewes.d8.0378)
-
-**Keywords:** HVAC, Occupancy, Energy consumption, Air conditioning, Deep learning, Computer science
-
-**Abstract:**
-
-The use of fixed or scheduled setpoints combined with varying occupancy patterns in buildings could lead to spaces being over or under-conditioned, which may lead to significant waste in energy consumption. The present study aims to develop a vision-based deep learning method for real-time occupancy activity detection and recognition. The method enables predicting and generating real-time heat gain data, which can inform building energy management systems and heating, ventilation, and air-conditioning (HVAC) controls. A faster region-based convolutional neural network was developed, trained and deployed to an artificial intelligence-powered camera. For the initial analysis, an experimental test was performed within a selected case study building's office space. Average detection accuracy of 92.2% was achieved for all activities. Using building energy simulation, the case study building was simulated with both 'static' and deep learning influenced profiles to assess the potential energy savings that can be achieved. The work has shown that the proposed approach can better estimate the occupancy internal heat gains for optimising the operations of building HVAC systems.
-
-**AI Summary:**
-
-> The use of fixed or scheduled setpoints combined with varying occupancy patterns in buildings could lead to spaces being over or under-conditioned, which may lead to significant waste in energy consum... Keywords: HVAC, Occupancy, Energy consumption.
-
----
-
-## 5. AI-Driven Innovations in Building Energy Management Systems: A Review of Potential Applications and Energy Savings
-
-**Authors:** Dalia Mohammed Talat Ebrahim Ali, Violeta Motuzienė, Rasa Džiugaitė-Tumėnienė
-
-**Year:** 2024
-
-**Journal:** Energies
-
-**Citations:** 105
-
-**DOI:** [https://doi.org/10.3390/en17174277](https://doi.org/https://doi.org/10.3390/en17174277)
-
-**Keywords:** Energy management, Energy (signal processing), Energy system, Architectural engineering, Environmental economics, Computer science
-
-**Abstract:**
-
-Despite the tightening of energy performance standards for buildings in various countries and the increased use of efficient and renewable energy technologies, it is clear that the sector needs to change more rapidly to meet the Net Zero Emissions (NZE) scenario by 2050. One of the problems that have been analyzed intensively in recent years is that buildings in operation use much more energy than they were designed to. This problem, known as the energy performance gap, is found in many countries and buildings and is often attributed to the poor management of building energy systems. The application of Artificial Intelligence (AI) to Building Energy Management Systems (BEMS) has untapped potential to address this problem and lead to more sustainable buildings. This paper reviews different AI-based models that have been proposed for different applications and different buildings with the intention to reduce energy consumption. It compares the performance of the different AI-based models evaluated in the reviewed papers by presenting the accuracy and error rates of model performance and identifies where the greatest potential for energy savings could be achieved, and to what extent. The review showed that offices have the greatest potential for energy savings (up to 37%) when they employ AI models for HVAC control and optimization. In residential and educational buildings, the lower intelligence of the existing BEMS results in smaller energy savings (up to 23% and 21%, respectively).
-
-**AI Summary:**
-
-> Despite the tightening of energy performance standards for buildings in various countries and the increased use of efficient and renewable energy technologies, it is clear that the sector needs to cha... Keywords: Energy management, Energy (signal processing), Energy system.
-
----
-
-## 6. Enhancing Energy Efficiency in Commercial Office Buildings: A Smart IoT and Machine Vision Approach
-
-**Authors:** Sushrut Madhav Patankar, Raju Kumar Swami, Sameer Nanivadekar
-
-**Year:** 2024
-
-**Journal:** N/A
-
-**Citations:** 4
-
-**DOI:** [https://doi.org/10.1109/wconf61366.2024.10691999](https://doi.org/https://doi.org/10.1109/wconf61366.2024.10691999)
-
-**Keywords:** Efficient energy use, Internet of Things, Computer science, Machine vision, Architectural engineering, Energy (signal processing)
-
-**Abstract:**
-
-Commercial office buildings often waste substantial energy due to the inefficient use of HVAC and lighting systems. This paper introduces an innovative Internet of Things (IoT) and Machine Vision-based system to combat this issue and improve energy efficiency. The system combines real-time occupancy detection using the You Only Look Once (YOLO) object detection method with CCTV footage obtained through the ESP32 cam module. Additionally, machine vision technology evaluates ambient light conditions. Leveraging the gathered occupancy and lighting data, the system autonomously controls lighting and employs a novel algorithm to regulate HVAC activation for cooling, factoring in indoor and outdoor temperatures. Our approach achieved an impressive accuracy rate of 96.31%. Specifically designed for office environments where occupants typically prioritize energy conservation less, this system offers a discreet solution that dynamically adjusts to real-time occupancy patterns. By implementing this system, commercial buildings have the potential to reduce energy consumption while ensuring occupant comfort is maintained significantly.
-
-**AI Summary:**
-
-> Commercial office buildings often waste substantial energy due to the inefficient use of HVAC and lighting systems Keywords: Efficient energy use, Internet of Things, Computer science.
-
----
-
-## 7. Data-Driven Ventilation and Energy Optimization in Smart Office Buildings: Insights from a High-Resolution Occupancy and Indoor Climate Dataset
-
-**Authors:** Haidar Hosamo, Silvia Mazzetto
-
-**Year:** 2024
-
-**Journal:** Sustainability
-
-**Citations:** 20
-
-**DOI:** [https://doi.org/10.3390/su17010058](https://doi.org/https://doi.org/10.3390/su17010058)
-
-**Keywords:** Occupancy, Ventilation (architecture), Architectural engineering, Environmental science, Energy (signal processing), Computer science
-
-**Abstract:**
-
-This paper explores innovative approaches to reducing energy consumption in building ventilation systems through the implementation of adaptive control strategies. Using a publicly available high-resolution dataset spanning a full year, the study integrates real-time data on occupancy, CO2 levels, temperature, window state, and external environmental conditions. Notably, occupancy data derived from computer vision-based detection using the YOLOv5 algorithm provides an unprecedented level of granularity. The study evaluates five energy-saving strategies: Demand-Controlled Ventilation (DCV), occupancy-based control, time-based off-peak reduction, window-open control, and temperature-based control. Among these, the occupancy-based strategy achieved the highest energy savings, reducing power consumption by 50%, while temperature-based control yielded a significant 37.27% reduction. This paper’s originality lies in its holistic analysis of multiple dynamic control strategies, integrating diverse environmental and operational variables rarely combined in prior research. The findings highlight the transformative potential of integrating real-time environmental data and advanced control algorithms to optimize HVAC performance. This study establishes a new benchmark for energy-efficient building management through offering practical recommendations and laying the groundwork for predictive models, renewable energy integration, and occupant-centric systems.
-
-**AI Summary:**
-
-> This paper explores innovative approaches to reducing energy consumption in building ventilation systems through the implementation of adaptive control strategies Keywords: Occupancy, Ventilation (architecture), Architectural engineering.
-
----
-
-## 8. A Practical Multi-Sensor Cooling Demand Estimation Approach Based on Visual, Indoor and Outdoor Information Sensing
-
-**Authors:** Junqi Wang, Norman C. F. Tse, Tin Yan Poon et al.
-
-**Year:** 2018
-
-**Journal:** Sensors
-
-**Citations:** 22
-
-**DOI:** [https://doi.org/10.3390/s18113591](https://doi.org/https://doi.org/10.3390/s18113591)
-
-**Keywords:** Estimation, Computer science, Real-time computing, Environmental science, Remote sensing, Engineering
-
-**Abstract:**
-
-The operating efficiency of heating, ventilation and air conditioning (HVAC) system is critical for building energy performance. Demand-based control is an efficient HVAC operating strategy, which can provide an appropriate level of HVAC services based on the recognition of actual cooling "demand." The cooling demand primarily relies on the accurate detection of occupancy. The current researches of demand-based HVAC control tend to detect the occupant count using cameras or other sensors, which often impose high computation and costs with limited real-life applications. Instead of detecting the occupant count, this paper proposes to detect the occupancy density. The occupancy density (estimated by image foreground moving pixels) together with the indoor and outdoor information (acquired from existing sensors) are used as inputs to an artificial neural network model for cooling demand estimation. Experiments have been implemented in a university design studio. Results show that, by adding the occupancy density, the cooling demand estimation error is greatly reduced by 67.4% and the R value is improved from 0.75 to 0.96. The proposed approach also features low-cost, computationally efficient, privacy-friendly and easily implementable. It shows good application potentials and can be readily incorporated into existing building management systems for improving energy efficiency.
-
-**AI Summary:**
-
-> The operating efficiency of heating, ventilation and air conditioning (HVAC) system is critical for building energy performance Keywords: Estimation, Computer science, Real-time computing.
-
----
-
-## 9. Occupancy Measurement in Under-Actuated Zones: YOLO-based Deep Learning Approach
-
-**Authors:** Ade Syahputra, Yaddarabullah, Mohammad Faiz Azhary et al.
-
-**Year:** 2024
-
-**Journal:** International Journal of Advanced Computer Science and Applications
-
-**Citations:** 2
-
-**DOI:** [https://doi.org/10.14569/ijacsa.2024.0150277](https://doi.org/https://doi.org/10.14569/ijacsa.2024.0150277)
-
-**Keywords:** Computer science, Occupancy, Deep learning, Artificial intelligence, Real-time computing, Human–computer interaction
-
-**Abstract:**
-
-The challenge of accurately detecting and identifying individuals within under-actuated zones presents a relevant research problem in occupant detection. This study aims to address the challenge of occupant detection in under-actuated zones through the utilization of the You Only Look Once version 8 (YOLO v8) object detection model. The research methodology involves a comprehensive evaluation of YOLO v8's performance across three distinct zones, where its precision, accuracy, and recall capabilities in identifying occupants are rigorously assessed. The outcomes of this performance evaluation, expressed through quantitative metrics, provide compelling evidence of the efficacy of the YOLO v8 model in the context of occupant detection in under-actuated zones. Across these three diverse under-actuated zones, YOLO v8 consistently exhibits remarkable mean Average Precision (mAP) scores, achieving 99.2% in Zone 1, 78.3% in Zone 2, and 96.2% in Zone 3. These mAP scores serve as a testament to the model's precision, indicating its proficiency in accurately localizing and identifying occupants within each zone. Furthermore, YOLO v8 demonstrates impressive efficiency in executing occupant detection tasks. The model boasts rapid processing times, with all three zones being analyzed in a matter of milliseconds. Specifically, YOLO v8 achieves execution times of 0.004 seconds in both Zone 1 and Zone 3, while Zone 2, which entails slightly more computational effort, still maintains an efficient execution time of 0.024 seconds. This efficiency constitutes a pivotal advantage of YOLO v8, as it ensures expeditious and effective occupant detection in the context of under-actuated zones.
-
-**AI Summary:**
-
-> The challenge of accurately detecting and identifying individuals within under-actuated zones presents a relevant research problem in occupant detection Keywords: Computer science, Occupancy, Deep learning.
-
----
-
-## 10. Development of CNN-based visual recognition air conditioner for smart buildings
-
-**Authors:** Qian Huang, Kangli Hao
-
-**Year:** 2020
-
-**Journal:** Journal of Information Technology in Construction
-
-**Citations:** 25
-
-**DOI:** [https://doi.org/10.36680/j.itcon.2020.021](https://doi.org/https://doi.org/10.36680/j.itcon.2020.021)
-
-**Keywords:** HVAC, Air conditioning, Occupancy, Building automation, Computer science, Convolutional neural network
-
-**Abstract:**
-
-Demand-driven heating, ventilation, and air conditioning (HVAC) operations have become very attractive in energy-efficient smart buildings. Demand-oriented HVAC control largely relies on accurate detection of building occupancy levels and locations. So far, existing building occupancy detection methods have their disadvantages, and cannot fully meet the expected performance. To address this challenge, this paper proposes a visual recognition method based on convolutional neural networks (CNN), which can intelligently interpret visual contents of surveillance cameras to identify the number of occupants and their locations in buildings. The proposed study can detect the quantity, distance, and angle of indoor human users, which is essential for controlling air-conditioners to adjust the direction and speed of air blow. Compared with the state of the art, the proposed method successfully fulfills the function of building occupant counting, which cannot be realized when using PIR, sound, and carbon dioxide sensors. Our method also achieves higher accuracy in detecting moving or stationary human bodies and can filter out false detections (such as animal pets or moving curtains) that are existed in previous solutions. The proposed idea has been implemented and collaboratively tested with air conditioners in an office environment. The experimental results verify the validity and benefits of our proposed idea.
-
-**AI Summary:**
-
-> Demand-driven heating, ventilation, and air conditioning (HVAC) operations have become very attractive in energy-efficient smart buildings Keywords: HVAC, Air conditioning, Occupancy.
-
----
-
-## 11. Modified Lightweight YOLO v8 Model for Fast and Precise Indoor Occupancy Detection
-
-**Authors:** Hanyuan Zhang, Luyan Liu, Jingxue Bi et al.
-
-**Year:** 2025
-
-**Journal:** Applied Sciences
-
-**Citations:** 1
-
-**DOI:** [https://doi.org/10.3390/app16010335](https://doi.org/https://doi.org/10.3390/app16010335)
-
-**Keywords:** Occupancy, Computer science, Software deployment, Boosting (machine learning), Real-time computing, Feature (linguistics)
-
-**Abstract:**
-
-Fast and accurate indoor occupancy detection is critical for energy efficiency and emergency rescue in the fields of smart building and indoor positioning. However, existing image-based indoor occupancy detection models often neglect small human targets and suffer from large parameters, compromising detection accuracy, real-time performance, and deployment on resource-constrained devices. To address these issues, this study proposes a modified lightweight indoor occupancy detection model based on YOLO v8. Firstly, a patch expanding layer is added to the neck of the YOLO v8 model for reshaping the feature maps of adjacent dimensions into higher-resolution feature maps. Secondly, the standard convolution in the original neck is replaced with the GSConv, boosting the non-linear representation by adding DSC layers and a shuffle operation, efficiently preserving hidden connections between channels. Additionally, the VoV-GSCSP in the neck is designed to adopt one-shot aggregation with GS bottlenecks based on GSConv, followed by a cross-stage partial network module. Experiments on the SCUT-HEAD dataset show the modified lightweight YOLO v8 reduces parameters by 9.3% and computational complexity by 8.6%, while increasing mAP50 by 1.4% compared to the baseline. The proposed model can detect indoor occupancy in a fast and precise manner.
-
-**AI Summary:**
-
-> Fast and accurate indoor occupancy detection is critical for energy efficiency and emergency rescue in the fields of smart building and indoor positioning Keywords: Occupancy, Computer science, Software deployment.
-
----
-
-## 12. Review of modern demand control solutions and technologies for HVAC operation
-
-**Authors:** Anatolijs Borodiņecs, Jurģis Zemītis, Arturs Palcikovskis et al.
-
-**Year:** 2023
-
-**Journal:** E3S Web of Conferences
-
-**Citations:** 4
-
-**DOI:** [https://doi.org/10.1051/e3sconf/202339602020](https://doi.org/https://doi.org/10.1051/e3sconf/202339602020)
-
-**Keywords:** HVAC, Occupancy, Computer science, Indoor air quality, Building automation, Architectural engineering
-
-**Abstract:**
-
-HVAC systems, which use traditional control strategies with fixed ventilation rates or with ventilation rate schedules, do not adjust according to the required IAQ and thermal comfort. As a result, building spaces are being over or under-ventilated. In this paper, the latest modern solutions for demand-controlled HVAC system operation are analyzed, based on the review of existing studies. Such modern technologies as human detection systems, computer vision, and neural network applications are looked at. Different types of human presence detection are presented based on the applied technology. The most common ones are indirect detection based on the usage data of existing IT equipment, and direct detection through the use of passive infrared sensors, wearable tags, and vision sensors. Also, the potential solutions of human activity monitoring, skin temperature, and clothing level detection systems are examined. The studies discussed in this paper show real application examples and prove the benefits of using the technologies for the control of ventilation systems in various building types. Research has shown that such technologies have a favorable effect on both indoor air quality and system energy consumption. In the future, the ventilation system should be equipped with cameras for a more accurate analysis of the room and occupancy. Also, the systems must consider occupant behavior, activity, and other information, which can be used for indoor environment quality improvement. Based on the gained knowledge a sensor capable of human detection, accounting, and location marking is developed.
-
-**AI Summary:**
-
-> HVAC systems, which use traditional control strategies with fixed ventilation rates or with ventilation rate schedules, do not adjust according to the required IAQ and thermal comfort Keywords: HVAC, Occupancy, Computer science.
-
----
-
-## 13. Deep Learning for Edge Computing Applications: A State-of-the-Art Survey
-
-**Authors:** Fangxin Wang, Miao Zhang, Xiangxiang Wang et al.
-
-**Year:** 2020
-
-**Journal:** IEEE Access
-
-**Citations:** 252
-
-**DOI:** [https://doi.org/10.1109/access.2020.2982411](https://doi.org/https://doi.org/10.1109/access.2020.2982411)
-
-**Keywords:** Computer science, Edge computing, Cloud computing, Edge device, Deep learning, Leverage (statistics)
-
-**Abstract:**
-
-With the booming development of Internet-of-Things (IoT) and communication technologies such as 5G, our future world is envisioned as an interconnected entity where billions of devices will provide uninterrupted service to our daily lives and the industry. Meanwhile, these devices will generate massive amounts of valuable data at the network edge, calling for not only instant data processing but also intelligent data analysis in order to fully unleash the potential of the edge big data. Both the traditional cloud computing and on-device computing cannot sufficiently address this problem due to the high latency and the limited computation capacity, respectively. Fortunately, the emerging edge computing sheds a light on the issue by pushing the data processing from the remote network core to the local network edge, remarkably reducing the latency and improving the efficiency. Besides, the recent breakthroughs in deep learning have greatly facilitated the data processing capacity, enabling a thrilling development of novel applications, such as video surveillance and autonomous driving. The convergence of edge computing and deep learning is believed to bring new possibilities to both interdisciplinary researches and industrial applications. In this article, we provide a comprehensive survey of the latest efforts on the deep-learning-enabled edge computing applications and particularly offer insights on how to leverage the deep learning advances to facilitate edge applications from four domains, i.e., smart multimedia, smart transportation, smart city, and smart industry. We also highlight the key research challenges and promising research directions therein. We believe this survey will inspire more researches and contributions in this promising field.
-
-**AI Summary:**
-
-> With the booming development of Internet-of-Things (IoT) and communication technologies such as 5G, our future world is envisioned as an interconnected entity where billions of devices will provide un... Keywords: Computer science, Edge computing, Cloud computing.
-
----
-
-## 14. An IoT-Based Smart Building Solution for Indoor Environment Management and Occupants Prediction
-
-**Authors:** Alessandro Floris, Simone Porcu, Roberto Girau et al.
-
-**Year:** 2021
-
-**Journal:** Energies
-
-**Citations:** 66
-
-**DOI:** [https://doi.org/10.3390/en14102959](https://doi.org/https://doi.org/10.3390/en14102959)
-
-**Keywords:** Building automation, Computer science, Internet of Things, Dashboard, Indoor air quality, Home automation
-
-**Abstract:**
-
-Smart buildings use Internet of Things (IoT) sensors for monitoring indoor environmental parameters, such as temperature, humidity, luminosity, and air quality. Due to the huge amount of data generated by these sensors, data analytics and machine learning techniques are needed to extract useful and interesting insights, which provide the input for the building optimization in terms of energy-saving, occupants’ health and comfort. In this paper, we propose an IoT-based smart building (SB) solution for indoor environment management, which aims to provide the following main functionalities: monitoring of the room environmental parameters; detection of the number of occupants in the room; a cloud platform where virtual entities collect the data acquired by the sensors and virtual super entities perform data analysis tasks using machine learning algorithms; a control dashboard for the management and control of the building. With our prototype, we collected data for 10 days, and we built two prediction models: a classification model that predicts the number of occupants based on the monitored environmental parameters (average accuracy of 99.5%), and a regression model that predicts the total volatile organic compound (TVOC) values based on the environmental parameters and the number of occupants (Pearson correlation coefficient of 0.939).
-
-**AI Summary:**
-
-> Smart buildings use Internet of Things (IoT) sensors for monitoring indoor environmental parameters, such as temperature, humidity, luminosity, and air quality Keywords: Building automation, Computer science, Internet of Things.
-
----
-
-## 15. ODDS: Real-Time Object Detection Using Depth Sensors on Embedded GPUs
-
-**Authors:** Niluthpol Chowdhury Mithun, Sirajum Munir, Karen Guo et al.
-
-**Year:** 2018
-
-**Journal:** N/A
-
-**Citations:** 14
-
-**DOI:** [https://doi.org/10.1109/ipsn.2018.00051](https://doi.org/https://doi.org/10.1109/ipsn.2018.00051)
-
-**Keywords:** Computer science, Convolutional neural network, Object detection, RGB color model, Deep learning, Artificial intelligence
-
-**Abstract:**
-
-Detecting objects that are carried when someone enters or exits a room is very useful for a wide range of smart building applications including safety, security, and energy efficiency. While there has been a significant amount of work on object recognition using large-scale RGB image datasets, RGB cameras are too privacy invasive in many smart building applications and they work poorly in the dark. Additionally, deep object detection networks require powerful and expensive GPUs. We propose a novel system that we call ODDS (Object Detector using a Depth Sensor) that can detect objects in real-time using only raw depth data on an embedded GPU, e.g., NVIDIA Jetson TX1. Hence, our solution is significantly less privacy invasive (even if the sensor is compromised) and less expensive, while maintaining a comparable accuracy with state of the art solutions. Specifically, we resort to training a deep convolutional neural network using raw depth images, with curriculum based learning to improve accuracy by considering the complexity and imbalance in object classes and developing a sparse coding based technique that speeds up the system ~2× with minimal loss of accuracy. Based on a complete implementation and real-world evaluation, we see ODDS achieve 80.14% mean average precision in object detection in real-time (5-6 FPS) on a Jetson TX1.
-
-**AI Summary:**
-
-> Detecting objects that are carried when someone enters or exits a room is very useful for a wide range of smart building applications including safety, security, and energy efficiency Keywords: Computer science, Convolutional neural network, Object detection.
-
----
-
-## 16. Privacy‐preserving labeling‐free occupancy counting sensor based on ToF camera and clustering
-
-**Authors:** Jaeik Jeong, Wan‐Ki Park
-
-**Year:** 2025
-
-**Journal:** ETRI Journal
-
-**Citations:** 2
-
-**DOI:** [https://doi.org/10.4218/etrij.2025-0022](https://doi.org/https://doi.org/10.4218/etrij.2025-0022)
-
-**Keywords:** Cluster analysis, Bounding overwatch, Computer science, Artificial intelligence, Computer vision, Energy (signal processing)
-
-**Abstract:**
-
-Abstract Occupancy detection systems are crucial for optimizing energy efficiency in smart cities and buildings but often face privacy and data dependency challenges. YOLO (you only look once), a widely used real‐time detection framework, relies on identifiable image data and labeled datasets. This study proposes a privacy‐preserving, labeling‐free occupancy sensor using a time‐of‐flight (ToF) camera, and a clustering algorithm. Positioned above doorways, the ToF camera captures depth data that inherently protect privacy by avoiding identifiable information. Using the mean shift clustering algorithm, it performs real‐time detection and tracking without labeled data, generating bounding boxes for movement analysis. Unlike traditional ToF‐based or unsupervised methods, the proposed system adapts dynamically to varying occupant behaviors and environmental conditions for robust real‐time detection. Experimental results show that the proposed method achieves over 90% accuracy in standard single‐entry and exit scenarios. By addressing existing limitations, it offers a data‐efficient, privacy‐sensitive solution for building digital twins in energy optimization and resource management.
-
-**AI Summary:**
-
-> Abstract Occupancy detection systems are crucial for optimizing energy efficiency in smart cities and buildings but often face privacy and data dependency challenges Keywords: Cluster analysis, Bounding overwatch, Computer science.
-
----
-
-## 17. An occupancy-based strategy employing computer vision for reducing cooling energy consumed in buildings
-
-**Authors:** Rania A. AlQadi, Alaa Zaghloul, Shereen A. Taie
-
-**Year:** 2021
-
-**Journal:** Bulletin of Electrical Engineering and Informatics
-
-**Citations:** 1
-
-**DOI:** [https://doi.org/10.11591/eei.v10i3.3058](https://doi.org/https://doi.org/10.11591/eei.v10i3.3058)
-
-**Keywords:** Setpoint, Energy consumption, Energy (signal processing), Occupancy, Air conditioning, Automotive engineering
-
-**Abstract:**
-
-The energy expended to cool the occupied areas by air conditioners represents a substantial share of the total energy exhausted in buildings. Therefore, developing strategies to reduce this energy is crucial. One of the preponderance strategies adopted to depreciate energy consumption in buildings is the occupancy-based strategy. In this research, an innovative model was established to achieve the goal of reducing cooling energy consumed in buildings based on occupancy-based combined with a constant temperature setpoint strategy in two phases, and each phase engrosses in 20 days. Phase one is to identify the extent of cooling energy employed according to the use of room occupants and its costs in consumption was 276.01 kWh after completion of this phase. Sequentially, constructing phase two intended to reduce cooling energy consumption by employing an automatic air-conditioner (AC) control strategy relying on an improved human detection algorithm with a 25℃ as temperature setpoint, resulting in 112.45 kWh of consumption. To complement the motives for elaboration, the human detection measurement using you only look once (YOLO) improved by applying pre-processing algorithms to reach an average human detection enhancement of 21.2%. The proposed model results showed that potential savings associated with the embraced strategy decreases by more than anticipated as the amount of reduced energy reached 59% savings.
-
-**AI Summary:**
-
-> The energy expended to cool the occupied areas by air conditioners represents a substantial share of the total energy exhausted in buildings Keywords: Setpoint, Energy consumption, Energy (signal processing).
-
----
-
-## 18. Occupant-Detection-Based Individual Control of Four-Way Air Conditioner for Sustainable Building Energy Management
-
-**Authors:** J H Ham, Bum‐Soo Kim, In-Woo Bae et al.
-
-**Year:** 2024
-
-**Journal:** Sustainability
-
-**Citations:** 2
-
-**DOI:** [https://doi.org/10.3390/su16177404](https://doi.org/https://doi.org/10.3390/su16177404)
-
-**Keywords:** Energy consumption, Python (programming language), Thermal comfort, Air conditioning, Occupancy, Simulation
-
-**Abstract:**
-
-In this study, individual control of a four-way air conditioner was developed based on the distribution of occupants to prevent unnecessary energy consumption during room-wide control. An occupancy detection algorithm was created in Python using YOLOv5 object recognition technology to identify the occupants’ distribution in space. Recorded video data were used to test the algorithm. A simulation case study for a building energy model was conducted, assuming that this algorithm was applied using surveillance cameras in commercial buildings, such as cafés and restaurants. A grey-box model was established based on measurements in a thermal zone, dividing one space into two zones. The temperature data for the two zones were collected by individually turning on the air conditioner for each zone in turns for a specific period. Manual closure was applied to each supply blade using a tape to provide cooling to the target zone. Finally, through energy simulations, the decreased rates in energy consumption between the proposed individual control and existing room-wide controls were compared. Different scenarios for the occupants’ schedules were considered, and average rates in energy savings of 21–22% were observed, demonstrating the significance of individual control in terms of energy consumption. However, marginal comfort violations were observed, which is inevitable. The developed control method is expected to contribute to sustainable energy management in buildings.
-
-**AI Summary:**
-
-> In this study, individual control of a four-way air conditioner was developed based on the distribution of occupants to prevent unnecessary energy consumption during room-wide control Keywords: Energy consumption, Python (programming language), Thermal comfort.
-
----
-
-## 19. Clothing Insulation Rate and Metabolic Rate Estimation for Individual Thermal Comfort Assessment in Real Life
-
-**Authors:** Jinsong Liu, Isak Worre Foged, Thomas B. Moeslund
-
-**Year:** 2022
-
-**Journal:** Sensors
-
-**Citations:** 32
-
-**DOI:** [https://doi.org/10.3390/s22020619](https://doi.org/https://doi.org/10.3390/s22020619)
-
-**Keywords:** Metabolic rate, Clothing, Thermal comfort, Estimation, Thermal manikin, Engineering
-
-**Abstract:**
-
-Satisfactory indoor thermal environments can improve working efficiencies of office staff. To build such satisfactory indoor microclimates, individual thermal comfort assessment is important, for which personal clothing insulation rate (Icl) and metabolic rate (M) need to be estimated dynamically. Therefore, this paper proposes a vision-based method. Specifically, a human tracking-by-detection framework is implemented to acquire each person’s clothing status (short-sleeved, long-sleeved), key posture (sitting, standing), and bounding box information simultaneously. The clothing status together with a key body points detector locate the person’s skin region and clothes region, allowing the measurement of skin temperature (Ts) and clothes temperature (Tc), and realizing the calculation of Icl from Ts and Tc. The key posture and the bounding box change across time can category the person’s activity intensity into a corresponding level, from which the M value is estimated. Moreover, we have collected a multi-person thermal dataset to evaluate the method. The tracking-by-detection framework achieves a mAP50 (Mean Average Precision) rate of 89.1% and a MOTA (Multiple Object Tracking Accuracy) rate of 99.5%. The Icl estimation module gets an accuracy of 96.2% in locating skin and clothes. The M estimation module obtains a classification rate of 95.6% in categorizing activity level. All of these prove the usefulness of the proposed method in a multi-person scenario of real-life applications.
-
-**AI Summary:**
-
-> Satisfactory indoor thermal environments can improve working efficiencies of office staff Keywords: Metabolic rate, Clothing, Thermal comfort.
-
----
-
-## 20. Design and Validation of an Edge-AI Fire Safety System with SmartThings Integration for Accelerated Detection and Targeted Suppression
-
-**Authors:** Seung-Jun Lee, Hong‐Sik Yun, Hong-Sik Yun et al.
-
-**Year:** 2025
-
-**Journal:** Applied Sciences
-
-**Citations:** 8
-
-**DOI:** [https://doi.org/10.3390/app15148118](https://doi.org/https://doi.org/10.3390/app15148118)
-
-**Keywords:** Computer science
-
-**Abstract:**
-
-This study presents the design and validation of an integrated fire safety system that leverages edge AI, hybrid sensing, and precision suppression to overcome the latency and collateral limitations of conventional smoke detection and sprinkler systems. The proposed platform features a dual-mode sensor array for early fire recognition, motorized ventilation units for rapid smoke extraction, and a 360° directional nozzle for targeted agent discharge using a residue-free clean extinguishing agent. Experimental trials demonstrated an average fire detection time of 5.8 s and complete flame suppression within 13.2 s, with 90% smoke clearance achieved in under 95 s. No false positives were recorded during non-fire simulations, and the system remained fully functional under simulated cloud communication failure, confirming its edge-resilient architecture. A probabilistic risk analysis based on ISO 31000 and NFPA 551 frameworks showed risk reductions of 75.6% in life safety, 58.0% in property damage, and 67.1% in business disruption. The system achieved a composite risk reduction of approximately 73%, shifting the operational risk level into the ALARP region. These findings demonstrate the system’s capacity to provide proactive, energy-efficient, and spatially targeted fire response suitable for high-value infrastructure. The modular design and SmartThings Edge integration further support scalable deployment and real-time system intelligence, establishing a strong foundation for future adaptive fire protection frameworks.
-
-**AI Summary:**
-
-> This study presents the design and validation of an integrated fire safety system that leverages edge AI, hybrid sensing, and precision suppression to overcome the latency and collateral limitations o... Keywords: Computer science.
-
----
-
-## 21. Embedded Real-Time Clothing Classifier Using One-Stage Methods for Saving Energy in Thermostats
-
-**Authors:** Adán Medina, Juana Isabel Méndez, Pedro Ponce et al.
-
-**Year:** 2022
-
-**Journal:** Energies
-
-**Citations:** 11
-
-**DOI:** [https://doi.org/10.3390/en15176117](https://doi.org/https://doi.org/10.3390/en15176117)
-
-**Keywords:** Thermostat, Energy consumption, Computer science, Clothing, HVAC, Efficient energy use
-
-**Abstract:**
-
-Energy-saving is a mandatory research topic since the growing population demands additional energy yearly. Moreover, climate change requires more attention to reduce the impact of generating more CO2. As a result, some new research areas need to be explored to create innovative energy-saving alternatives in electrical devices that have high energy consumption. One research area of interest is the computer visual classification for reducing energy consumption and keeping thermal comfort in thermostats. Usually, connected thermostats obrtain information from sensors for detecting persons and scheduling autonomous operations to save energy. However, there is a lack of knowledge of how computer vision can be deployed in embedded digital systems to analyze clothing insulation in connected thermostats to reduce energy consumption and keep thermal comfort. The clothing classification algorithm embedded in a digital system for saving energy could be a companion device in connected thermostats to obtain the clothing insulation. Currently, there is no connected thermostat in the market using complementary computer visual classification systems to analyze the clothing insulation factor. Hence, this proposal aims to develop and evaluate an embedded real-time clothing classifier that could help to improve the efficiency of heating and ventilation air conditioning systems in homes or buildings. This paper compares six different one-stage object detection and classification algorithms trained with a small custom dataset in two embedded systems and a personal computer to compare the models. In addition, the paper describes how the classifier could interact with the thermostat to tune the temperature set point to save energy and keep thermal comfort. The results confirm that the proposed real-time clothing classifier could be implemented as a companion device in connected thermostats to provide additional information to end-users about making decisions on saving energy.
-
-**AI Summary:**
-
-> Energy-saving is a mandatory research topic since the growing population demands additional energy yearly Keywords: Thermostat, Energy consumption, Computer science.
-
----
-
-## 22. IoB Internet of Things (IoT) for Smart Built Environment (SBE): Understanding the Complexity and Contributing to Energy Efficiency; A Case Study in Mediterranean Climates
-
-**Authors:** Ignacio Martínez Ruiz, Enrique Cano-Suñén, Álvaro Marco et al.
-
-**Year:** 2025
-
-**Journal:** Applied Sciences
-
-**Citations:** 3
-
-**DOI:** [https://doi.org/10.3390/app15041724](https://doi.org/https://doi.org/10.3390/app15041724)
-
-**Keywords:** Internet of Things, Computer science, Computer security
-
-**Abstract:**
-
-To meet the 2050 targets about climate change and decarbonization, accomplishing thermal comfort, Internet of Things (IoT) ecosystems are key enabling technologies to move the Built Environment (BE) towards Smart Built Environment (SBE). The first contributions of this paper conceptualise SBE from its dynamic and adaptative perspectives, considering the human habitat, and enunciate SBE as a multidimensional approach through six ways of inhabiting: defensive, projective, scientific, thermodynamic, subjective, and complex. From these premises, to analyse the performance indicators that characterise these multidisciplinary ways of inhabiting, an IoT-driven methodology is proposed: to deploy a sensor infrastructure to acquire experimental measurements; analyse data to convert them into context-aware information; and make knowledge-based decisions. Thus, this work tackles the inefficiency and high energy consumption of public buildings with the challenge of balancing energy efficiency and user comfort in dynamic scenarios. As current systems lack real-time adaptability, this work integrates an IoT-driven approach to enhance energy management and reduce discrepancies between measured temperatures and normative thresholds. Following the energy efficiency directives, the obtained results contribute to the following: understanding the complexity of the SBE by analysing its thermal performance, quantifying the potential of energy saving, and estimating its economic impact. The derived conclusions show that IoT-driven solutions allow the generation of real-data-based models on which to enhance SBE knowledge, by increasing energy efficiency and guaranteeing user comfort while minimising environmental effects and economic impact.
-
-**AI Summary:**
-
-> To meet the 2050 targets about climate change and decarbonization, accomplishing thermal comfort, Internet of Things (IoT) ecosystems are key enabling technologies to move the Built Environment (BE) t... Keywords: Internet of Things, Computer science, Computer security.
-
----
-
-## 23. Artificial intelligence in construction asset management: a review of present status, challenges and future opportunities
-
-**Authors:** Luca Rampini, Fulvio Re Cecconi
-
-**Year:** 2022
-
-**Journal:** Journal of Information Technology in Construction
-
-**Citations:** 51
-
-**DOI:** [https://doi.org/10.36680/j.itcon.2022.043](https://doi.org/https://doi.org/10.36680/j.itcon.2022.043)
-
-**Keywords:** Asset management, Context (archaeology), Computer science, Sustainability, Inefficiency, Asset (computer security)
-
-**Abstract:**
-
-The built environment is responsible for roughly 40% of global greenhouse emissions, making the sector a crucial factor for climate change and sustainability. Meanwhile, other sectors (like manufacturing) adopted Artificial Intelligence (AI) to solve complex, non-linear problems to reduce waste, inefficiency, and pollution. Therefore, many research efforts in the Architecture, Engineering, and Construction community have recently tried introducing AI into building asset management (AM) processes. Since AM encompasses a broad set of disciplines, an overview of several AI applications, current research gaps, and trends is needed. In this context, this study conducted the first state-of-the-art research on AI for building asset management. A total of 578 papers were analyzed with bibliometric tools to identify prominent institutions, topics, and journals. The quantitative analysis helped determine the most researched areas of AM and which AI techniques are applied. The areas were furtherly investigated by reading in-depth the 83 most relevant studies selected by screening the articles’ abstracts identified in the bibliometric analysis. The results reveal many applications for Energy Management, Condition assessment, Risk management, and Project management areas. Finally, the literature review identified three main trends that can be a reference point for future studies made by practitioners or researchers: Digital Twin, Generative Adversarial Networks (with synthetic images) for data augmentation, and Deep Reinforcement Learning.
-
-**AI Summary:**
-
-> The built environment is responsible for roughly 40% of global greenhouse emissions, making the sector a crucial factor for climate change and sustainability Keywords: Asset management, Context (archaeology), Computer science.
-
----
-
-## 24. Real operational labeled data of air handling units from office, auditorium, and hospital buildings
-
-**Authors:** Seunghyeon Wang
-
-**Year:** 2025
-
-**Journal:** Scientific Data
-
-**Citations:** 23
-
-**DOI:** [https://doi.org/10.1038/s41597-025-05825-9](https://doi.org/https://doi.org/10.1038/s41597-025-05825-9)
-
-**Keywords:** Computer science, Identification (biology), Fault detection and isolation, Data collection, Key (lock), Raw data
-
-**Abstract:**
-
-This study aims to develop comprehensive real operational datasets from three distinct building types-a large-scale office, an auditorium, and a hospital-focusing on Air Handling Units (AHUs) equipped with Constant Air Volume (CAV) systems for Automated Fault Detection and Diagnosis (AFDD). Although a consistent methodological framework was followed, data collection and preparation processes were specifically adapted to each building's unique operational characteristics. Key procedures included: (1) customized raw data collection based on individual building requirements; (2) thorough identification and removal of missing or duplicated data points; (3) systematic annotation of operational conditions and fault categories; and (4) strategic division of datasets into training, validation, and test subsets tailored to each building's specific data features. The resulting datasets enable researchers and developers to refine and advance machine learning and diagnostic models specifically designed for AFDD within AHU systems. Facility operators can then seamlessly integrate these validated AFDD models into existing management systems, facilitating efficient automated fault detection and ensuring optimal performance and reliability.
-
-**AI Summary:**
-
-> This study aims to develop comprehensive real operational datasets from three distinct building types-a large-scale office, an auditorium, and a hospital-focusing on Air Handling Units (AHUs) equipped... Keywords: Computer science, Identification (biology), Fault detection and isolation.
-
----
-
-## 25. A Lightweight Electronic Water Pump Shell Defect Detection Method Based on Improved YOLOv5s
-
-**Authors:** Qunbiao Wu, Zhen Wang, Haifeng Fang et al.
-
-**Year:** 2023
-
-**Journal:** Computer Systems Science and Engineering
-
-**Citations:** 3
-
-**DOI:** [https://doi.org/10.32604/csse.2023.036239](https://doi.org/https://doi.org/10.32604/csse.2023.036239)
-
-**Keywords:** Computer science, Artificial intelligence, Pattern recognition (psychology)
-
-**Abstract:**
-
-For surface defects in electronic water pump shells, the manual detection efficiency is low, prone to misdetection and leak detection, and encounters problems, such as uncertainty. To improve the speed and accuracy of surface defect detection, a lightweight detection method based on an improved YOLOv5s method is proposed to replace the traditional manual detection methods. In this method, the MobileNetV3 module replaces the backbone network of YOLOv5s, depth-separable convolution is introduced, the parameters and calculations are reduced, and CIoU_Loss is used as the loss function of the boundary box regression to improve its detection accuracy. A dataset of electronic pump shell defects is established, and the performance of the improved method is evaluated by comparing it with that of the original method. The results show that the parameters and FLOPs are reduced by 49.83% and 61.59%, respectively, compared with the original YOLOv5s model, and the detection accuracy is improved by 1.74%, which is an indication of the superiority of the improved method. To further verify the universality of the improved method, it is compared with the results using the original method on the PASCALVOC2007 dataset, which verifies that it yields better performance. In summary, the improved lightweight method can be used for the real-time detection of electronic water pump shell defects.
-
-**AI Summary:**
-
-> For surface defects in electronic water pump shells, the manual detection efficiency is low, prone to misdetection and leak detection, and encounters problems, such as uncertainty Keywords: Computer science, Artificial intelligence, Pattern recognition (psychology).
-
----
-
-## 26. Testing and Evaluation of Low-Cost Sensors for Developing Open Smart Campus Systems Based on IoT
-
-**Authors:** Pascal Neis, Dominik Warch, Max Hoppe
-
-**Year:** 2023
-
-**Journal:** Sensors
-
-**Citations:** 10
-
-**DOI:** [https://doi.org/10.3390/s23208652](https://doi.org/https://doi.org/10.3390/s23208652)
-
-**Keywords:** Smart city, Computer science, Context (archaeology), Visitor pattern, Building automation, USable
-
-**Abstract:**
-
-Urbanization has led to the need for the intelligent management of various urban challenges, from traffic to energy. In this context, smart campuses and buildings emerge as microcosms of smart cities, offering both opportunities and challenges in technology and communication integration. This study sets itself apart by prioritizing sustainable, adaptable, and reusable solutions through an open-source framework and open data protocols. We utilized the Internet of Things (IoT) and cost-effective sensors to capture real-time data for three different use cases: real-time monitoring of visitor counts, room and parking occupancy, and the collection of environment and climate data. Our analysis revealed that the implementation of the utilized hardware and software combination significantly improved the implementation of open smart campus systems, providing a usable visitor information system for students. Moreover, our focus on data privacy and technological versatility offers valuable insights into real-world applicability and limitations. This study contributes a novel framework that not only drives technological advancements but is also readily adaptable, improvable, and reusable across diverse settings, thereby showcasing the untapped potential of smart, sustainable systems.
-
-**AI Summary:**
-
-> Urbanization has led to the need for the intelligent management of various urban challenges, from traffic to energy Keywords: Smart city, Computer science, Context (archaeology).
-
----
-
-## 27. A Survey of FPGA-Based Vision Systems for Autonomous Cars
-
-**Authors:** David Castells‐Rufas, Vinh Ngo, Juan Borrego-Carazo et al.
-
-**Year:** 2022
-
-**Journal:** IEEE Access
-
-**Citations:** 24
-
-**DOI:** [https://doi.org/10.1109/access.2022.3230282](https://doi.org/https://doi.org/10.1109/access.2022.3230282)
-
-**Keywords:** Field-programmable gate array, Computer science, Automotive industry, Implementation, Latency (audio), Advanced driver assistance systems
-
-**Abstract:**
-
-On the road to making self-driving cars a reality, academic and industrial researchers are working hard to continue to increase safety while meeting technical and regulatory constraints Understanding the surrounding environment is a fundamental task in self-driving cars. It requires combining complex computer vision algorithms. Although state-of-the-art algorithms achieve good accuracy, their implementations often require powerful computing platforms with high power consumption. In some cases, the processing speed does not meet real-time constraints. FPGA platforms are often used to implement a category of latency-critical algorithms that demand maximum performance and energy efficiency. Since self-driving car computer vision functions fall into this category, one could expect to see a wide adoption of FPGAs in autonomous cars. In this paper, we survey the computer vision FPGA-based works from the literature targeting automotive applications over the last decade. Based on the survey, we identify the strengths and weaknesses of FPGAs in this domain and future research opportunities and challenges.
-
-**AI Summary:**
-
-> On the road to making self-driving cars a reality, academic and industrial researchers are working hard to continue to increase safety while meeting technical and regulatory constraints Understanding ... Keywords: Field-programmable gate array, Computer science, Automotive industry.
-
----
-
-## 28. A Cost-Effective System for Indoor Three-Dimensional Occupant Positioning and Trajectory Reconstruction
-
-**Authors:** Xiaomei Zhao, Shuo Li, Zhan Zhao et al.
-
-**Year:** 2023
-
-**Journal:** Buildings
-
-**Citations:** 4
-
-**DOI:** [https://doi.org/10.3390/buildings13112832](https://doi.org/https://doi.org/10.3390/buildings13112832)
-
-**Keywords:** Occupancy, Computer vision, Computer science, Tracking (education), Artificial intelligence, Trajectory
-
-**Abstract:**
-
-Accurate indoor occupancy information extraction plays a crucial role in building energy conservation. Vision-based methods are popularly used for occupancy information extraction because of their high accuracy. However, previous vision-based methods either only provide 2D occupancy information or require expensive equipment. In this paper, we propose a cost-effective indoor occupancy information extraction system that estimates occupant positions and trajectories in 3D using a single RGB camera. The proposed system provides an inverse proportional model to estimate the distance between a human head and the camera according to pixel-heights of human heads, eliminating the dependence on expensive depth sensors. The 3D position coordinates of human heads are calculated based on the above model. The proposed system also associates the 3D position coordinates of human heads with human tracking results by assigning the 3D coordinates of human heads to the corresponding human IDs from a tracking module, obtaining the 3D trajectory of each person. Experimental results demonstrate that the proposed system successfully calculates accurate 3D positions and trajectories of indoor occupants with only one surveillance camera. In conclusion, the proposed system is a low-cost and high-accuracy indoor occupancy information extraction system that has high potential in reducing building energy consumption.
-
-**AI Summary:**
-
-> Accurate indoor occupancy information extraction plays a crucial role in building energy conservation Keywords: Occupancy, Computer vision, Computer science.
-
----
-
-## 29. A novel lightweight skeletal temporal model for real-time, computationally efficient recognition of occupant thermal adaptation behavior
-
-**Authors:** Zhe Wang, Hao Sun, John Kaiser Calautit et al.
-
-**Year:** 2025
-
-**Journal:** Building Simulation
-
-**Citations:** 3
-
-**DOI:** [https://doi.org/10.1007/s12273-025-1335-6](https://doi.org/https://doi.org/10.1007/s12273-025-1335-6)
-
-**Keywords:** Adaptation (eye), Thermal, Computer science, Artificial intelligence, Engineering, Real-time computing
-
-**Abstract:**
-
-Abstract Optimizing building energy systems based on real-time occupant behavior and feedback can lead to improved energy efficiency and enhanced thermal comfort in buildings. Traditional thermal comfort surveys do not provide real-time insights, while conventional sensors, such as thermal sensors, are limited in their ability to capture continuous, detailed occupancy data. Meanwhile, deep learning and computer vision have emerged as promising approaches for real-time occupancy behavior detection, but existing artificial intelligence (AI) models suffer from low frame rates and high computational demands, which can lead to increased energy consumption for processing, potentially offsetting the energy savings achieved through occupant-responsive control. Thus, this study developed a novel occupant thermal adaptation behavior recognition model that balances accuracy, real-time performance and computational resource usage to enable effective operation indoors. Using a multi-camera setup with Raspberry Pi 3B+, a custom dataset comprising 400 video samples was collected from four different angles. The dataset captures four distinct human activities: dressing, undressing, sitting, and standing. Compared to SlowFast (SF) and Spatial Temporal Graph Convolutional Networks (ST-GCN), which are widely used deep learning architectures for action recognition, the proposed novel lightweight skeletal temporal model achieved good accuracy (0.975 accuracy) on the Kungliga Tekniska Högskolan (KTH) dataset while significantly outperforming them in detection speed and resource efficiency. It reached 31.38 FPS by running on the graphics processing unit (GPU)—over three times faster than ST-GCN with OpenPose and more than twelve times faster than SF with You Only Look Once Version X (YOLOX)—while maintaining low central processing unit (CPU) and GPU usage at 13.71% and 33.05%, respectively. By running it on the CPU, it achieved 25.3 FPS with 56.10% CPU usage, proving its practicality for platforms without GPU support. When evaluated on the custom dataset, we introduced a double long short-term memory (LSTM) with an attention mechanism to better handle the increased action complexity, preserving a high accuracy of 0.963. Although the frame rate experienced a slight reduction compared to the results on the KTH dataset—dropping from 31.38 to 30.95 FPS on GPU and from 25.3 to 18.98 FPS on CPU—the model exhibited lower CPU and GPU usage, highlighting its potential for energy-efficient deployment in smart building applications. The model was further deployed on an NVIDIA Jetson Orin Nano, enabling stable long-term operation and supporting simultaneous multi-person recognition. Overall, this study presents a practical, AI-driven solution for occupant thermal adaptation behavior recognition, effectively balancing accuracy, real-time performance, and computational efficiency—making it well suited for energy-saving applications in buildings that adapt dynamically to occupant behavior.
-
-**AI Summary:**
-
-> Abstract Optimizing building energy systems based on real-time occupant behavior and feedback can lead to improved energy efficiency and enhanced thermal comfort in buildings Keywords: Adaptation (eye), Thermal, Computer science.
-
----
-
-## 30. A ventilation early warning system (VEWS) for diaphanous workspaces considering COVID-19 and future pandemics scenarios
-
-**Authors:** Gonçal Costa, Oriol Arroyo, Pablo Rueda et al.
-
-**Year:** 2023
-
-**Journal:** Heliyon
-
-**Citations:** 12
-
-**DOI:** [https://doi.org/10.1016/j.heliyon.2023.e14640](https://doi.org/https://doi.org/10.1016/j.heliyon.2023.e14640)
-
-**Keywords:** HVAC, Workspace, Warning system, Sustainability, Architectural engineering, Computer science
-
-**Abstract:**
-
-The COVID-19 pandemic has generated new needs due to the associated health risks and, more specifically, its rapid infection rate. Prevention measures to avoid contagions in indoor spaces, especially in office and public buildings (e.g., hospitals, public administration, educational centres, etc.), have led to the need for adequate ventilation to dilute the possible concentration of the virus. This article presents our contribution to this new challenge, namely the Ventilation Early Warning System (VEWS) which has aims to adapt the operation of the current Heating, Ventilating and Air Conditioning (HVAC) systems to the ventilation needs of diaphanous workspaces, based on a Smart Campus Digital Twin (SCDT) framework approach, while maintaining sustainability. Different technologies such as the Internet of Things (IoT), Building Information Modelling (BIM) and Artificial Intelligence (AI) algorithms are combined to collect and integrate monitoring data (historical records, real-time information, and location-related patterns) to carry out forecasting simulations in this digital twin. The generated outputs serve to assist facility managers in their building governance, considering the appropriate application of health measures to reduce the risk of coronavirus contagion in combination with sustainability criteria. The article also provides the results of the implementation of the VEWS in a university workspace as a case study. Its application has made it possible to detect and warn of inadequate ventilation situations for the daily flow of people in the different controlled zones.
-
-**AI Summary:**
-
-> The COVID-19 pandemic has generated new needs due to the associated health risks and, more specifically, its rapid infection rate Keywords: HVAC, Workspace, Warning system.
-
----
-
-## 31. Advanced Power Converters and Learning in Diverse Robotic Innovation: A Review
-
-**Authors:** Rupam Singh, Varaha Satya Bharath Kurukuru, Mohammed Ali Khan
-
-**Year:** 2023
-
-**Journal:** Energies
-
-**Citations:** 13
-
-**DOI:** [https://doi.org/10.3390/en16207156](https://doi.org/https://doi.org/10.3390/en16207156)
-
-**Keywords:** Artificial intelligence, Robotics, Computer science, Flexibility (engineering), Robot, Reinforcement learning
-
-**Abstract:**
-
-This paper provides a comprehensive review of the integration of advanced power management systems and learning techniques in the field of robotics. It identifies the critical roles these areas play in reshaping the capabilities of robotic systems across diverse applications. To begin, it highlights the significance of efficient power usage in modern robotics. The paper explains how advanced power converters effectively control voltage, manage current and shape waveforms, thereby optimizing energy utilization. These converters ensure that robotic components receive the precise voltage levels they require, leading to improved motor performance and enabling precise control over motor behavior. Consequently, this results in extended operational times and increased design flexibility. Furthermore, the review explores the integration of learning approaches, emphasizing their substantial impact on robotic perception, decision-making and autonomy. It discusses the application of techniques such as reinforcement learning, supervised learning and unsupervised learning, showcasing their applications in areas like object recognition, semantic segmentation, sensor fusion and anomaly detection. By utilizing these learning methods, robots become more intelligent, adaptable and capable of autonomous operation across various domains. By examining the interaction between advanced power management and learning integration, this review anticipates a future where robots operate with increased efficiency, adapt to various tasks and drive technological innovation across a wide range of industries.
-
-**AI Summary:**
-
-> This paper provides a comprehensive review of the integration of advanced power management systems and learning techniques in the field of robotics Keywords: Artificial intelligence, Robotics, Computer science.
-
----
-
-## 32. A pilot study of occupant centric control stratum ventilation based on computer vision
-
-**Authors:** Yihang Liu, Bin Yang, Zhang Lin
-
-**Year:** 2022
-
-**Journal:** E3S Web of Conferences
-
-**Citations:** 2
-
-**DOI:** [https://doi.org/10.1051/e3sconf/202235601029](https://doi.org/https://doi.org/10.1051/e3sconf/202235601029)
-
-**Keywords:** HVAC, Ventilation (architecture), Thermal comfort, Cooling load, Energy consumption, Automotive engineering
-
-**Abstract:**
-
-Indoor occupant information has an obvious influence on operating parameters of heating ventilation and air conditioning (HVAC) system, which further affects occupants’ thermal comfort and energy consumption. This pilot study proposes an occupant centric control (OCC) strategy for stratum ventilation (SV) to achieve demand control ventilation (DCV). Firstly, the computer vision sensing system and deep learning algorithm are used to detect the number of occupants in real time, and the accuracy of the number of occupants in the office environment was evaluated. Then, the occupant centric stratum ventilation control strategy is designed by the dynamic changes of cooling load. Finally, the thermal comfort and air quality of the thermal environment created by the OCC strategy were evaluated through subject experiment, and the energy consumption of the HVAC system was calculated in combination with the energy consumption simulation software. This study adjusts system setting values according to actual needs, so that the HVAC system responds to the dynamic changes of the indoor cooling load in real time, creating a comfortable and healthy indoor environment in an energy efficient manner.
-
-**AI Summary:**
-
-> Indoor occupant information has an obvious influence on operating parameters of heating ventilation and air conditioning (HVAC) system, which further affects occupants’ thermal comfort and energy cons... Keywords: HVAC, Ventilation (architecture), Thermal comfort.
-
----
-
-## 33. Towards the application of machine learning in digital twin technology: a multi-scale review
-
-**Authors:** Luigi Nele, Giulio Mattera, Emily W. Yap et al.
-
-**Year:** 2024
-
-**Journal:** Discover Applied Sciences
-
-**Citations:** 47
-
-**DOI:** [https://doi.org/10.1007/s42452-024-06206-4](https://doi.org/https://doi.org/10.1007/s42452-024-06206-4)
-
-**Keywords:** Scale (ratio), Computer science, Artificial intelligence, Machine learning, Data science, Human–computer interaction
-
-**Abstract:**
-
-This review article delves into the conceptual framework of digital twins and their diverse applications across research domains, highlighting the pivotal role of machine learning in shaping the development and integration of digital twin technology across multiple disciplines. Emphasising key features like multidisciplinarity and multi-scale aspects, the paper explores how data-driven techniques are employed for modelling, visualisation, monitoring, and optimisation within the digital twin framework, pinpointing the benefits introduced in the current state-of-the-art applications, and elucidates persisting challenges across various research fields, including advanced materials, smart buildings, and manufacturing systems.
-
-**AI Summary:**
-
-> This review article delves into the conceptual framework of digital twins and their diverse applications across research domains, highlighting the pivotal role of machine learning in shaping the devel... Keywords: Scale (ratio), Computer science, Artificial intelligence.
-
----
-
-## 34. Human Action Recognition in Smart Living Services and Applications: Context Awareness, Data Availability, Personalization, and Privacy
-
-**Authors:** Giovanni Diraco, Gabriele Rescio, Andrea Caroppo et al.
-
-**Year:** 2023
-
-**Journal:** Sensors
-
-**Citations:** 43
-
-**DOI:** [https://doi.org/10.3390/s23136040](https://doi.org/https://doi.org/10.3390/s23136040)
-
-**Keywords:** Personalization, Context (archaeology), Computer science, Smart city, Independent living, Data science
-
-**Abstract:**
-
-Smart living, an increasingly prominent concept, entails incorporating sophisticated technologies in homes and urban environments to elevate the quality of life for citizens. A critical success factor for smart living services and applications, from energy management to healthcare and transportation, is the efficacy of human action recognition (HAR). HAR, rooted in computer vision, seeks to identify human actions and activities using visual data and various sensor modalities. This paper extensively reviews the literature on HAR in smart living services and applications, amalgamating key contributions and challenges while providing insights into future research directions. The review delves into the essential aspects of smart living, the state of the art in HAR, and the potential societal implications of this technology. Moreover, the paper meticulously examines the primary application sectors in smart living that stand to gain from HAR, such as smart homes, smart healthcare, and smart cities. By underscoring the significance of the four dimensions of context awareness, data availability, personalization, and privacy in HAR, this paper offers a comprehensive resource for researchers and practitioners striving to advance smart living services and applications. The methodology for this literature review involved conducting targeted Scopus queries to ensure a comprehensive coverage of relevant publications in the field. Efforts have been made to thoroughly evaluate the existing literature, identify research gaps, and propose future research directions. The comparative advantages of this review lie in its comprehensive coverage of the dimensions essential for smart living services and applications, addressing the limitations of previous reviews and offering valuable insights for researchers and practitioners in the field.
-
-**AI Summary:**
-
-> Smart living, an increasingly prominent concept, entails incorporating sophisticated technologies in homes and urban environments to elevate the quality of life for citizens Keywords: Personalization, Context (archaeology), Computer science.
-
----
-
-## 35. Deep Learning for IoT Big Data and Streaming Analytics: A Survey
+## 1. Deep Learning for IoT Big Data and Streaming Analytics: A Survey
 
 **Authors:** Mehdi Mohammadi, Ala Al‐Fuqaha, Sameh Sorour et al.
 
@@ -832,11 +16,11 @@ Smart living, an increasingly prominent concept, entails incorporating sophistic
 
 **Journal:** IEEE Communications Surveys & Tutorials
 
-**Citations:** 88
+**Citations:** 1483
 
 **DOI:** [https://doi.org/10.1109/comst.2018.2844341](https://doi.org/https://doi.org/10.1109/comst.2018.2844341)
 
-**Keywords:** Big data, Computer science, Analytics, Data science, Internet of Things, Data analysis
+**Keywords:** Big data, Computer science, Analytics, Data science, Internet of Things, deep learning
 
 **Abstract:**
 
@@ -848,115 +32,619 @@ In the era of the Internet of Things (IoT), an enormous amount of sensing device
 
 ---
 
-## 36. Scan-to-EDTs: Automated Generation of Energy Digital Twins from 3D Point Clouds
+## 2. Deep Learning for Edge Computing Applications: A State-of-the-Art Survey
 
-**Authors:** O. V. Roman, Maarten Bassier, Giorgio Agugiaro et al.
+**Authors:** Fangxin Wang, Miao Zhang, Xiangxiang Wang et al.
 
-**Year:** 2025
+**Year:** 2020
 
-**Journal:** Buildings
+**Journal:** IEEE Access
 
-**Citations:** 1
+**Citations:** 263
 
-**DOI:** [https://doi.org/10.3390/buildings15224060](https://doi.org/https://doi.org/10.3390/buildings15224060)
+**DOI:** [https://doi.org/10.1109/access.2020.2982411](https://doi.org/https://doi.org/10.1109/access.2020.2982411)
 
-**Keywords:** Reliability (semiconductor), Energy (signal processing), Computer science, Point cloud, Efficient energy use, Point (geometry)
+**Keywords:** Computer science, Edge computing, Cloud computing, Edge device, Deep learning, edge computing
 
 **Abstract:**
 
-Digital Twins (DTs) are transforming construction and energy management sectors by integrating 3D surveying, monitoring, Building Performance Simulation (BPS), and Building Energy Simulation (BES) from the earliest design or retrofit stages. Moreover, dynamic thermal simulations further support energy performance assessments by modeling indoor conditions to meet comfort and efficiency targets. However, their reliability depends on accurate, standards-compliant 3D building models, which are costly to create. This research introduces a complete framework for automatically generating energy-focused Digital Twins (EDTs) directly from unstructured point clouds. Combining Deep Learning-based instance detection, Scan-to-BIM techniques, and computational geometry, the method produces simulation-ready models without manual intervention. The resulting EDTs streamline early-stage performance evaluation, enable scenario testing, and enhance decision making for energy-efficient retrofits, advancing smart-building design through predictive simulation.
+With the booming development of Internet-of-Things (IoT) and communication technologies such as 5G, our future world is envisioned as an interconnected entity where billions of devices will provide uninterrupted service to our daily lives and the industry. Meanwhile, these devices will generate massive amounts of valuable data at the network edge, calling for not only instant data processing but also intelligent data analysis in order to fully unleash the potential of the edge big data. Both the traditional cloud computing and on-device computing cannot sufficiently address this problem due to the high latency and the limited computation capacity, respectively. Fortunately, the emerging edge computing sheds a light on the issue by pushing the data processing from the remote network core to the local network edge, remarkably reducing the latency and improving the efficiency. Besides, the recent breakthroughs in deep learning have greatly facilitated the data processing capacity, enabling a thrilling development of novel applications, such as video surveillance and autonomous driving. The convergence of edge computing and deep learning is believed to bring new possibilities to both interdisciplinary researches and industrial applications. In this article, we provide a comprehensive survey of the latest efforts on the deep-learning-enabled edge computing applications and particularly offer insights on how to leverage the deep learning advances to facilitate edge applications from four domains, i.e., smart multimedia, smart transportation, smart city, and smart industry. We also highlight the key research challenges and promising research directions therein. We believe this survey will inspire more researches and contributions in this promising field.
 
 **AI Summary:**
 
-> Digital Twins (DTs) are transforming construction and energy management sectors by integrating 3D surveying, monitoring, Building Performance Simulation (BPS), and Building Energy Simulation (BES) fro... Keywords: Reliability (semiconductor), Energy (signal processing), Computer science.
+> With the booming development of Internet-of-Things (IoT) and communication technologies such as 5G, our future world is envisioned as an interconnected entity where billions of devices will provide un... Keywords: Computer science, Edge computing, Cloud computing.
 
 ---
 
-## 37. Privacy-Preserving Person Detection Using Low-Resolution Infrared Cameras
+## 3. The Rise of Agentic AI: A Review of Definitions, Frameworks, Architectures, Applications, Evaluation Metrics, and Challenges
 
-**Authors:** Thomas Dubail, Fidel A. Guerrero Peña, Heitor R. Medeiros et al.
+**Authors:** Ajay Bandi, Bhavani Kongari, Roshini Naguru et al.
+
+**Year:** 2025
+
+**Journal:** Future Internet
+
+**Citations:** 177
+
+**DOI:** [https://doi.org/10.3390/fi17090404](https://doi.org/https://doi.org/10.3390/fi17090404)
+
+**Keywords:** Computer science, Artificial intelligence, Data science, Machine learning, Software engineering, agentic AI
+
+**Abstract:**
+
+Agentic AI systems are a recently emerged and important approach that goes beyond traditional AI, generative AI, and autonomous systems by focusing on autonomy, adaptability, and goal-driven reasoning. This study provides a clear review of agentic AI systems by bringing together their definitions, frameworks, and architectures, and by comparing them with related areas like generative AI, autonomic computing, and multi-agent systems. To do this, we reviewed 143 primary studies on current LLM-based and non-LLM-driven agentic systems and examined how they support planning, memory, reflection, and goal pursuit. Furthermore, we classified architectural models, input–output mechanisms, and applications based on their task domains where agentic AI is applied, supported using tabular summaries that highlight real-world case studies. Evaluation metrics were classified as qualitative and quantitative measures, along with available testing methods of agentic AI systems to check the system’s performance and reliability. This study also highlights the main challenges and limitations of agentic AI, covering technical, architectural, coordination, ethical, and security issues. We organized the conceptual foundations, available tools, architectures, and evaluation metrics in this research, which defines a structured foundation for understanding and advancing agentic AI. These findings aim to help researchers and developers build better, clearer, and more adaptable systems that support responsible deployment in different domains.
+
+**AI Summary:**
+
+> Agentic AI systems are a recently emerged and important approach that goes beyond traditional AI, generative AI, and autonomous systems by focusing on autonomy, adaptability, and goal-driven reasoning Keywords: Computer science, Artificial intelligence, Data science.
+
+---
+
+## 4. Deep Learning-Based Industry 4.0 and Internet of Things towards Effective Energy Management for Smart Buildings
+
+**Authors:** Mahmoud Elsisi, Minh‐Quang Tran, Karar Mahmoud et al.
+
+**Year:** 2021
+
+**Journal:** Sensors
+
+**Citations:** 175
+
+**DOI:** [https://doi.org/10.3390/s21041038](https://doi.org/https://doi.org/10.3390/s21041038)
+
+**Keywords:** Energy consumption, Computer science, Deep learning, Dashboard, Air conditioning, smart buildings
+
+**Abstract:**
+
+Worldwide, energy consumption and saving represent the main challenges for all sectors, most importantly in industrial and domestic sectors. The internet of things (IoT) is a new technology that establishes the core of Industry 4.0. The IoT enables the sharing of signals between devices and machines via the internet. Besides, the IoT system enables the utilization of artificial intelligence (AI) techniques to manage and control the signals between different machines based on intelligence decisions. The paper's innovation is to introduce a deep learning and IoT based approach to control the operation of air conditioners in order to reduce energy consumption. To achieve such an ambitious target, we have proposed a deep learning-based people detection system utilizing the YOLOv3 algorithm to count the number of persons in a specific area. Accordingly, the operation of the air conditioners could be optimally managed in a smart building. Furthermore, the number of persons and the status of the air conditioners are published via the internet to the dashboard of the IoT platform. The proposed system enhances decision making about energy consumption. To affirm the efficacy and effectiveness of the proposed approach, intensive test scenarios are simulated in a specific smart building considering the existence of air conditioners. The simulation results emphasize that the proposed deep learning-based recognition algorithm can accurately detect the number of persons in the specified area, thanks to its ability to model highly non-linear relationships in data. The detection status can also be successfully published on the dashboard of the IoT platform. Another vital application of the proposed promising approach is in the remote management of diverse controllable devices.
+
+**AI Summary:**
+
+> Worldwide, energy consumption and saving represent the main challenges for all sectors, most importantly in industrial and domestic sectors Keywords: Energy consumption, Computer science, Deep learning.
+
+---
+
+## 5. AI-Driven Innovations in Building Energy Management Systems: A Review of Potential Applications and Energy Savings
+
+**Authors:** Dalia Mohammed Talat Ebrahim Ali, Violeta Motuzienė, Rasa Džiugaitė-Tumėnienė
+
+**Year:** 2024
+
+**Journal:** Energies
+
+**Citations:** 118
+
+**DOI:** [https://doi.org/10.3390/en17174277](https://doi.org/https://doi.org/10.3390/en17174277)
+
+**Keywords:** Energy management, Energy (signal processing), Energy system, Architectural engineering, Environmental economics, building energy management systems
+
+**Abstract:**
+
+Despite the tightening of energy performance standards for buildings in various countries and the increased use of efficient and renewable energy technologies, it is clear that the sector needs to change more rapidly to meet the Net Zero Emissions (NZE) scenario by 2050. One of the problems that have been analyzed intensively in recent years is that buildings in operation use much more energy than they were designed to. This problem, known as the energy performance gap, is found in many countries and buildings and is often attributed to the poor management of building energy systems. The application of Artificial Intelligence (AI) to Building Energy Management Systems (BEMS) has untapped potential to address this problem and lead to more sustainable buildings. This paper reviews different AI-based models that have been proposed for different applications and different buildings with the intention to reduce energy consumption. It compares the performance of the different AI-based models evaluated in the reviewed papers by presenting the accuracy and error rates of model performance and identifies where the greatest potential for energy savings could be achieved, and to what extent. The review showed that offices have the greatest potential for energy savings (up to 37%) when they employ AI models for HVAC control and optimization. In residential and educational buildings, the lower intelligence of the existing BEMS results in smaller energy savings (up to 23% and 21%, respectively).
+
+**AI Summary:**
+
+> Despite the tightening of energy performance standards for buildings in various countries and the increased use of efficient and renewable energy technologies, it is clear that the sector needs to cha... Keywords: Energy management, Energy (signal processing), Energy system.
+
+---
+
+## 6. Application of deep learning in facility management and maintenance for heating, ventilation, and air conditioning
+
+**Authors:** Mirza Rayana Sanzana, Tomás Maul, Jing Ying Wong et al.
 
 **Year:** 2022
 
-**Journal:** arXiv (Cornell University)
+**Journal:** Automation in Construction
 
-**Citations:** 1
+**Citations:** 109
 
-**DOI:** [https://doi.org/10.48550/arxiv.2209.11335](https://doi.org/https://doi.org/10.48550/arxiv.2209.11335)
+**DOI:** [https://doi.org/10.1016/j.autcon.2022.104445](https://doi.org/https://doi.org/10.1016/j.autcon.2022.104445)
 
-**Keywords:** Computer science, Artificial intelligence, Computer vision, Detector, Minimum bounding box, Computation
+**Keywords:** HVAC, Deep learning, Air conditioning, Predictive maintenance, Computer science, deep learning
 
 **Abstract:**
 
-In intelligent building management, knowing the number of people and their location in a room are important for better control of its illumination, ventilation, and heating with reduced costs and improved comfort. This is typically achieved by detecting people using compact embedded devices that are installed on the room's ceiling, and that integrate low-resolution infrared camera, which conceals each person's identity. However, for accurate detection, state-of-the-art deep learning models still require supervised training using a large annotated dataset of images. In this paper, we investigate cost-effective methods that are suitable for person detection based on low-resolution infrared images. Results indicate that for such images, we can reduce the amount of supervision and computation, while still achieving a high level of detection accuracy. Going from single-shot detectors that require bounding box annotations of each person in an image, to auto-encoders that only rely on unlabelled images that do not contain people, allows for considerable savings in terms of annotation costs, and for models with lower computational costs. We validate these experimental findings on two challenging top-view datasets with low-resolution infrared images.
+Despite the promising results of deep learning research, construction industry applications are still limited. Facility Management (FM) in construction has yet to take full advantage of the efficiency of deep learning techniques in daily operations and maintenance. Heating, Ventilation, and Air Conditioning (HVAC) is a major part of Facility Management and Maintenance (FMM) operations, and an occasional HVAC malfunction can lead to a huge monetary loss. The application of deep learning techniques in FMM can optimize building performance, especially in predictive maintenance, by lowering energy consumption, scheduling maintenance, as well as monitoring equipment. This review covers 100 papers that show how neural networks have evolved in this area and summarizes deep learning applications in facility management. Furthermore, it discusses the current challenges and foresees how deep learning applications can be useful in this field for researchers developing specific deep learning models for FMM. The paper also highlights how establishing public datasets relevant to FM for predictive maintenance is crucial for the effectiveness of deep learning techniques. The utilization of deep learning methods for predictive maintenance on Thermal-Storage Air-Conditioning (TS-AC) in HVAC is necessary for environmental sustainability, as well as to improve the cost-efficiency of buildings.
 
 **AI Summary:**
 
-> In intelligent building management, knowing the number of people and their location in a room are important for better control of its illumination, ventilation, and heating with reduced costs and impr... Keywords: Computer science, Artificial intelligence, Computer vision.
+> Despite the promising results of deep learning research, construction industry applications are still limited Keywords: HVAC, Deep learning, Air conditioning.
 
 ---
 
-## 38. Building Ventilation Optimization Through Occupant-Centered Computer Vision Analysis
+## 7. A review of the Digital Twin technology for fault detection in buildings
 
-**Authors:** Jevgēnijs Teličko, Kirill I. Bolotin
+**Authors:** Haidar Hosamo, Henrik Kofoed Nielsen, Ammar Alnmr et al.
+
+**Year:** 2022
+
+**Journal:** Frontiers in Built Environment
+
+**Citations:** 92
+
+**DOI:** [https://doi.org/10.3389/fbuil.2022.1013196](https://doi.org/https://doi.org/10.3389/fbuil.2022.1013196)
+
+**Keywords:** Fault detection and isolation, Fault (geology), Incentive, Engineering, Computer science, digital twin
+
+**Abstract:**
+
+This study aims to evaluate the utilization of technology known as Digital Twin for fault detection in buildings. The strategy consisted of studying existing applications, difficulties, and possibilities that come with it. The Digital Twin technology is one of the most intriguing newly discovered technologies rapidly evolving; however, some problems still need to be addressed. First, using Digital Twins to detect building faults to prevent future failures and cutting overall costs by improving building maintenance is still ambiguous. Second, how Digital Twin technology may be applied to discover inefficiencies inside the building to optimize energy usage is not well defined. To address these issues, we reviewed 326 documents related to Digital Twin, BIM, and fault detection in civil engineering. Then out of the 326 documents, we reviewed 115 documents related to Digital Twin for fault detection in detail. This study used a qualitative assessment to uncover Digital Twin technology’s full fault detection capabilities. Our research concludes that Digital Twins need more development in areas such as scanner hardware and software, detection and prediction algorithms, modeling, and twinning programs before they will be convincing enough for fault detection and prediction. In addition, more building owners, architects, and engineers need substantial financial incentives to invest in condition monitoring before many of the strategies discussed in the reviewed papers will be used in the construction industry. For future investigation, more research needs to be devoted to exploring how machine learning may be integrated with other Digital Twin components to develop new fault detection methods.
+
+**AI Summary:**
+
+> This study aims to evaluate the utilization of technology known as Digital Twin for fault detection in buildings Keywords: Fault detection and isolation, Fault (geology), Incentive.
+
+---
+
+## 8. An IoT-Based Smart Building Solution for Indoor Environment Management and Occupants Prediction
+
+**Authors:** Alessandro Floris, Simone Porcu, Roberto Girau et al.
+
+**Year:** 2021
+
+**Journal:** Energies
+
+**Citations:** 70
+
+**DOI:** [https://doi.org/10.3390/en14102959](https://doi.org/https://doi.org/10.3390/en14102959)
+
+**Keywords:** Building automation, Computer science, Internet of Things, Dashboard, Indoor air quality, smart buildings
+
+**Abstract:**
+
+Smart buildings use Internet of Things (IoT) sensors for monitoring indoor environmental parameters, such as temperature, humidity, luminosity, and air quality. Due to the huge amount of data generated by these sensors, data analytics and machine learning techniques are needed to extract useful and interesting insights, which provide the input for the building optimization in terms of energy-saving, occupants’ health and comfort. In this paper, we propose an IoT-based smart building (SB) solution for indoor environment management, which aims to provide the following main functionalities: monitoring of the room environmental parameters; detection of the number of occupants in the room; a cloud platform where virtual entities collect the data acquired by the sensors and virtual super entities perform data analysis tasks using machine learning algorithms; a control dashboard for the management and control of the building. With our prototype, we collected data for 10 days, and we built two prediction models: a classification model that predicts the number of occupants based on the monitored environmental parameters (average accuracy of 99.5%), and a regression model that predicts the total volatile organic compound (TVOC) values based on the environmental parameters and the number of occupants (Pearson correlation coefficient of 0.939).
+
+**AI Summary:**
+
+> Smart buildings use Internet of Things (IoT) sensors for monitoring indoor environmental parameters, such as temperature, humidity, luminosity, and air quality Keywords: Building automation, Computer science, Internet of Things.
+
+---
+
+## 9. Towards the application of machine learning in digital twin technology: a multi-scale review
+
+**Authors:** Luigi Nele, Giulio Mattera, Emily W. Yap et al.
+
+**Year:** 2024
+
+**Journal:** Discover Applied Sciences
+
+**Citations:** 64
+
+**DOI:** [https://doi.org/10.1007/s42452-024-06206-4](https://doi.org/https://doi.org/10.1007/s42452-024-06206-4)
+
+**Keywords:** Scale (ratio), Computer science, Artificial intelligence, Machine learning, Data science, digital twin
+
+**Abstract:**
+
+This review article delves into the conceptual framework of digital twins and their diverse applications across research domains, highlighting the pivotal role of machine learning in shaping the development and integration of digital twin technology across multiple disciplines. Emphasising key features like multidisciplinarity and multi-scale aspects, the paper explores how data-driven techniques are employed for modelling, visualisation, monitoring, and optimisation within the digital twin framework, pinpointing the benefits introduced in the current state-of-the-art applications, and elucidates persisting challenges across various research fields, including advanced materials, smart buildings, and manufacturing systems.
+
+**AI Summary:**
+
+> This review article delves into the conceptual framework of digital twins and their diverse applications across research domains, highlighting the pivotal role of machine learning in shaping the devel... Keywords: Scale (ratio), Computer science, Artificial intelligence.
+
+---
+
+## 10. Artificial intelligence in construction asset management: a review of present status, challenges and future opportunities
+
+**Authors:** Luca Rampini, Fulvio Re Cecconi
+
+**Year:** 2022
+
+**Journal:** Journal of Information Technology in Construction
+
+**Citations:** 56
+
+**DOI:** [https://doi.org/10.36680/j.itcon.2022.043](https://doi.org/https://doi.org/10.36680/j.itcon.2022.043)
+
+**Keywords:** Asset management, Context (archaeology), Computer science, Sustainability, Inefficiency, artificial intelligence
+
+**Abstract:**
+
+The built environment is responsible for roughly 40% of global greenhouse emissions, making the sector a crucial factor for climate change and sustainability. Meanwhile, other sectors (like manufacturing) adopted Artificial Intelligence (AI) to solve complex, non-linear problems to reduce waste, inefficiency, and pollution. Therefore, many research efforts in the Architecture, Engineering, and Construction community have recently tried introducing AI into building asset management (AM) processes. Since AM encompasses a broad set of disciplines, an overview of several AI applications, current research gaps, and trends is needed. In this context, this study conducted the first state-of-the-art research on AI for building asset management. A total of 578 papers were analyzed with bibliometric tools to identify prominent institutions, topics, and journals. The quantitative analysis helped determine the most researched areas of AM and which AI techniques are applied. The areas were furtherly investigated by reading in-depth the 83 most relevant studies selected by screening the articles’ abstracts identified in the bibliometric analysis. The results reveal many applications for Energy Management, Condition assessment, Risk management, and Project management areas. Finally, the literature review identified three main trends that can be a reference point for future studies made by practitioners or researchers: Digital Twin, Generative Adversarial Networks (with synthetic images) for data augmentation, and Deep Reinforcement Learning.
+
+**AI Summary:**
+
+> The built environment is responsible for roughly 40% of global greenhouse emissions, making the sector a crucial factor for climate change and sustainability Keywords: Asset management, Context (archaeology), Computer science.
+
+---
+
+## 11. Human Action Recognition in Smart Living Services and Applications: Context Awareness, Data Availability, Personalization, and Privacy
+
+**Authors:** Giovanni Diraco, Gabriele Rescio, Andrea Caroppo et al.
 
 **Year:** 2023
 
-**Journal:** Latvian Journal of Physics and Technical Sciences
+**Journal:** Sensors
 
-**Citations:** 3
+**Citations:** 53
 
-**DOI:** [https://doi.org/10.2478/lpts-2023-0045](https://doi.org/https://doi.org/10.2478/lpts-2023-0045)
+**DOI:** [https://doi.org/10.3390/s23136040](https://doi.org/https://doi.org/10.3390/s23136040)
 
-**Keywords:** Ventilation (architecture), Simulation, Computer science, Energy consumption, Architectural engineering, Efficient energy use
+**Keywords:** Personalization, Context (archaeology), Computer science, Smart city, Independent living, human action recognition
 
 **Abstract:**
 
-Abstract Buildings consume about 40 % of all energy. Ventilation plays a significant role in both the energy consumption of buildings and the comfort of occupants. To achieve energy efficiency and comfort, smarter ventilation control algorithms can be employed, such as those with feedback based on CO 2 levels. Furthermore, by knowing the current number of people in a space, ventilation can theoretically be adjusted to maintain a constant CO 2 level without wasting energy when people are not present. An additional benefit of such control could arise due to occupants’ habits. For example, if a person senses elevated CO 2 levels, even if the ventilation system has started operating more intense, they might choose to open a window, potentially compromising energy efficiency. Therefore, if the control algorithm were to maintain a constant CO 2 level, occupants may be less likely to open windows. In our work, we explore a model in combination with a custom monitoring system based on computer vision to implement such control. The monitoring system combines outside and inside CO 2 sensors with precise people counting based on computer vision to provide data to the model. The model relies on the mass balance equation for CO 2 and considers the historical data of the number of occupants and their activities to estimate the overall CO 2 generation in indoor spaces. The results suggest that the model can effectively forecast CO 2 dynamics with an absolute deviation of 40 ppm. However, it was observed that the analysis of the actual air exchange level could be compromised by several factors.
+Smart living, an increasingly prominent concept, entails incorporating sophisticated technologies in homes and urban environments to elevate the quality of life for citizens. A critical success factor for smart living services and applications, from energy management to healthcare and transportation, is the efficacy of human action recognition (HAR). HAR, rooted in computer vision, seeks to identify human actions and activities using visual data and various sensor modalities. This paper extensively reviews the literature on HAR in smart living services and applications, amalgamating key contributions and challenges while providing insights into future research directions. The review delves into the essential aspects of smart living, the state of the art in HAR, and the potential societal implications of this technology. Moreover, the paper meticulously examines the primary application sectors in smart living that stand to gain from HAR, such as smart homes, smart healthcare, and smart cities. By underscoring the significance of the four dimensions of context awareness, data availability, personalization, and privacy in HAR, this paper offers a comprehensive resource for researchers and practitioners striving to advance smart living services and applications. The methodology for this literature review involved conducting targeted Scopus queries to ensure a comprehensive coverage of relevant publications in the field. Efforts have been made to thoroughly evaluate the existing literature, identify research gaps, and propose future research directions. The comparative advantages of this review lie in its comprehensive coverage of the dimensions essential for smart living services and applications, addressing the limitations of previous reviews and offering valuable insights for researchers and practitioners in the field.
 
 **AI Summary:**
 
-> Abstract Buildings consume about 40 % of all energy Keywords: Ventilation (architecture), Simulation, Computer science.
+> Smart living, an increasingly prominent concept, entails incorporating sophisticated technologies in homes and urban environments to elevate the quality of life for citizens Keywords: Personalization, Context (archaeology), Computer science.
 
 ---
 
-## 39. Real-time Occupancy Detection and Tracking for HVAC Control in an Office Building
+## 12. Using Deep Learning in Real-Time for Clothing Classification with Connected Thermostats
 
-**Authors:** Jun-Sub Kim, Sun Ho Kim, Moon Hyeun Jun
+**Authors:** Adán Medina, Juana Isabel Méndez, Pedro Ponce et al.
+
+**Year:** 2022
+
+**Journal:** Energies
+
+**Citations:** 38
+
+**DOI:** [https://doi.org/10.3390/en15051811](https://doi.org/https://doi.org/10.3390/en15051811)
+
+**Keywords:** Clothing, Overfitting, MNIST database, Artificial intelligence, Computer science, clothing classification
+
+**Abstract:**
+
+Thermal comfort is associated with clothing insulation, conveying a level of satisfaction with the thermal surroundings. Besides, clothing insulation is commonly associated with indoor thermal comfort. However, clothing classification in smart homes might save energy when the end-user wears appropriate clothes to save energy and obtain thermal comfort. Furthermore, object detection and classification through Convolutional Neural Networks has increased over the last decade. There are real-time clothing garment classifiers, but these are oriented towards single garment recognition for texture, fabric, shape, or style. Consequently, this paper proposes a CNN model classification for the implementation of these classifiers on cameras. First, the Fashion MNIST was analyzed and compared with the VGG16, Inceptionvv4, TinyYOLOv3, and ResNet18 classification algorithms to determine the best clo classifier. Then, for real-time analysis, a new dataset with 12,000 images was created and analyzed with the YOLOv3 and TinyYOLO. Finally, an Azure Kinect DT was employed to analyze the clo value in real-time. Moreover, real-time analysis can be employed with any other webcam. The model recognizes at least three garments of a clothing ensemble, proving that it identifies more than a single clothing garment. Besides, the model has at least 90% accuracy in the test dataset, ensuring that it can be generalized and is not overfitting.
+
+**AI Summary:**
+
+> Thermal comfort is associated with clothing insulation, conveying a level of satisfaction with the thermal surroundings Keywords: Clothing, Overfitting, MNIST database.
+
+---
+
+## 13. Measuring Indoor Occupancy through Environmental Sensors: A Systematic Review on Sensor Deployment
+
+**Authors:** Alma Mena-Martinez, Héctor G. Ceballos, Joanna Alvarado-Uribe
+
+**Year:** 2022
+
+**Journal:** Sensors
+
+**Citations:** 36
+
+**DOI:** [https://doi.org/10.3390/s22103770](https://doi.org/https://doi.org/10.3390/s22103770)
+
+**Keywords:** Occupancy, Software deployment, Computer science, Wireless sensor network, Environmental monitoring, indoor occupancy detection
+
+**Abstract:**
+
+The COVID-19 pandemic has changed our common habits and lifestyle. Occupancy information is valued more now due to the restrictions put in place to reduce the spread of the virus. Over the years, several authors have developed methods and algorithms to detect/estimate occupancy in enclosed spaces. Similarly, different types of sensors have been installed in the places to allow this measurement. However, new researchers and practitioners often find it difficult to estimate the number of sensors to collect the data, the time needed to sense, and technical information related to sensor deployment. Therefore, this systematic review provides an overview of the type of environmental sensors used to detect/estimate occupancy, the places that have been selected to carry out experiments, details about the placement of the sensors, characteristics of datasets, and models/algorithms developed. Furthermore, with the information extracted from three selected studies, a technique to calculate the number of environmental sensors to be deployed is proposed.
+
+**AI Summary:**
+
+> The COVID-19 pandemic has changed our common habits and lifestyle Keywords: Occupancy, Software deployment, Computer science.
+
+---
+
+## 14. Clothing Insulation Rate and Metabolic Rate Estimation for Individual Thermal Comfort Assessment in Real Life
+
+**Authors:** Jinsong Liu, Isak Worre Foged, Thomas Baltzer Moeslund
+
+**Year:** 2022
+
+**Journal:** Sensors
+
+**Citations:** 35
+
+**DOI:** [https://doi.org/10.3390/s22020619](https://doi.org/https://doi.org/10.3390/s22020619)
+
+**Keywords:** Metabolic rate, Clothing, Thermal comfort, Estimation, Thermal manikin, metabolic rate estimation
+
+**Abstract:**
+
+Satisfactory indoor thermal environments can improve working efficiencies of office staff. To build such satisfactory indoor microclimates, individual thermal comfort assessment is important, for which personal clothing insulation rate (Icl) and metabolic rate (M) need to be estimated dynamically. Therefore, this paper proposes a vision-based method. Specifically, a human tracking-by-detection framework is implemented to acquire each person’s clothing status (short-sleeved, long-sleeved), key posture (sitting, standing), and bounding box information simultaneously. The clothing status together with a key body points detector locate the person’s skin region and clothes region, allowing the measurement of skin temperature (Ts) and clothes temperature (Tc), and realizing the calculation of Icl from Ts and Tc. The key posture and the bounding box change across time can category the person’s activity intensity into a corresponding level, from which the M value is estimated. Moreover, we have collected a multi-person thermal dataset to evaluate the method. The tracking-by-detection framework achieves a mAP50 (Mean Average Precision) rate of 89.1% and a MOTA (Multiple Object Tracking Accuracy) rate of 99.5%. The Icl estimation module gets an accuracy of 96.2% in locating skin and clothes. The M estimation module obtains a classification rate of 95.6% in categorizing activity level. All of these prove the usefulness of the proposed method in a multi-person scenario of real-life applications.
+
+**AI Summary:**
+
+> Satisfactory indoor thermal environments can improve working efficiencies of office staff Keywords: Metabolic rate, Clothing, Thermal comfort.
+
+---
+
+## 15. A high-fidelity residential building occupancy detection dataset
+
+**Authors:** Margarite Jacoby, Sin Yong Tan, Gregor P. Henze et al.
+
+**Year:** 2021
+
+**Journal:** Scientific Data
+
+**Citations:** 31
+
+**DOI:** [https://doi.org/10.1038/s41597-021-01055-x](https://doi.org/https://doi.org/10.1038/s41597-021-01055-x)
+
+**Keywords:** Occupancy, Computer science, Ground truth, Fidelity, Modalities, human presence detection
+
+**Abstract:**
+
+This paper describes development of a data acquisition system used to capture a range of occupancy related modalities from single-family residences, along with the dataset that was generated. The publicly available dataset includes: grayscale images at 32-by-32 pixels, captured every second; audio files, which have undergone processing to remove personally identifiable information; indoor environmental readings, captured every ten seconds; and ground truth binary occupancy status. The data acquisition system, coined the mobile human presence detection (HPDmobile) system, was deployed in six homes for a minimum duration of one month each, and captured all modalities from at least four different locations concurrently inside each home. The environmental modalities are available as captured, but to preserve the privacy and identity of the occupants, images were downsized and audio files went through a series of processing steps, as described in this paper. This dataset adds to a very small body of existing data, with applications to energy efficiency and indoor environmental quality.
+
+**AI Summary:**
+
+> This paper describes development of a data acquisition system used to capture a range of occupancy related modalities from single-family residences, along with the dataset that was generated Keywords: Occupancy, Computer science, Ground truth.
+
+---
+
+## 16. A Survey of FPGA-Based Vision Systems for Autonomous Cars
+
+**Authors:** David Castells‐Rufas, Vinh Ngo, Juan Borrego-Carazo et al.
+
+**Year:** 2022
+
+**Journal:** IEEE Access
+
+**Citations:** 29
+
+**DOI:** [https://doi.org/10.1109/access.2022.3230282](https://doi.org/https://doi.org/10.1109/access.2022.3230282)
+
+**Keywords:** Field-programmable gate array, Computer science, Automotive industry, Implementation, Latency (audio), FPGA
+
+**Abstract:**
+
+On the road to making self-driving cars a reality, academic and industrial researchers are working hard to continue to increase safety while meeting technical and regulatory constraints Understanding the surrounding environment is a fundamental task in self-driving cars. It requires combining complex computer vision algorithms. Although state-of-the-art algorithms achieve good accuracy, their implementations often require powerful computing platforms with high power consumption. In some cases, the processing speed does not meet real-time constraints. FPGA platforms are often used to implement a category of latency-critical algorithms that demand maximum performance and energy efficiency. Since self-driving car computer vision functions fall into this category, one could expect to see a wide adoption of FPGAs in autonomous cars. In this paper, we survey the computer vision FPGA-based works from the literature targeting automotive applications over the last decade. Based on the survey, we identify the strengths and weaknesses of FPGAs in this domain and future research opportunities and challenges.
+
+**AI Summary:**
+
+> On the road to making self-driving cars a reality, academic and industrial researchers are working hard to continue to increase safety while meeting technical and regulatory constraints Understanding ... Keywords: Field-programmable gate array, Computer science, Automotive industry.
+
+---
+
+## 17. Thermal Imagery Feature Extraction Techniques and the Effects on Machine Learning Models for Smart HVAC Efficiency in Building Energy
+
+**Authors:** Yaa Takyiwaa Acquaah, Balakrishna Gokaraju, Raymond Tesiero et al.
+
+**Year:** 2021
+
+**Journal:** Remote Sensing
+
+**Citations:** 28
+
+**DOI:** [https://doi.org/10.3390/rs13193847](https://doi.org/https://doi.org/10.3390/rs13193847)
+
+**Keywords:** Artificial intelligence, Computer science, Pattern recognition (psychology), Wavelet, Support vector machine, occupancy detection
+
+**Abstract:**
+
+The control of thermostats of a heating, ventilation, and air-conditioning (HVAC) system installed in commercial and residential buildings remains a pertinent problem in building energy efficiency and thermal comfort research. The ability to determine the number of people at a particular time in an area is imperative for energy efficiency in order to condition only occupied regions and thermally deficient regions. In this study of the best features comparison for detecting the number of people in an area, feature extraction techniques including wavelet scattering, wavelet decomposition, grey-level co-occurrence matrix (GLCM) and feature maps convolution neural network (CNN) layers were explored using thermal camera imagery. Specifically, the pretrained CNN networks explored are the deep residual (Resnet-50) and visual geometry group (VGG-16) networks. The discriminating potential of Haar, Daubechies and Symlets wavelet statistics on different distributions of data were investigated. The performance of VGG-16 and ResNet-50 in an end-to-end manner utilizing transfer learning approach was investigated. Experimental results showed the classification and regression trees (CART) model trained on only GLCM and Haar wavelet statistic features, individually achieved accuracies of approximately 80% and 84%, respectively, in the detection problem. Moreover, k-nearest neighbors (KNN) trained on the combined features of GLCM and Haar wavelet statistics achieved an accuracy of approximately 86%. In addition, the performance accuracy of the multi classification support vector machine (SVM) trained on deep features obtained from layers of pretrained ResNet-50 and VGG-16 was between 96% and 97%. Furthermore, ResNet-50 transfer learning outperformed the VGG-16 transfer learning model for occupancy detection using thermal imagery. Overall, the SVM model trained on features extracted from wavelet scattering emerged as the best performing classifier with an accuracy of 100%. A principal component analysis (PCA) on the wavelet scattering features proved that the first twenty (20) principal components achieved a similar accuracy level instead of training on the whole feature set to reduce the execution time. The occupancy detection models can be integrated into HVAC control systems for energy efficiency and security systems, and aid in the distribution of resources to people in an area.
+
+**AI Summary:**
+
+> The control of thermostats of a heating, ventilation, and air-conditioning (HVAC) system installed in commercial and residential buildings remains a pertinent problem in building energy efficiency and... Keywords: Artificial intelligence, Computer science, Pattern recognition (psychology).
+
+---
+
+## 18. Development of CNN-based visual recognition air conditioner for smart buildings
+
+**Authors:** Qian Huang, Kangli Hao
+
+**Year:** 2020
+
+**Journal:** Journal of Information Technology in Construction
+
+**Citations:** 26
+
+**DOI:** [https://doi.org/10.36680/j.itcon.2020.021](https://doi.org/https://doi.org/10.36680/j.itcon.2020.021)
+
+**Keywords:** HVAC, Air conditioning, Occupancy, Building automation, Computer science, occupant detection
+
+**Abstract:**
+
+Demand-driven heating, ventilation, and air conditioning (HVAC) operations have become very attractive in energy-efficient smart buildings. Demand-oriented HVAC control largely relies on accurate detection of building occupancy levels and locations. So far, existing building occupancy detection methods have their disadvantages, and cannot fully meet the expected performance. To address this challenge, this paper proposes a visual recognition method based on convolutional neural networks (CNN), which can intelligently interpret visual contents of surveillance cameras to identify the number of occupants and their locations in buildings. The proposed study can detect the quantity, distance, and angle of indoor human users, which is essential for controlling air-conditioners to adjust the direction and speed of air blow. Compared with the state of the art, the proposed method successfully fulfills the function of building occupant counting, which cannot be realized when using PIR, sound, and carbon dioxide sensors. Our method also achieves higher accuracy in detecting moving or stationary human bodies and can filter out false detections (such as animal pets or moving curtains) that are existed in previous solutions. The proposed idea has been implemented and collaboratively tested with air conditioners in an office environment. The experimental results verify the validity and benefits of our proposed idea.
+
+**AI Summary:**
+
+> Demand-driven heating, ventilation, and air conditioning (HVAC) operations have become very attractive in energy-efficient smart buildings Keywords: HVAC, Air conditioning, Occupancy.
+
+---
+
+## 19. Real operational labeled data of air handling units from office, auditorium, and hospital buildings
+
+**Authors:** Seunghyeon Wang
 
 **Year:** 2025
 
-**Journal:** Building Simulation Conference proceedings
+**Journal:** Scientific Data
 
-**Citations:** 0
+**Citations:** 26
 
-**DOI:** [https://doi.org/10.26868/25222708.2025.1472](https://doi.org/https://doi.org/10.26868/25222708.2025.1472)
+**DOI:** [https://doi.org/10.1038/s41597-025-05825-9](https://doi.org/https://doi.org/10.1038/s41597-025-05825-9)
 
-**Keywords:** HVAC, Computer science, Schedule, Inefficiency, Key (lock), Tracking (education)
+**Keywords:** Computer science, Identification (biology), Fault detection and isolation, Data collection, Key (lock), air handling units
 
 **Abstract:**
 
-The efficient management of energy in office buildings is contingent upon the accurate real-time detection of occupancy. Conventional HVAC systems, often reliant on fixed schedules, struggle with inefficiency due to a mismatch with actual occupancy. While vision-based systems offer a promising solution, relying on detection-only models is insufficient, as they fail to provide reliable counts due to significant tracking errors like ID fragmentation. To address this specific limitation, this study proposes and validates an integrated detection and tracking framework based on YOLOv8 and DeepSORT.The proposed framework’s key strength is its superior performance in maintaining consistent occupant IDs. This capability overcomes the critical issue of ID fragmentation, which is a common failure in detection-only approaches. A case-study analysis demonstrated this stability: for 113 unique individuals, our framework assigned only 125 IDs, whereas a YOLO-only model generated 867. This tracking stability directly translates to superior counting accuracy, with the proposed system achieving a Mean Absolute Error (MAE) of 4.84, a clear improvement over the 42.05 MAE from the YOLO-only baseline. Furthermore, the framework addresses privacy concerns by leveraging YOLOv8's instance segmentation capability to generate a precise pixel-level mask for each person, obscuring their appearance while preserving the silhouette essential for tracking.The practical impact of this data was validated by integrating it into an EnergyPlus building simulation. The resulting real-time load schedule demonstrated a more stable and accurate load prediction, significantly reducing the average and maximum hourly errors compared to a conventional fixed schedule. This study thus establishes a validated, end-to-end framework for demand-driven HVAC optimization, providing the reliable, privacy-preserving data necessary to move beyond inefficient, static schedules and enable advanced, responsive control strategies.
+This study aims to develop comprehensive real operational datasets from three distinct building types-a large-scale office, an auditorium, and a hospital-focusing on Air Handling Units (AHUs) equipped with Constant Air Volume (CAV) systems for Automated Fault Detection and Diagnosis (AFDD). Although a consistent methodological framework was followed, data collection and preparation processes were specifically adapted to each building's unique operational characteristics. Key procedures included: (1) customized raw data collection based on individual building requirements; (2) thorough identification and removal of missing or duplicated data points; (3) systematic annotation of operational conditions and fault categories; and (4) strategic division of datasets into training, validation, and test subsets tailored to each building's specific data features. The resulting datasets enable researchers and developers to refine and advance machine learning and diagnostic models specifically designed for AFDD within AHU systems. Facility operators can then seamlessly integrate these validated AFDD models into existing management systems, facilitating efficient automated fault detection and ensuring optimal performance and reliability.
 
 **AI Summary:**
 
-> The efficient management of energy in office buildings is contingent upon the accurate real-time detection of occupancy Keywords: HVAC, Computer science, Schedule.
+> This study aims to develop comprehensive real operational datasets from three distinct building types-a large-scale office, an auditorium, and a hospital-focusing on Air Handling Units (AHUs) equipped... Keywords: Computer science, Identification (biology), Fault detection and isolation.
 
 ---
 
-## 40. A Review of the Potential of Drone-Based Approaches for Integrated Building Envelope Assessment
+## 20. Data-Driven Ventilation and Energy Optimization in Smart Office Buildings: Insights from a High-Resolution Occupancy and Indoor Climate Dataset
 
-**Authors:** Shayan Mirzabeigi, Ryan Razkenari, Paul Crovella
+**Authors:** Haidar Hosamo, Silvia Mazzetto
+
+**Year:** 2024
+
+**Journal:** Sustainability
+
+**Citations:** 23
+
+**DOI:** [https://doi.org/10.3390/su17010058](https://doi.org/https://doi.org/10.3390/su17010058)
+
+**Keywords:** Occupancy, Ventilation (architecture), Architectural engineering, Environmental science, Energy (signal processing), building ventilation
+
+**Abstract:**
+
+This paper explores innovative approaches to reducing energy consumption in building ventilation systems through the implementation of adaptive control strategies. Using a publicly available high-resolution dataset spanning a full year, the study integrates real-time data on occupancy, CO2 levels, temperature, window state, and external environmental conditions. Notably, occupancy data derived from computer vision-based detection using the YOLOv5 algorithm provides an unprecedented level of granularity. The study evaluates five energy-saving strategies: Demand-Controlled Ventilation (DCV), occupancy-based control, time-based off-peak reduction, window-open control, and temperature-based control. Among these, the occupancy-based strategy achieved the highest energy savings, reducing power consumption by 50%, while temperature-based control yielded a significant 37.27% reduction. This paper’s originality lies in its holistic analysis of multiple dynamic control strategies, integrating diverse environmental and operational variables rarely combined in prior research. The findings highlight the transformative potential of integrating real-time environmental data and advanced control algorithms to optimize HVAC performance. This study establishes a new benchmark for energy-efficient building management through offering practical recommendations and laying the groundwork for predictive models, renewable energy integration, and occupant-centric systems.
+
+**AI Summary:**
+
+> This paper explores innovative approaches to reducing energy consumption in building ventilation systems through the implementation of adaptive control strategies Keywords: Occupancy, Ventilation (architecture), Architectural engineering.
+
+---
+
+## 21. A Practical Multi-Sensor Cooling Demand Estimation Approach Based on Visual, Indoor and Outdoor Information Sensing
+
+**Authors:** Junqi Wang, Norman C. F. Tse, Tin Yan Poon et al.
+
+**Year:** 2018
+
+**Journal:** Sensors
+
+**Citations:** 23
+
+**DOI:** [https://doi.org/10.3390/s18113591](https://doi.org/https://doi.org/10.3390/s18113591)
+
+**Keywords:** Estimation, Computer science, Real-time computing, Environmental science, Remote sensing, multi-sensor fusion
+
+**Abstract:**
+
+The operating efficiency of heating, ventilation and air conditioning (HVAC) system is critical for building energy performance. Demand-based control is an efficient HVAC operating strategy, which can provide an appropriate level of HVAC services based on the recognition of actual cooling "demand." The cooling demand primarily relies on the accurate detection of occupancy. The current researches of demand-based HVAC control tend to detect the occupant count using cameras or other sensors, which often impose high computation and costs with limited real-life applications. Instead of detecting the occupant count, this paper proposes to detect the occupancy density. The occupancy density (estimated by image foreground moving pixels) together with the indoor and outdoor information (acquired from existing sensors) are used as inputs to an artificial neural network model for cooling demand estimation. Experiments have been implemented in a university design studio. Results show that, by adding the occupancy density, the cooling demand estimation error is greatly reduced by 67.4% and the R value is improved from 0.75 to 0.96. The proposed approach also features low-cost, computationally efficient, privacy-friendly and easily implementable. It shows good application potentials and can be readily incorporated into existing building management systems for improving energy efficiency.
+
+**AI Summary:**
+
+> The operating efficiency of heating, ventilation and air conditioning (HVAC) system is critical for building energy performance Keywords: Estimation, Computer science, Real-time computing.
+
+---
+
+## 22. Occupancy heat gain detection and prediction using deep learning approach for reducing building energy demand
+
+**Authors:** Paige Wenbin Tien, Shuangyu Wei, John Kaiser Calautit et al.
+
+**Year:** 2020
+
+**Journal:** Journal of Sustainable Development of Energy Water and Environment Systems
+
+**Citations:** 21
+
+**DOI:** [https://doi.org/10.13044/j.sdewes.d8.0378](https://doi.org/https://doi.org/10.13044/j.sdewes.d8.0378)
+
+**Keywords:** HVAC, Occupancy, Energy consumption, Air conditioning, Deep learning, occupancy detection
+
+**Abstract:**
+
+The use of fixed or scheduled setpoints combined with varying occupancy patterns in buildings could lead to spaces being over or under-conditioned, which may lead to significant waste in energy consumption.The present study aims to develop a vision-based deep learning method for real-time occupancy activity detection and recognition.The method enables predicting and generating real-time heat gain data, which can inform building energy management systems and heating, ventilation, and air-conditioning (HVAC) controls.A faster region-based convolutional neural network was developed, trained and deployed to an artificial intelligence-powered camera.For the initial analysis, an experimental test was performed within a selected case study building's office space.Average detection accuracy of 92.2% was achieved for all activities.Using building energy simulation, the case study building was simulated with both 'static' and deep learning influenced profiles to assess the potential energy savings that can be achieved.The work has shown that the proposed approach can better estimate the occupancy internal heat gains for optimising the operations of building HVAC systems.
+
+**AI Summary:**
+
+> The use of fixed or scheduled setpoints combined with varying occupancy patterns in buildings could lead to spaces being over or under-conditioned, which may lead to significant waste in energy consum... Keywords: HVAC, Occupancy, Energy consumption.
+
+---
+
+## 23. An Ultra-low-power Embedded AI Fire Detection and Crowd Counting System for Indoor Areas
+
+**Authors:** Alexios Papaioannou, Charalampos S. Kouzinopoulos, Dimosthenis Ioannidis et al.
+
+**Year:** 2023
+
+**Journal:** ACM Transactions on Embedded Computing Systems
+
+**Citations:** 19
+
+**DOI:** [https://doi.org/10.1145/3582433](https://doi.org/https://doi.org/10.1145/3582433)
+
+**Keywords:** Computer science, Fire detection, Deep learning, Real-time computing, Inference, fire detection
+
+**Abstract:**
+
+Fire incidents in residential and industrial areas are often the cause of human casualties and property damage. Although there are existing systems that detect fire and monitor the presence of people in indoor areas, research on their implementation in embedded platforms is limited. This article introduces an ultra-low-power embedded system for fire detection and crowd counting using efficient deep learning methods. For the prediction of fire occurrences, environmental and gas sensor along with multilayer perceptron nodes are used. For crowd counting, a custom lightweight version of YOLOv5 is introduced, using an architecture based on ShuffleNetV2, resulting in a model with low memory requirements, high accuracy predictions, and fast inference on an embedded platform. The accuracy, power consumption, and memory requirements of the proposed system are evaluated using public datasets and datasets acquired by the environmental and image sensors, and its performance is compared to that of existing approaches.
+
+**AI Summary:**
+
+> Fire incidents in residential and industrial areas are often the cause of human casualties and property damage Keywords: Computer science, Fire detection, Deep learning.
+
+---
+
+## 24. A ventilation early warning system (VEWS) for diaphanous workspaces considering COVID-19 and future pandemics scenarios
+
+**Authors:** Gonçal Costa, Oriol Arroyo, Pablo Rueda et al.
+
+**Year:** 2023
+
+**Journal:** Heliyon
+
+**Citations:** 17
+
+**DOI:** [https://doi.org/10.1016/j.heliyon.2023.e14640](https://doi.org/https://doi.org/10.1016/j.heliyon.2023.e14640)
+
+**Keywords:** HVAC, Workspace, Warning system, Sustainability, Architectural engineering, HVAC control
+
+**Abstract:**
+
+The COVID-19 pandemic has generated new needs due to the associated health risks and, more specifically, its rapid infection rate. Prevention measures to avoid contagions in indoor spaces, especially in office and public buildings (e.g., hospitals, public administration, educational centres, etc.), have led to the need for adequate ventilation to dilute the possible concentration of the virus. This article presents our contribution to this new challenge, namely the Ventilation Early Warning System (VEWS) which has aims to adapt the operation of the current Heating, Ventilating and Air Conditioning (HVAC) systems to the ventilation needs of diaphanous workspaces, based on a Smart Campus Digital Twin (SCDT) framework approach, while maintaining sustainability. Different technologies such as the Internet of Things (IoT), Building Information Modelling (BIM) and Artificial Intelligence (AI) algorithms are combined to collect and integrate monitoring data (historical records, real-time information, and location-related patterns) to carry out forecasting simulations in this digital twin. The generated outputs serve to assist facility managers in their building governance, considering the appropriate application of health measures to reduce the risk of coronavirus contagion in combination with sustainability criteria. The article also provides the results of the implementation of the VEWS in a university workspace as a case study. Its application has made it possible to detect and warn of inadequate ventilation situations for the daily flow of people in the different controlled zones.
+
+**AI Summary:**
+
+> The COVID-19 pandemic has generated new needs due to the associated health risks and, more specifically, its rapid infection rate Keywords: HVAC, Workspace, Warning system.
+
+---
+
+## 25. ODDS: Real-Time Object Detection Using Depth Sensors on Embedded GPUs
+
+**Authors:** Niluthpol Chowdhury Mithun, Sirajum Munir, Karen Guo et al.
+
+**Year:** 2018
+
+**Journal:** N/A
+
+**Citations:** 14
+
+**DOI:** [https://doi.org/10.1109/ipsn.2018.00051](https://doi.org/https://doi.org/10.1109/ipsn.2018.00051)
+
+**Keywords:** Computer science, Convolutional neural network, Object detection, RGB color model, Deep learning, object detection
+
+**Abstract:**
+
+Detecting objects that are carried when someone enters or exits a room is very useful for a wide range of smart building applications including safety, security, and energy efficiency. While there has been a significant amount of work on object recognition using large-scale RGB image datasets, RGB cameras are too privacy invasive in many smart building applications and they work poorly in the dark. Additionally, deep object detection networks require powerful and expensive GPUs. We propose a novel system that we call ODDS (Object Detector using a Depth Sensor) that can detect objects in real-time using only raw depth data on an embedded GPU, e.g., NVIDIA Jetson TX1. Hence, our solution is significantly less privacy invasive (even if the sensor is compromised) and less expensive, while maintaining a comparable accuracy with state of the art solutions. Specifically, we resort to training a deep convolutional neural network using raw depth images, with curriculum based learning to improve accuracy by considering the complexity and imbalance in object classes and developing a sparse coding based technique that speeds up the system ~2× with minimal loss of accuracy. Based on a complete implementation and real-world evaluation, we see ODDS achieve 80.14% mean average precision in object detection in real-time (5-6 FPS) on a Jetson TX1.
+
+**AI Summary:**
+
+> Detecting objects that are carried when someone enters or exits a room is very useful for a wide range of smart building applications including safety, security, and energy efficiency Keywords: Computer science, Convolutional neural network, Object detection.
+
+---
+
+## 26. Advanced Power Converters and Learning in Diverse Robotic Innovation: A Review
+
+**Authors:** Rupam Singh, Varaha Satya Bharath Kurukuru, Mohammed Ali Khan
+
+**Year:** 2023
+
+**Journal:** Energies
+
+**Citations:** 14
+
+**DOI:** [https://doi.org/10.3390/en16207156](https://doi.org/https://doi.org/10.3390/en16207156)
+
+**Keywords:** Artificial intelligence, Robotics, Computer science, Flexibility (engineering), Robot, power converters
+
+**Abstract:**
+
+This paper provides a comprehensive review of the integration of advanced power management systems and learning techniques in the field of robotics. It identifies the critical roles these areas play in reshaping the capabilities of robotic systems across diverse applications. To begin, it highlights the significance of efficient power usage in modern robotics. The paper explains how advanced power converters effectively control voltage, manage current and shape waveforms, thereby optimizing energy utilization. These converters ensure that robotic components receive the precise voltage levels they require, leading to improved motor performance and enabling precise control over motor behavior. Consequently, this results in extended operational times and increased design flexibility. Furthermore, the review explores the integration of learning approaches, emphasizing their substantial impact on robotic perception, decision-making and autonomy. It discusses the application of techniques such as reinforcement learning, supervised learning and unsupervised learning, showcasing their applications in areas like object recognition, semantic segmentation, sensor fusion and anomaly detection. By utilizing these learning methods, robots become more intelligent, adaptable and capable of autonomous operation across various domains. By examining the interaction between advanced power management and learning integration, this review anticipates a future where robots operate with increased efficiency, adapt to various tasks and drive technological innovation across a wide range of industries.
+
+**AI Summary:**
+
+> This paper provides a comprehensive review of the integration of advanced power management systems and learning techniques in the field of robotics Keywords: Artificial intelligence, Robotics, Computer science.
+
+---
+
+## 27. A Review of the Potential of Drone-Based Approaches for Integrated Building Envelope Assessment
+
+**Authors:** Shayan Mirzabeigi, Ryan Razkenari, Paul L. Crovella
 
 **Year:** 2025
 
 **Journal:** Buildings
 
-**Citations:** 8
+**Citations:** 14
 
 **DOI:** [https://doi.org/10.3390/buildings15132230](https://doi.org/https://doi.org/10.3390/buildings15132230)
 
-**Keywords:** Drone, Building envelope, Envelope (radar), Systems engineering, Engineering, Architectural engineering
+**Keywords:** Drone, Building envelope, Envelope (radar), Systems engineering, Engineering, building energy audit
 
 **Abstract:**
 
@@ -968,75 +656,459 @@ The urgent need for affordable and scalable building retrofit solutions has inte
 
 ---
 
-## 41. A Review of Prospects and Opportunities in Disassembly With Human–Robot Collaboration
+## 28. Design and Validation of an Edge-AI Fire Safety System with SmartThings Integration for Accelerated Detection and Targeted Suppression
 
-**Authors:** Meng-Lun Lee, Xiao Liang, Boyi Hu et al.
-
-**Year:** 2023
-
-**Journal:** Journal of Manufacturing Science and Engineering
-
-**Citations:** 49
-
-**DOI:** [https://doi.org/10.1115/1.4063992](https://doi.org/https://doi.org/10.1115/1.4063992)
-
-**Keywords:** Remanufacturing, Reuse, Flexibility (engineering), Task (project management), Risk analysis (engineering), Robot
-
-**Abstract:**
-
-Abstract Product disassembly plays a crucial role in the recycling, remanufacturing, and reuse of end-of-use (EoU) products. However, the current manual disassembly process is inefficient due to the complexity and variation of EoU products. While fully automating disassembly is not economically viable given the intricate nature of the task, there is potential in using human–robot collaboration (HRC) to enhance disassembly operations. HRC combines the flexibility and problem-solving abilities of humans with the precise repetition and handling of unsafe tasks by robots. Nevertheless, numerous challenges persist in technology, human workers, and remanufacturing work, which require comprehensive multidisciplinary research to address critical gaps. These challenges have motivated the authors to provide a detailed discussion on the opportunities and obstacles associated with introducing HRC to disassembly. In this regard, the authors have conducted a review of the recent progress in HRC disassembly and present the insights gained from this analysis from three distinct perspectives: technology, workers, and work.
-
-**AI Summary:**
-
-> Abstract Product disassembly plays a crucial role in the recycling, remanufacturing, and reuse of end-of-use (EoU) products Keywords: Remanufacturing, Reuse, Flexibility (engineering).
-
----
-
-## 42. BIM and IFC Data Readiness for AI Integration in the Construction Industry: A Review Approach
-
-**Authors:** Shuzhang Du, Lei Hou, Guomin Zhang et al.
-
-**Year:** 2024
-
-**Journal:** Buildings
-
-**Citations:** 36
-
-**DOI:** [https://doi.org/10.3390/buildings14103305](https://doi.org/https://doi.org/10.3390/buildings14103305)
-
-**Keywords:** Building information modeling, Engineering, Systems engineering, Manufacturing engineering, Engineering management, Knowledge management
-
-**Abstract:**
-
-Building Information Modelling (BIM) has been increasingly integrated with Artificial Intelligence (AI) solutions to automate building construction processes. However, the methods for effectively transforming data from BIM formats, such as Industry Foundation Classes (IFC), into formats suitable for AI applications still need to be explored. This paper conducts a Systematic Literature Review (SLR) following the PRISMA guidelines to analyse current data preparation approaches in BIM applications. The goal is to identify the most suitable methods for AI integration by reviewing current data preparation practices in BIM applications. The review included a total of 93 articles from SCOPUS and WoS. The results include eight common data types, two data management frameworks, and four primary data conversion methods. Further analysis identified three barriers: first, the IFC format’s lack of support for time-series data; second, limitations in extracting geometric information from BIM models; and third, the absence of established toolchains to convert IFC files into usable formats. Based on the evidence, the data readiness is at an intermediate level. This research may serve as a guideline for future studies to address the limitations in data preparation within BIM for AI integration.
-
-**AI Summary:**
-
-> Building Information Modelling (BIM) has been increasingly integrated with Artificial Intelligence (AI) solutions to automate building construction processes Keywords: Building information modeling, Engineering, Systems engineering.
-
----
-
-## 43. Real-Time Customer Density Analysis Using Fine-Tuned YOLOv11 for Optimized HVAC Management in Supermarkets
-
-**Authors:** C Santhosh, Santhiya Kalimuthu, N Adhithyaa et al.
+**Authors:** Seung-Jun Lee, Seung-Jun Lee, Hong-Sik Yun et al.
 
 **Year:** 2025
 
-**Journal:** N/A
+**Journal:** Applied Sciences
 
-**Citations:** 0
+**Citations:** 11
 
-**DOI:** [https://doi.org/10.1109/icngcs64900.2025.11183037](https://doi.org/https://doi.org/10.1109/icngcs64900.2025.11183037)
+**DOI:** [https://doi.org/10.3390/app15148118](https://doi.org/https://doi.org/10.3390/app15148118)
 
-**Keywords:** HVAC, Computer science, Scheduling (production processes), Efficient energy use, Baseline (sea), Energy (signal processing)
+**Keywords:** Computer science, edge AI, fire safety systems, fire detection, smoke detection, probabilistic risk assessment
 
 **Abstract:**
 
-In recent years, research on smart energy management in retail settings has grown significantly with the goal of maximizing energy use and cutting expenses. For HVAC (heating, ventilation, and air conditioning) systems, prior research has mostly concentrated on static scheduling or rule-based modifications depending on anticipated store occupancy. With this research, we provide a dynamic system that uses CCTV footage's real-time client density analysis to regulate HVAC usage in various supermarket areas. Utilizing a YOLO-based crowd detection technique, our methodology counts the number of individuals in designated zones and modifies HVAC intensity accordingly. Depending on the density level ("Off," "Low," "Mid," and "High"), the HVAC system in each sector is adjusted to maximize energy efficiency without sacrificing comfort. We implemented this strategy into practice in a Dash web application that computes energy and cost savings through efficient usage, visualizes crowd numbers, and permits video uploads. We examined many video feeds from a mock supermarket setting to evaluate the efficacy of our technology, utilizing population counts to dynamically modify HVAC levels. The outcomes were contrasted with a baseline situation in which HVAC systems were always operated at full capacity. With observed cost savings varying from 20% to 35% depending on the section and crowd density, our investigation demonstrates that the suggested approach greatly lowers energy use while maintaining comfort levels.
+This study presents the design and validation of an integrated fire safety system that leverages edge AI, hybrid sensing, and precision suppression to overcome the latency and collateral limitations of conventional smoke detection and sprinkler systems. The proposed platform features a dual-mode sensor array for early fire recognition, motorized ventilation units for rapid smoke extraction, and a 360° directional nozzle for targeted agent discharge using a residue-free clean extinguishing agent. Experimental trials demonstrated an average fire detection time of 5.8 s and complete flame suppression within 13.2 s, with 90% smoke clearance achieved in under 95 s. No false positives were recorded during non-fire simulations, and the system remained fully functional under simulated cloud communication failure, confirming its edge-resilient architecture. A probabilistic risk analysis based on ISO 31000 and NFPA 551 frameworks showed risk reductions of 75.6% in life safety, 58.0% in property damage, and 67.1% in business disruption. The system achieved a composite risk reduction of approximately 73%, shifting the operational risk level into the ALARP region. These findings demonstrate the system’s capacity to provide proactive, energy-efficient, and spatially targeted fire response suitable for high-value infrastructure. The modular design and SmartThings Edge integration further support scalable deployment and real-time system intelligence, establishing a strong foundation for future adaptive fire protection frameworks.
 
 **AI Summary:**
 
-> In recent years, research on smart energy management in retail settings has grown significantly with the goal of maximizing energy use and cutting expenses Keywords: HVAC, Computer science, Scheduling (production processes).
+> This study presents the design and validation of an integrated fire safety system that leverages edge AI, hybrid sensing, and precision suppression to overcome the latency and collateral limitations o... Keywords: Computer science, edge AI, fire safety systems.
+
+---
+
+## 29. Embedded Real-Time Clothing Classifier Using One-Stage Methods for Saving Energy in Thermostats
+
+**Authors:** Adán Medina, Juana Isabel Méndez, Pedro Ponce et al.
+
+**Year:** 2022
+
+**Journal:** Energies
+
+**Citations:** 11
+
+**DOI:** [https://doi.org/10.3390/en15176117](https://doi.org/https://doi.org/10.3390/en15176117)
+
+**Keywords:** Thermostat, Energy consumption, Computer science, Clothing, HVAC, clothing classification
+
+**Abstract:**
+
+Energy-saving is a mandatory research topic since the growing population demands additional energy yearly. Moreover, climate change requires more attention to reduce the impact of generating more CO2. As a result, some new research areas need to be explored to create innovative energy-saving alternatives in electrical devices that have high energy consumption. One research area of interest is the computer visual classification for reducing energy consumption and keeping thermal comfort in thermostats. Usually, connected thermostats obrtain information from sensors for detecting persons and scheduling autonomous operations to save energy. However, there is a lack of knowledge of how computer vision can be deployed in embedded digital systems to analyze clothing insulation in connected thermostats to reduce energy consumption and keep thermal comfort. The clothing classification algorithm embedded in a digital system for saving energy could be a companion device in connected thermostats to obtain the clothing insulation. Currently, there is no connected thermostat in the market using complementary computer visual classification systems to analyze the clothing insulation factor. Hence, this proposal aims to develop and evaluate an embedded real-time clothing classifier that could help to improve the efficiency of heating and ventilation air conditioning systems in homes or buildings. This paper compares six different one-stage object detection and classification algorithms trained with a small custom dataset in two embedded systems and a personal computer to compare the models. In addition, the paper describes how the classifier could interact with the thermostat to tune the temperature set point to save energy and keep thermal comfort. The results confirm that the proposed real-time clothing classifier could be implemented as a companion device in connected thermostats to provide additional information to end-users about making decisions on saving energy.
+
+**AI Summary:**
+
+> Energy-saving is a mandatory research topic since the growing population demands additional energy yearly Keywords: Thermostat, Energy consumption, Computer science.
+
+---
+
+## 30. Testing and Evaluation of Low-Cost Sensors for Developing Open Smart Campus Systems Based on IoT
+
+**Authors:** Pascal Neis, Dominik Warch, Max Hoppe
+
+**Year:** 2023
+
+**Journal:** Sensors
+
+**Citations:** 11
+
+**DOI:** [https://doi.org/10.3390/s23208652](https://doi.org/https://doi.org/10.3390/s23208652)
+
+**Keywords:** Smart city, Computer science, Context (archaeology), Visitor pattern, Building automation, low-cost sensors
+
+**Abstract:**
+
+Urbanization has led to the need for the intelligent management of various urban challenges, from traffic to energy. In this context, smart campuses and buildings emerge as microcosms of smart cities, offering both opportunities and challenges in technology and communication integration. This study sets itself apart by prioritizing sustainable, adaptable, and reusable solutions through an open-source framework and open data protocols. We utilized the Internet of Things (IoT) and cost-effective sensors to capture real-time data for three different use cases: real-time monitoring of visitor counts, room and parking occupancy, and the collection of environment and climate data. Our analysis revealed that the implementation of the utilized hardware and software combination significantly improved the implementation of open smart campus systems, providing a usable visitor information system for students. Moreover, our focus on data privacy and technological versatility offers valuable insights into real-world applicability and limitations. This study contributes a novel framework that not only drives technological advancements but is also readily adaptable, improvable, and reusable across diverse settings, thereby showcasing the untapped potential of smart, sustainable systems.
+
+**AI Summary:**
+
+> Urbanization has led to the need for the intelligent management of various urban challenges, from traffic to energy Keywords: Smart city, Computer science, Context (archaeology).
+
+---
+
+## 31. VR digital twin of office space with computer vision-based estimation of room occupancy and power consumption
+
+**Authors:** Abhishek Mukhopadhyay, Naveen R. Talwar, Himanshu Viswakarma et al.
+
+**Year:** 2024
+
+**Journal:** Discover Analytics
+
+**Citations:** 8
+
+**DOI:** [https://doi.org/10.1007/s44257-024-00008-z](https://doi.org/https://doi.org/10.1007/s44257-024-00008-z)
+
+**Keywords:** Algorithm, Computer science, Artificial intelligence, Machine learning, Database, digital twin
+
+**Abstract:**
+
+Abstract In the past years, energy consumption has increased rapidly due to many factors, including the rise in technology adoption. This has many downfalls, from higher costs to CO $$_2$$ 2 emissions. Human activities in offices and houses represent a considerable amount of energy usage. A digital twin (DT) of an open-plan common space is created, serving the purpose of remote room occupancy monitoring and automatic detection of energy consumption. A virtual reality (VR) model is developed and integrated to temperature, humidity and imaging sensors. For maintaining privacy, images are processed in local computers to measure occupancy levels and live video feed were never transmitted. The same set of imaging sensors were also used in a bespoke computer vision module for energy consumption estimation. The human avatars were mapped with high correlation (R $$^{2}$$ 2 $$= 0.85$$ = 0.85 ) with actual positions on floor. Our energy consumption algorithm accuracy obtained true positive rate of $$91.58\%$$ 91.58 % and F1 score of $$81.96\%$$ 81.96 % . Finally, all this information is transmitted and visualized to the 3D digital twin for remote monitoring and simulation.
+
+**AI Summary:**
+
+> Abstract In the past years, energy consumption has increased rapidly due to many factors, including the rise in technology adoption Keywords: Algorithm, Computer science, Artificial intelligence.
+
+---
+
+## 32. A novel lightweight skeletal temporal model for real-time, computationally efficient recognition of occupant thermal adaptation behavior
+
+**Authors:** Zhe Wang, Hao Sun, John Kaiser Calautit et al.
+
+**Year:** 2025
+
+**Journal:** Building Simulation
+
+**Citations:** 7
+
+**DOI:** [https://doi.org/10.1007/s12273-025-1335-6](https://doi.org/https://doi.org/10.1007/s12273-025-1335-6)
+
+**Keywords:** Adaptation (eye), Thermal, Computer science, Artificial intelligence, Engineering, thermal comfort
+
+**Abstract:**
+
+Abstract Optimizing building energy systems based on real-time occupant behavior and feedback can lead to improved energy efficiency and enhanced thermal comfort in buildings. Traditional thermal comfort surveys do not provide real-time insights, while conventional sensors, such as thermal sensors, are limited in their ability to capture continuous, detailed occupancy data. Meanwhile, deep learning and computer vision have emerged as promising approaches for real-time occupancy behavior detection, but existing artificial intelligence (AI) models suffer from low frame rates and high computational demands, which can lead to increased energy consumption for processing, potentially offsetting the energy savings achieved through occupant-responsive control. Thus, this study developed a novel occupant thermal adaptation behavior recognition model that balances accuracy, real-time performance and computational resource usage to enable effective operation indoors. Using a multi-camera setup with Raspberry Pi 3B+, a custom dataset comprising 400 video samples was collected from four different angles. The dataset captures four distinct human activities: dressing, undressing, sitting, and standing. Compared to SlowFast (SF) and Spatial Temporal Graph Convolutional Networks (ST-GCN), which are widely used deep learning architectures for action recognition, the proposed novel lightweight skeletal temporal model achieved good accuracy (0.975 accuracy) on the Kungliga Tekniska Högskolan (KTH) dataset while significantly outperforming them in detection speed and resource efficiency. It reached 31.38 FPS by running on the graphics processing unit (GPU)—over three times faster than ST-GCN with OpenPose and more than twelve times faster than SF with You Only Look Once Version X (YOLOX)—while maintaining low central processing unit (CPU) and GPU usage at 13.71% and 33.05%, respectively. By running it on the CPU, it achieved 25.3 FPS with 56.10% CPU usage, proving its practicality for platforms without GPU support. When evaluated on the custom dataset, we introduced a double long short-term memory (LSTM) with an attention mechanism to better handle the increased action complexity, preserving a high accuracy of 0.963. Although the frame rate experienced a slight reduction compared to the results on the KTH dataset—dropping from 31.38 to 30.95 FPS on GPU and from 25.3 to 18.98 FPS on CPU—the model exhibited lower CPU and GPU usage, highlighting its potential for energy-efficient deployment in smart building applications. The model was further deployed on an NVIDIA Jetson Orin Nano, enabling stable long-term operation and supporting simultaneous multi-person recognition. Overall, this study presents a practical, AI-driven solution for occupant thermal adaptation behavior recognition, effectively balancing accuracy, real-time performance, and computational efficiency—making it well suited for energy-saving applications in buildings that adapt dynamically to occupant behavior.
+
+**AI Summary:**
+
+> Abstract Optimizing building energy systems based on real-time occupant behavior and feedback can lead to improved energy efficiency and enhanced thermal comfort in buildings Keywords: Adaptation (eye), Thermal, Computer science.
+
+---
+
+## 33. Enhancing Energy Efficiency in Commercial Office Buildings: A Smart IoT and Machine Vision Approach
+
+**Authors:** Sushrut Madhav Patankar, Raju Kumar Swami, Sameer Suresh Nanivadekar
+
+**Year:** 2024
+
+**Journal:** N/A
+
+**Citations:** 4
+
+**DOI:** [https://doi.org/10.1109/wconf61366.2024.10691999](https://doi.org/https://doi.org/10.1109/wconf61366.2024.10691999)
+
+**Keywords:** Efficient energy use, Internet of Things, Computer science, Machine vision, Architectural engineering, commercial office buildings
+
+**Abstract:**
+
+Commercial office buildings often waste substantial energy due to the inefficient use of HVAC and lighting systems. This paper introduces an innovative Internet of Things (IoT) and Machine Vision-based system to combat this issue and improve energy efficiency. The system combines real-time occupancy detection using the You Only Look Once (YOLO) object detection method with CCTV footage obtained through the ESP32 cam module. Additionally, machine vision technology evaluates ambient light conditions. Leveraging the gathered occupancy and lighting data, the system autonomously controls lighting and employs a novel algorithm to regulate HVAC activation for cooling, factoring in indoor and outdoor temperatures. Our approach achieved an impressive accuracy rate of 96.31%. Specifically designed for office environments where occupants typically prioritize energy conservation less, this system offers a discreet solution that dynamically adjusts to real-time occupancy patterns. By implementing this system, commercial buildings have the potential to reduce energy consumption while ensuring occupant comfort is maintained significantly.
+
+**AI Summary:**
+
+> Commercial office buildings often waste substantial energy due to the inefficient use of HVAC and lighting systems Keywords: Efficient energy use, Internet of Things, Computer science.
+
+---
+
+## 34. Review of modern demand control solutions and technologies for HVAC operation
+
+**Authors:** Anatolijs Borodiņecs, Jurģis Zemītis, Arturs Palcikovskis et al.
+
+**Year:** 2023
+
+**Journal:** E3S Web of Conferences
+
+**Citations:** 4
+
+**DOI:** [https://doi.org/10.1051/e3sconf/202339602020](https://doi.org/https://doi.org/10.1051/e3sconf/202339602020)
+
+**Keywords:** HVAC, Occupancy, Computer science, Indoor air quality, Building automation, demand-controlled ventilation
+
+**Abstract:**
+
+HVAC systems, which use traditional control strategies with fixed ventilation rates or with ventilation rate schedules, do not adjust according to the required IAQ and thermal comfort. As a result, building spaces are being over or under-ventilated. In this paper, the latest modern solutions for demand-controlled HVAC system operation are analyzed, based on the review of existing studies. Such modern technologies as human detection systems, computer vision, and neural network applications are looked at. Different types of human presence detection are presented based on the applied technology. The most common ones are indirect detection based on the usage data of existing IT equipment, and direct detection through the use of passive infrared sensors, wearable tags, and vision sensors. Also, the potential solutions of human activity monitoring, skin temperature, and clothing level detection systems are examined. The studies discussed in this paper show real application examples and prove the benefits of using the technologies for the control of ventilation systems in various building types. Research has shown that such technologies have a favorable effect on both indoor air quality and system energy consumption. In the future, the ventilation system should be equipped with cameras for a more accurate analysis of the room and occupancy. Also, the systems must consider occupant behavior, activity, and other information, which can be used for indoor environment quality improvement. Based on the gained knowledge a sensor capable of human detection, accounting, and location marking is developed.
+
+**AI Summary:**
+
+> HVAC systems, which use traditional control strategies with fixed ventilation rates or with ventilation rate schedules, do not adjust according to the required IAQ and thermal comfort Keywords: HVAC, Occupancy, Computer science.
+
+---
+
+## 35. IoB Internet of Things (IoT) for Smart Built Environment (SBE): Understanding the Complexity and Contributing to Energy Efficiency; A Case Study in Mediterranean Climates
+
+**Authors:** Ignacio Martínez Ruiz, Enrique Cano-Suñén, Álvaro Marco et al.
+
+**Year:** 2025
+
+**Journal:** Applied Sciences
+
+**Citations:** 4
+
+**DOI:** [https://doi.org/10.3390/app15041724](https://doi.org/https://doi.org/10.3390/app15041724)
+
+**Keywords:** Internet of Things, Computer science, Computer security, smart built environment, energy efficiency, public buildings
+
+**Abstract:**
+
+To meet the 2050 targets about climate change and decarbonization, accomplishing thermal comfort, Internet of Things (IoT) ecosystems are key enabling technologies to move the Built Environment (BE) towards Smart Built Environment (SBE). The first contributions of this paper conceptualise SBE from its dynamic and adaptative perspectives, considering the human habitat, and enunciate SBE as a multidimensional approach through six ways of inhabiting: defensive, projective, scientific, thermodynamic, subjective, and complex. From these premises, to analyse the performance indicators that characterise these multidisciplinary ways of inhabiting, an IoT-driven methodology is proposed: to deploy a sensor infrastructure to acquire experimental measurements; analyse data to convert them into context-aware information; and make knowledge-based decisions. Thus, this work tackles the inefficiency and high energy consumption of public buildings with the challenge of balancing energy efficiency and user comfort in dynamic scenarios. As current systems lack real-time adaptability, this work integrates an IoT-driven approach to enhance energy management and reduce discrepancies between measured temperatures and normative thresholds. Following the energy efficiency directives, the obtained results contribute to the following: understanding the complexity of the SBE by analysing its thermal performance, quantifying the potential of energy saving, and estimating its economic impact. The derived conclusions show that IoT-driven solutions allow the generation of real-data-based models on which to enhance SBE knowledge, by increasing energy efficiency and guaranteeing user comfort while minimising environmental effects and economic impact.
+
+**AI Summary:**
+
+> To meet the 2050 targets about climate change and decarbonization, accomplishing thermal comfort, Internet of Things (IoT) ecosystems are key enabling technologies to move the Built Environment (BE) t... Keywords: Internet of Things, Computer science, Computer security.
+
+---
+
+## 36. A Cost-Effective System for Indoor Three-Dimensional Occupant Positioning and Trajectory Reconstruction
+
+**Authors:** Xiaomei Zhao, Shuo Li, Zhan Zhao et al.
+
+**Year:** 2023
+
+**Journal:** Buildings
+
+**Citations:** 4
+
+**DOI:** [https://doi.org/10.3390/buildings13112832](https://doi.org/https://doi.org/10.3390/buildings13112832)
+
+**Keywords:** Occupancy, Computer vision, Computer science, Tracking (education), Artificial intelligence, indoor occupancy detection
+
+**Abstract:**
+
+Accurate indoor occupancy information extraction plays a crucial role in building energy conservation. Vision-based methods are popularly used for occupancy information extraction because of their high accuracy. However, previous vision-based methods either only provide 2D occupancy information or require expensive equipment. In this paper, we propose a cost-effective indoor occupancy information extraction system that estimates occupant positions and trajectories in 3D using a single RGB camera. The proposed system provides an inverse proportional model to estimate the distance between a human head and the camera according to pixel-heights of human heads, eliminating the dependence on expensive depth sensors. The 3D position coordinates of human heads are calculated based on the above model. The proposed system also associates the 3D position coordinates of human heads with human tracking results by assigning the 3D coordinates of human heads to the corresponding human IDs from a tracking module, obtaining the 3D trajectory of each person. Experimental results demonstrate that the proposed system successfully calculates accurate 3D positions and trajectories of indoor occupants with only one surveillance camera. In conclusion, the proposed system is a low-cost and high-accuracy indoor occupancy information extraction system that has high potential in reducing building energy consumption.
+
+**AI Summary:**
+
+> Accurate indoor occupancy information extraction plays a crucial role in building energy conservation Keywords: Occupancy, Computer vision, Computer science.
+
+---
+
+## 37. Improved human image density detection with comparison of YOLOv8 depth level architecture and drop-out implementation
+
+**Authors:** Winda Yulita, Uri Arta Ramadhani, Zunanik Mufidah et al.
+
+**Year:** 2025
+
+**Journal:** Journal of Soft Computing Exploration
+
+**Citations:** 3
+
+**DOI:** [https://doi.org/10.52465/joscex.v6i1.556](https://doi.org/https://doi.org/10.52465/joscex.v6i1.556)
+
+**Keywords:** Architecture, Image (mathematics), Drop (telecommunication), Computer science, Artificial intelligence, YOLOv8
+
+**Abstract:**
+
+Energy inefficiency due to Air Conditioners (AC) running in empty rooms contribute to unnecessary energy consumption and increased CO₂ emissions. This study explores how different depth levels of the YOLOv8 architecture and dropout regularization can enhance human density detection for smarter AC control systems. By evaluating model accuracy through Mean Average Precision (mAP50-95), we provide quantitative insights into how these modifications improve detection performance. Our dataset consists of 1363 images taken in an office environment at ITERA under varying lighting conditions and different human presence densities. The results show that the YOLOv8m model performs best, achieving an mAP50-95 score of 0.814 in training and 0.813 in validation, outperforming other YOLOv8 variants. Furthermore, applying dropout regularization improves model generalization, increasing mAP50-95 from 0.552 to 0.6 and effectively reducing overfitting. This study highlights the balance between architectural depth and dropout regularization in YOLOv8, demonstrating its effectiveness in energy-efficient smart buildings. The findings support the potential of deep learning-based human density detection in improving energy conservation strategies, making it a valuable solution for intelligent automation systems.
+
+**AI Summary:**
+
+> Energy inefficiency due to Air Conditioners (AC) running in empty rooms contribute to unnecessary energy consumption and increased CO₂ emissions Keywords: Architecture, Image (mathematics), Drop (telecommunication).
+
+---
+
+## 38. A Lightweight Electronic Water Pump Shell Defect Detection Method Based on Improved YOLOv5s
+
+**Authors:** Qunbiao Wu, Zhen Wang, Haifeng Fang et al.
+
+**Year:** 2023
+
+**Journal:** Computer Systems Science and Engineering
+
+**Citations:** 3
+
+**DOI:** [https://doi.org/10.32604/csse.2023.036239](https://doi.org/https://doi.org/10.32604/csse.2023.036239)
+
+**Keywords:** Computer science, Artificial intelligence, Pattern recognition (psychology), surface defect detection, lightweight object detection, YOLOv5
+
+**Abstract:**
+
+For surface defects in electronic water pump shells, the manual detection efficiency is low, prone to misdetection and leak detection, and encounters problems, such as uncertainty. To improve the speed and accuracy of surface defect detection, a lightweight detection method based on an improved YOLOv5s method is proposed to replace the traditional manual detection methods. In this method, the MobileNetV3 module replaces the backbone network of YOLOv5s, depth-separable convolution is introduced, the parameters and calculations are reduced, and CIoU_Loss is used as the loss function of the boundary box regression to improve its detection accuracy. A dataset of electronic pump shell defects is established, and the performance of the improved method is evaluated by comparing it with that of the original method. The results show that the parameters and FLOPs are reduced by 49.83% and 61.59%, respectively, compared with the original YOLOv5s model, and the detection accuracy is improved by 1.74%, which is an indication of the superiority of the improved method. To further verify the universality of the improved method, it is compared with the results using the original method on the PASCALVOC2007 dataset, which verifies that it yields better performance. In summary, the improved lightweight method can be used for the real-time detection of electronic water pump shell defects.
+
+**AI Summary:**
+
+> For surface defects in electronic water pump shells, the manual detection efficiency is low, prone to misdetection and leak detection, and encounters problems, such as uncertainty Keywords: Computer science, Artificial intelligence, Pattern recognition (psychology).
+
+---
+
+## 39. Occupancy Measurement in Under-Actuated Zones: YOLO-based Deep Learning Approach
+
+**Authors:** Ade Syahputra, Yaddarabullah Yaddarabullah, Mohammad Faiz Azhary et al.
+
+**Year:** 2024
+
+**Journal:** International Journal of Advanced Computer Science and Applications
+
+**Citations:** 2
+
+**DOI:** [https://doi.org/10.14569/ijacsa.2024.0150277](https://doi.org/https://doi.org/10.14569/ijacsa.2024.0150277)
+
+**Keywords:** Computer science, Occupancy, Deep learning, Artificial intelligence, Real-time computing, occupant detection
+
+**Abstract:**
+
+The challenge of accurately detecting and identifying individuals within under-actuated zones presents a relevant research problem in occupant detection. This study aims to address the challenge of occupant detection in under-actuated zones through the utilization of the You Only Look Once version 8 (YOLO v8) object detection model. The research methodology involves a comprehensive evaluation of YOLO v8's performance across three distinct zones, where its precision, accuracy, and recall capabilities in identifying occupants are rigorously assessed. The outcomes of this performance evaluation, expressed through quantitative metrics, provide compelling evidence of the efficacy of the YOLO v8 model in the context of occupant detection in under-actuated zones. Across these three diverse under-actuated zones, YOLO v8 consistently exhibits remarkable mean Average Precision (mAP) scores, achieving 99.2% in Zone 1, 78.3% in Zone 2, and 96.2% in Zone 3. These mAP scores serve as a testament to the model's precision, indicating its proficiency in accurately localizing and identifying occupants within each zone. Furthermore, YOLO v8 demonstrates impressive efficiency in executing occupant detection tasks. The model boasts rapid processing times, with all three zones being analyzed in a matter of milliseconds. Specifically, YOLO v8 achieves execution times of 0.004 seconds in both Zone 1 and Zone 3, while Zone 2, which entails slightly more computational effort, still maintains an efficient execution time of 0.024 seconds. This efficiency constitutes a pivotal advantage of YOLO v8, as it ensures expeditious and effective occupant detection in the context of under-actuated zones.
+
+**AI Summary:**
+
+> The challenge of accurately detecting and identifying individuals within under-actuated zones presents a relevant research problem in occupant detection Keywords: Computer science, Occupancy, Deep learning.
+
+---
+
+## 40. Privacy‐preserving labeling‐free occupancy counting sensor based on ToF camera and clustering
+
+**Authors:** Jaeik Jeong, Wan–Ki Park
+
+**Year:** 2025
+
+**Journal:** ETRI Journal
+
+**Citations:** 2
+
+**DOI:** [https://doi.org/10.4218/etrij.2025-0022](https://doi.org/https://doi.org/10.4218/etrij.2025-0022)
+
+**Keywords:** Cluster analysis, Bounding overwatch, Computer science, Artificial intelligence, Computer vision, occupancy detection
+
+**Abstract:**
+
+Abstract Occupancy detection systems are crucial for optimizing energy efficiency in smart cities and buildings but often face privacy and data dependency challenges. YOLO (you only look once), a widely used real‐time detection framework, relies on identifiable image data and labeled datasets. This study proposes a privacy‐preserving, labeling‐free occupancy sensor using a time‐of‐flight (ToF) camera, and a clustering algorithm. Positioned above doorways, the ToF camera captures depth data that inherently protect privacy by avoiding identifiable information. Using the mean shift clustering algorithm, it performs real‐time detection and tracking without labeled data, generating bounding boxes for movement analysis. Unlike traditional ToF‐based or unsupervised methods, the proposed system adapts dynamically to varying occupant behaviors and environmental conditions for robust real‐time detection. Experimental results show that the proposed method achieves over 90% accuracy in standard single‐entry and exit scenarios. By addressing existing limitations, it offers a data‐efficient, privacy‐sensitive solution for building digital twins in energy optimization and resource management.
+
+**AI Summary:**
+
+> Abstract Occupancy detection systems are crucial for optimizing energy efficiency in smart cities and buildings but often face privacy and data dependency challenges Keywords: Cluster analysis, Bounding overwatch, Computer science.
+
+---
+
+## 41. Occupant-Detection-Based Individual Control of Four-Way Air Conditioner for Sustainable Building Energy Management
+
+**Authors:** J H Ham, Bum‐Soo Kim, In-Woo Bae et al.
+
+**Year:** 2024
+
+**Journal:** Sustainability
+
+**Citations:** 2
+
+**DOI:** [https://doi.org/10.3390/su16177404](https://doi.org/https://doi.org/10.3390/su16177404)
+
+**Keywords:** Energy consumption, Python (programming language), Thermal comfort, Air conditioning, Occupancy, occupant detection
+
+**Abstract:**
+
+In this study, individual control of a four-way air conditioner was developed based on the distribution of occupants to prevent unnecessary energy consumption during room-wide control. An occupancy detection algorithm was created in Python using YOLOv5 object recognition technology to identify the occupants’ distribution in space. Recorded video data were used to test the algorithm. A simulation case study for a building energy model was conducted, assuming that this algorithm was applied using surveillance cameras in commercial buildings, such as cafés and restaurants. A grey-box model was established based on measurements in a thermal zone, dividing one space into two zones. The temperature data for the two zones were collected by individually turning on the air conditioner for each zone in turns for a specific period. Manual closure was applied to each supply blade using a tape to provide cooling to the target zone. Finally, through energy simulations, the decreased rates in energy consumption between the proposed individual control and existing room-wide controls were compared. Different scenarios for the occupants’ schedules were considered, and average rates in energy savings of 21–22% were observed, demonstrating the significance of individual control in terms of energy consumption. However, marginal comfort violations were observed, which is inevitable. The developed control method is expected to contribute to sustainable energy management in buildings.
+
+**AI Summary:**
+
+> In this study, individual control of a four-way air conditioner was developed based on the distribution of occupants to prevent unnecessary energy consumption during room-wide control Keywords: Energy consumption, Python (programming language), Thermal comfort.
+
+---
+
+## 42. A pilot study of occupant centric control stratum ventilation based on computer vision
+
+**Authors:** Yihang Liu, Bin Yang, Zhang Lin
+
+**Year:** 2022
+
+**Journal:** E3S Web of Conferences
+
+**Citations:** 2
+
+**DOI:** [https://doi.org/10.1051/e3sconf/202235601029](https://doi.org/https://doi.org/10.1051/e3sconf/202235601029)
+
+**Keywords:** HVAC, Ventilation (architecture), Thermal comfort, Cooling load, Energy consumption, occupant-centric control
+
+**Abstract:**
+
+Indoor occupant information has an obvious influence on operating parameters of heating ventilation and air conditioning (HVAC) system, which further affects occupants’ thermal comfort and energy consumption. This pilot study proposes an occupant centric control (OCC) strategy for stratum ventilation (SV) to achieve demand control ventilation (DCV). Firstly, the computer vision sensing system and deep learning algorithm are used to detect the number of occupants in real time, and the accuracy of the number of occupants in the office environment was evaluated. Then, the occupant centric stratum ventilation control strategy is designed by the dynamic changes of cooling load. Finally, the thermal comfort and air quality of the thermal environment created by the OCC strategy were evaluated through subject experiment, and the energy consumption of the HVAC system was calculated in combination with the energy consumption simulation software. This study adjusts system setting values according to actual needs, so that the HVAC system responds to the dynamic changes of the indoor cooling load in real time, creating a comfortable and healthy indoor environment in an energy efficient manner.
+
+**AI Summary:**
+
+> Indoor occupant information has an obvious influence on operating parameters of heating ventilation and air conditioning (HVAC) system, which further affects occupants’ thermal comfort and energy cons... Keywords: HVAC, Ventilation (architecture), Thermal comfort.
+
+---
+
+## 43. Modified Lightweight YOLO v8 Model for Fast and Precise Indoor Occupancy Detection
+
+**Authors:** Hanyuan Zhang, Luyan Liu, Jingxue Bi et al.
+
+**Year:** 2025
+
+**Journal:** Applied Sciences
+
+**Citations:** 1
+
+**DOI:** [https://doi.org/10.3390/app16010335](https://doi.org/https://doi.org/10.3390/app16010335)
+
+**Keywords:** Occupancy, Computer science, Software deployment, Boosting (machine learning), Real-time computing, indoor occupancy detection
+
+**Abstract:**
+
+Fast and accurate indoor occupancy detection is critical for energy efficiency and emergency rescue in the fields of smart building and indoor positioning. However, existing image-based indoor occupancy detection models often neglect small human targets and suffer from large parameters, compromising detection accuracy, real-time performance, and deployment on resource-constrained devices. To address these issues, this study proposes a modified lightweight indoor occupancy detection model based on YOLO v8. Firstly, a patch expanding layer is added to the neck of the YOLO v8 model for reshaping the feature maps of adjacent dimensions into higher-resolution feature maps. Secondly, the standard convolution in the original neck is replaced with the GSConv, boosting the non-linear representation by adding DSC layers and a shuffle operation, efficiently preserving hidden connections between channels. Additionally, the VoV-GSCSP in the neck is designed to adopt one-shot aggregation with GS bottlenecks based on GSConv, followed by a cross-stage partial network module. Experiments on the SCUT-HEAD dataset show the modified lightweight YOLO v8 reduces parameters by 9.3% and computational complexity by 8.6%, while increasing mAP50 by 1.4% compared to the baseline. The proposed model can detect indoor occupancy in a fast and precise manner.
+
+**AI Summary:**
+
+> Fast and accurate indoor occupancy detection is critical for energy efficiency and emergency rescue in the fields of smart building and indoor positioning Keywords: Occupancy, Computer science, Software deployment.
+
+---
+
+## 44. Dynamic HVAC Operations Based on Occupancy Patterns With Real-Time Vision- Based System
+
+**Authors:** Siliang Lu
+
+**Year:** 2017
+
+**Journal:** KiltHub Repository
+
+**Citations:** 1
+
+**DOI:** [https://doi.org/10.1184/r1/6723290](https://doi.org/https://doi.org/10.1184/r1/6723290)
+
+**Keywords:** Occupancy, HVAC, Computer science, Real-time computing, Computer vision, HVAC control
+
+**Abstract:**
+
+An integrated heating, ventilation and air-conditioning (HVAC) system is one of the most important components to determining the energy consumption of the entire building. For commercial buildings, particularly office buildings and schools, the heating and cooling loads are largely dependent on the occupant behavioral patterns such as occupancy rates and their activities. Therefore, if HVAC systems can respond to dynamic occupancy profiles, there is a large potential to reduce energy consumption. However, currently, most of existing HVAC systems operate without the ability to adjust supply air rate accordingly in response to the dynamic profiles of occupants. Due to this inefficiency, much of the HVAC energy use is wasted, particularly when the conditioned spaces are unoccupied or under-occupied (less occupants than the intended design). The solution to this inefficiency is to control HVAC system based on dynamic occupant profiles. Motivated by this, the research provides a real-time vision-based occupant pattern recognition system for occupancy counting as well as activity level classification. The proposed vision-based system is integrated into the existing HVAC simulation model of a U.S. office building to investigate the level of energy savings as well as thermal comfort improvement compared to traditional existing HVAC control system. The research is divided into two parts. The first part is to use an open source library based on neural network for real-time occupant counting and background subtraction method for activity level classification with a common static RGB camera. The second part utilizes a DOE reference office building model with customized dynamic occupancy schedule, including the number of occupant schedule, activity schedule and clothing insulation schedule to identify the potential energy savings compared with conventional HVAC control system. The research results revealed that vision-based systems can detect occupants and classify activity level in real time with accuracy around 90% when there are not many occlusions. Additionally, the dynamic occupant schedules indeed can bring about energy savings. Details of vision-based system, methodology, simulation configurations and results will be presented in the paper as well as potential opportunities for use throughout multiple types of commercial buildings, specifically focused on office and educational institutes.
+
+**AI Summary:**
+
+> An integrated heating, ventilation and air-conditioning (HVAC) system is one of the most important components to determining the energy consumption of the entire building Keywords: Occupancy, HVAC, Computer science.
+
+---
+
+## 45. An occupancy-based strategy employing computer vision for reducing cooling energy consumed in buildings
+
+**Authors:** Rania A. AlQadi, Alaa Zaghloul, Shereen A. Taie
+
+**Year:** 2021
+
+**Journal:** Bulletin of Electrical Engineering and Informatics
+
+**Citations:** 1
+
+**DOI:** [https://doi.org/10.11591/eei.v10i3.3058](https://doi.org/https://doi.org/10.11591/eei.v10i3.3058)
+
+**Keywords:** Setpoint, Energy consumption, Energy (signal processing), Occupancy, Air conditioning, air conditioning control
+
+**Abstract:**
+
+The energy expended to cool the occupied areas by air conditioners represents a substantial share of the total energy exhausted in buildings. Therefore, developing strategies to reduce this energy is crucial. One of the preponderance strategies adopted to depreciate energy consumption in buildings is the occupancy-based strategy. In this research, an innovative model was established to achieve the goal of reducing cooling energy consumed in buildings based on occupancy-based combined with a constant temperature setpoint strategy in two phases, and each phase engrosses in 20 days. Phase one is to identify the extent of cooling energy employed according to the use of room occupants and its costs in consumption was 276.01 kWh after completion of this phase. Sequentially, constructing phase two intended to reduce cooling energy consumption by employing an automatic air-conditioner (AC) control strategy relying on an improved human detection algorithm with a 25℃ as temperature setpoint, resulting in 112.45 kWh of consumption. To complement the motives for elaboration, the human detection measurement using you only look once (YOLO) improved by applying pre-processing algorithms to reach an average human detection enhancement of 21.2%. The proposed model results showed that potential savings associated with the embraced strategy decreases by more than anticipated as the amount of reduced energy reached 59% savings.
+
+**AI Summary:**
+
+> The energy expended to cool the occupied areas by air conditioners represents a substantial share of the total energy exhausted in buildings Keywords: Setpoint, Energy consumption, Energy (signal processing).
+
+---
+
+## 46. Gradient Boosting-Based Residual Correction Model for Occupancy Estimation Using Channel State Information Signals in Under-Actuated Zones
+
+**Authors:** Unknown
+
+**Year:** 2025
+
+**Journal:** International journal of intelligent engineering and systems
+
+**Citations:** 1
+
+**DOI:** [https://doi.org/10.22266/ijies2025.0831.48](https://doi.org/https://doi.org/10.22266/ijies2025.0831.48)
+
+**Keywords:** Residual, Computer science, Boosting (machine learning), Gradient boosting, Occupancy, occupancy estimation
+
+**Abstract:**
+
+This study proposes a robust two-stage framework for estimating occupancy in under-actuated indoor zones using WiFi Channel State Information as a non-intrusive sensing modality.These zones, marked by sparse sensor coverage and irregular airflow, present challenges for conventional detection methods.To address these, a domainspecific feature engineering pipeline is introduced, incorporating temporal, nonlinear, and spatial interaction features derived from filtered channel state information amplitudes.The proposed Gradient Boosting-Based Residual Correction Model combines a Gradient Boosting Regressor to learn primary occupancy patterns with a Histogram-Based Regressor to model structured residual errors.The model was evaluated using two distinct datasets: a controlled dataset with predefined occupancy levels, and an uncontrolled dataset collected in real-world public transit settings with high variability across zones.On the controlled dataset, the proposed model achieved high predictive accuracy with an RMSE of 0.1292, MAE of 0.0952, and R² of 0.9918.On the uncontrolled dataset, the model retained strong performance with an RMSE of 1.3270, MAE of 1.0933, and R² of 0.8199, preserving over 82.6% of its accuracy relative to the controlled setting.Ablation studies confirmed the critical role of multipath-aware smoothing features, where their removal led to a +426% increase in MAE.Temporal and spatial features contributed modestly but supported overall robustness.The proposed model offers a scalable, generalizable solution for real-time occupancy monitoring and intelligent HVAC control in both structured and dynamic indoor environments.
+
+**AI Summary:**
+
+> This study proposes a robust two-stage framework for estimating occupancy in under-actuated indoor zones using WiFi Channel State Information as a non-intrusive sensing modality.These zones, marked by... Keywords: Residual, Computer science, Boosting (machine learning).
 
 ---
 
