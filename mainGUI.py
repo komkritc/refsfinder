@@ -289,7 +289,12 @@ def filter_and_sort_by_citations(papers):
     filtered.sort(key=lambda p: p.get("cited_by_count", 0), reverse=True)
     return filtered
 
-def save_all_outputs(papers, output_dir, query, only_with_abstract=False, only_with_citations=False):
+def filter_journal_papers(papers):
+    """Keep only journal articles (OpenAlex type 'article'), excluding theses,
+    conference papers, preprints, books, datasets, etc."""
+    return [p for p in papers if p.get("type") == "article"]
+
+def save_all_outputs(papers, output_dir, query, only_with_abstract=False, only_with_citations=False, only_journal_papers=False):
     """Generate all output files"""
     # Create output directory
     Path(output_dir).mkdir(parents=True, exist_ok=True)
@@ -300,6 +305,13 @@ def save_all_outputs(papers, output_dir, query, only_with_abstract=False, only_w
         papers = filter_papers_with_abstract(papers)
         filtered_count = len(papers)
         print(f"Filtered: {original_count} -> {filtered_count} papers with abstracts")
+
+    # Filter to journal articles only (no thesis, no conference papers) if requested
+    if only_journal_papers:
+        original_count = len(papers)
+        papers = filter_journal_papers(papers)
+        filtered_count = len(papers)
+        print(f"Filtered: {original_count} -> {filtered_count} journal papers (no thesis/conference)")
 
     # Filter to papers with citations and sort high to low if requested
     if only_with_citations:
@@ -1091,7 +1103,8 @@ class PaperExplorerWindow(QMainWindow):
                     output_dir,
                     query,
                     self.parent().abstract_filter_checkbox.isChecked() if self.parent() else True,
-                    self.parent().citation_filter_checkbox.isChecked() if self.parent() else False
+                    self.parent().citation_filter_checkbox.isChecked() if self.parent() else False,
+                    self.parent().journal_filter_checkbox.isChecked() if self.parent() else False
                 )
                 
                 QMessageBox.information(
@@ -1121,7 +1134,7 @@ class WorkerSignals(QObject):
     error = pyqtSignal(str)
 
 class FetchWorker(QRunnable):
-    def __init__(self, keywords, max_results, year_start, year_end, output_dir, only_with_abstract, only_with_citations=False):
+    def __init__(self, keywords, max_results, year_start, year_end, output_dir, only_with_abstract, only_with_citations=False, only_journal_papers=False):
         super().__init__()
         self.keywords = keywords
         self.max_results = max_results
@@ -1130,6 +1143,7 @@ class FetchWorker(QRunnable):
         self.output_dir = output_dir
         self.only_with_abstract = only_with_abstract
         self.only_with_citations = only_with_citations
+        self.only_journal_papers = only_journal_papers
         self.signals = WorkerSignals()
         self.is_running = True
 
@@ -1147,6 +1161,8 @@ class FetchWorker(QRunnable):
                 self.signals.log.emit(f"📝 Filter: Only papers with abstracts")
             if self.only_with_citations:
                 self.signals.log.emit(f"⭐ Filter: Only papers with citations (sorted high to low)")
+            if self.only_journal_papers:
+                self.signals.log.emit(f"📰 Filter: Only journal papers (no thesis/conference)")
             self.signals.log.emit("-" * 50)
             
             def progress_callback(current, total, error=None):
@@ -1177,6 +1193,11 @@ class FetchWorker(QRunnable):
                 filtered_count = len(papers)
                 self.signals.log.emit(f"📝 Filtered to {filtered_count} papers with abstracts ({original_count - filtered_count} removed)")
 
+            if self.only_journal_papers:
+                before_journal_filter = len(papers)
+                papers = filter_journal_papers(papers)
+                self.signals.log.emit(f"📰 Filtered to {len(papers)} journal papers ({before_journal_filter - len(papers)} removed: thesis/conference/other)")
+
             if self.only_with_citations:
                 before_citation_filter = len(papers)
                 papers = filter_and_sort_by_citations(papers)
@@ -1184,7 +1205,7 @@ class FetchWorker(QRunnable):
 
             self.signals.log.emit("📝 Generating output files...")
 
-            files = save_all_outputs(papers, self.output_dir, query, self.only_with_abstract, self.only_with_citations)
+            files = save_all_outputs(papers, self.output_dir, query, self.only_with_abstract, self.only_with_citations, self.only_journal_papers)
             
             files['original_count'] = original_count
             files['filtered_count'] = len(papers)
@@ -1534,6 +1555,10 @@ class OpenAlexGUI(QMainWindow):
         self.citation_filter_checkbox.setChecked(False)
         self.citation_filter_checkbox.setToolTip("Filter out papers with zero citations and sort the rest by citation count, highest first")
         filter_layout.addWidget(self.citation_filter_checkbox)
+        self.journal_filter_checkbox = QCheckBox("Only include journal papers (no thesis/conference)")
+        self.journal_filter_checkbox.setChecked(False)
+        self.journal_filter_checkbox.setToolTip("Keep only journal articles; excludes theses, conference papers, preprints, books, and other non-journal types")
+        filter_layout.addWidget(self.journal_filter_checkbox)
         filter_layout.addStretch()
         search_group_layout.addLayout(filter_layout, 3, 1)
         
@@ -1626,6 +1651,7 @@ class OpenAlexGUI(QMainWindow):
                 <li>✓ Year range filtering</li>
                 <li>✓ Abstract filter - only include papers with abstracts</li>
                 <li>✓ Citation filter - only include papers with citations, sorted high to low</li>
+                <li>✓ Journal filter - only include journal papers, excluding theses and conference papers</li>
                 <li>✓ Real-time progress tracking</li>
                 <li>✓ Terminal-like log output</li>
                 <li>✓ Custom output folder selection</li>
@@ -1729,6 +1755,7 @@ class OpenAlexGUI(QMainWindow):
         year_end = self.year_end_spin.value() if self.year_end_spin.value() < 2026 else None
         only_with_abstract = self.abstract_filter_checkbox.isChecked()
         only_with_citations = self.citation_filter_checkbox.isChecked()
+        only_journal_papers = self.journal_filter_checkbox.isChecked()
 
         self.fetch_btn.setEnabled(False)
         self.fetch_btn.setText("⏳ Fetching...")
@@ -1739,7 +1766,7 @@ class OpenAlexGUI(QMainWindow):
         self.log_message("🚀 Starting paper fetch...")
         self.log_message("=" * 60)
         
-        worker = FetchWorker(keywords, max_results, year_start, year_end, self.output_dir, only_with_abstract, only_with_citations)
+        worker = FetchWorker(keywords, max_results, year_start, year_end, self.output_dir, only_with_abstract, only_with_citations, only_journal_papers)
         worker.signals.progress.connect(self.update_progress)
         worker.signals.log.connect(self.log_message)
         worker.signals.error.connect(self.on_error)
