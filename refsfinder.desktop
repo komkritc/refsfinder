@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=RefFinder
+Comment=Academic Reference Finder
+Exec=python3 /data/Projects/reflib/refsfinder/mainGUI.py
+Path=/data/Projects/reflib/refsfinder
+Icon=/data/Projects/reflib/refsfinder/icon.png
+Terminal=false
+Categories=Education;
+StartupNotify=true
