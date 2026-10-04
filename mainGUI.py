@@ -18,7 +18,11 @@ from pathlib import Path
 from tqdm import tqdm
 import threading
 import webbrowser
+import copy
 from queue import Queue
+from difflib import SequenceMatcher
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
@@ -488,6 +492,845 @@ def save_all_outputs(papers, output_dir, query, only_with_abstract=False, only_w
     files['md'] = md_file
     
     return files
+
+# ==========================================================
+# BibTeX Validation / Reference Checker Backend
+# ==========================================================
+
+# Confidence / similarity thresholds (conservative by design)
+BIB_CONF_VALID = 0.85          # overall confidence considered fully VALID
+BIB_CONF_MINOR = 0.65          # overall confidence considered acceptable with minor differences
+BIB_CONF_WEAK = 0.40           # below this -> treat match as unreliable
+BIB_TITLE_STRONG = 0.75        # title similarity considered a strong match
+BIB_TITLE_MISMATCH = 0.50      # title similarity below this + DOI match -> metadata mismatch warning
+
+CROSSREF_HEADERS = {
+    'User-Agent': 'RefsFinder-BibValidator/1.0 (mailto:refsfinder@example.com)'
+}
+
+BIB_VALID_STATUSES = {'VALID', 'VALID - minor metadata difference'}
+BIB_WARNING_STATUSES = {'DOI VALID - metadata mismatch', 'SUSPICIOUS'}
+BIB_INVALID_STATUSES = {'DOI NOT FOUND', 'PAPER NOT FOUND'}
+BIB_DUPLICATE_STATUSES = {'POSSIBLE DUPLICATE'}
+BIB_UNVERIFIED_STATUSES = {'UNVERIFIED', 'INSUFFICIENT DATA', 'PENDING'}
+
+BIB_FIELD_ORDER = ['author', 'title', 'journal', 'booktitle', 'volume', 'number',
+                    'pages', 'year', 'doi', 'url', 'publisher', 'abstract', 'keywords', 'note']
+
+
+def parse_bib_file(path):
+    """Parse a .bib file into a list of entry dicts: {'key','type','fields'}.
+    Robust, hand-rolled parser (handles nested braces); malformed entries are
+    skipped individually and reported in the returned errors list instead of
+    crashing the whole parse.
+    """
+    with open(path, 'r', encoding='utf-8-sig', errors='replace') as f:
+        content = f.read()
+
+    entries = []
+    errors = []
+    i = 0
+    n = len(content)
+
+    while i < n:
+        at_pos = content.find('@', i)
+        if at_pos == -1:
+            break
+
+        m = re.match(r'@(\w+)\s*\{', content[at_pos:], re.IGNORECASE)
+        if not m:
+            i = at_pos + 1
+            continue
+
+        entry_type = m.group(1).lower()
+        brace_start = at_pos + m.end() - 1  # index of the opening '{'
+
+        depth = 0
+        j = brace_start
+        while j < n:
+            if content[j] == '{':
+                depth += 1
+            elif content[j] == '}':
+                depth -= 1
+                if depth == 0:
+                    break
+            j += 1
+
+        if depth != 0:
+            errors.append(f"Unbalanced braces for entry starting near position {at_pos}; stopped parsing.")
+            break
+
+        body = content[brace_start + 1:j]
+        i = j + 1
+
+        if entry_type in ('comment', 'string', 'preamble'):
+            continue
+
+        try:
+            entry = _parse_bib_entry_body(entry_type, body)
+            if entry.get('key'):
+                entries.append(entry)
+            else:
+                errors.append(f"Entry near position {at_pos} has no citation key; skipped.")
+        except Exception as e:
+            errors.append(f"Failed to parse entry near position {at_pos}: {e}")
+            continue
+
+    return entries, errors
+
+
+def _parse_bib_entry_body(entry_type, body):
+    """Parse the inner body of a bib entry (everything between the outer braces)."""
+    comma_idx = body.find(',')
+    if comma_idx == -1:
+        key = body.strip()
+        fields_str = ""
+    else:
+        key = body[:comma_idx].strip()
+        fields_str = body[comma_idx + 1:]
+
+    fields = {}
+    pos = 0
+    L = len(fields_str)
+
+    while pos < L:
+        while pos < L and fields_str[pos] in ' \t\r\n,':
+            pos += 1
+        if pos >= L:
+            break
+
+        eq_idx = fields_str.find('=', pos)
+        if eq_idx == -1:
+            break
+        field_name = fields_str[pos:eq_idx].strip().lower()
+        pos = eq_idx + 1
+        while pos < L and fields_str[pos] in ' \t\r\n':
+            pos += 1
+        if pos >= L:
+            break
+
+        if fields_str[pos] == '{':
+            depth = 0
+            start = pos
+            while pos < L:
+                if fields_str[pos] == '{':
+                    depth += 1
+                elif fields_str[pos] == '}':
+                    depth -= 1
+                    if depth == 0:
+                        pos += 1
+                        break
+                pos += 1
+            value = fields_str[start + 1:pos - 1] if pos - 1 > start else ""
+        elif fields_str[pos] == '"':
+            pos += 1
+            start = pos
+            while pos < L and fields_str[pos] != '"':
+                pos += 1
+            value = fields_str[start:pos]
+            pos += 1
+        else:
+            start = pos
+            while pos < L and fields_str[pos] != ',':
+                pos += 1
+            value = fields_str[start:pos].strip()
+
+        if field_name:
+            fields[field_name] = _clean_bib_value(value)
+
+    return {'key': key, 'type': entry_type, 'fields': fields}
+
+
+def _clean_bib_value(value):
+    value = value.strip()
+    value = re.sub(r'\s+', ' ', value)
+    return value
+
+
+def normalize_doi(doi):
+    """Normalise a DOI string: strip URL prefixes, 'doi:' prefix, whitespace,
+    surrounding punctuation and lower-case it."""
+    if not doi:
+        return ""
+    doi = str(doi).strip()
+    doi = re.sub(r'^https?://(dx\.)?doi\.org/', '', doi, flags=re.IGNORECASE)
+    doi = re.sub(r'^doi\s*:\s*', '', doi, flags=re.IGNORECASE)
+    doi = doi.strip().strip('{}').strip()
+    doi = doi.strip('.,;: \t')
+    return doi.lower()
+
+
+def normalize_title(title):
+    """Normalise title text for comparison: lower-case, strip LaTeX markup and
+    punctuation, collapse whitespace."""
+    if not title:
+        return ""
+    t = str(title).lower()
+    t = re.sub(r'[{}\\]', '', t)
+    t = re.sub(r'[^a-z0-9\s]', ' ', t)
+    t = re.sub(r'\s+', ' ', t).strip()
+    return t
+
+
+def title_similarity(a, b):
+    na, nb = normalize_title(a), normalize_title(b)
+    if not na or not nb:
+        return 0.0
+    return SequenceMatcher(None, na, nb).ratio()
+
+
+def extract_surnames(author_field):
+    """Extract a set of normalised author surnames from a BibTeX 'author'
+    string ("Last, First and Last2, First2") or a list of plain names."""
+    surnames = set()
+    if not author_field:
+        return surnames
+
+    if isinstance(author_field, list):
+        names = author_field
+    else:
+        names = re.split(r'\s+and\s+', str(author_field), flags=re.IGNORECASE)
+
+    for name in names:
+        name = name.strip()
+        if not name:
+            continue
+        if ',' in name:
+            surname = name.split(',')[0].strip()
+        else:
+            parts = name.split()
+            surname = parts[-1] if parts else name
+        surname = re.sub(r'[^a-zA-Z\-]', '', surname).lower()
+        if surname:
+            surnames.add(surname)
+    return surnames
+
+
+def author_similarity(bib_authors, record_authors):
+    set1 = extract_surnames(bib_authors)
+    set2 = extract_surnames(record_authors)
+    if not set1 or not set2:
+        return 0.0
+    overlap = set1 & set2
+    return len(overlap) / max(len(set1), len(set2))
+
+
+def build_bib_session():
+    """Create a requests Session with retry/backoff for transient failures."""
+    session = requests.Session()
+    retries = Retry(
+        total=3,
+        backoff_factor=1.0,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=frozenset(['GET'])
+    )
+    adapter = HTTPAdapter(max_retries=retries)
+    session.mount('https://', adapter)
+    session.mount('http://', adapter)
+    return session
+
+
+def _http_get(session, url, params=None, timeout=15, headers=None):
+    """Perform a GET request, returning (status_code, json_or_None, error_message).
+    status_code is None only when the request itself failed (network error)."""
+    try:
+        r = session.get(url, params=params, timeout=timeout, headers=headers)
+        if r.status_code == 200:
+            try:
+                return 200, r.json(), None
+            except Exception as e:
+                return r.status_code, None, f"Invalid JSON response: {e}"
+        elif r.status_code == 404:
+            return 404, None, None
+        else:
+            return r.status_code, None, f"HTTP {r.status_code}"
+    except requests.exceptions.RequestException as e:
+        return None, None, str(e)
+
+
+def crossref_to_record(item):
+    """Normalise a Crossref 'message' item into a common record dict."""
+    title_list = item.get('title') or []
+    title = title_list[0] if title_list else ""
+
+    authors = []
+    for a in item.get('author', []) or []:
+        given = a.get('given', '') or ''
+        family = a.get('family', '') or ''
+        name = f"{given} {family}".strip()
+        if name:
+            authors.append(name)
+
+    year = None
+    for date_field in ('published-print', 'published-online', 'issued', 'created'):
+        date_parts = (item.get(date_field) or {}).get('date-parts')
+        if date_parts and date_parts[0]:
+            year = date_parts[0][0]
+            break
+
+    journal_list = item.get('container-title') or []
+    journal = journal_list[0] if journal_list else ""
+
+    doi = normalize_doi(item.get('DOI', ''))
+
+    return {
+        'source': 'crossref',
+        'title': title,
+        'authors': authors,
+        'year': year,
+        'journal': journal,
+        'volume': item.get('volume', '') or '',
+        'issue': item.get('issue', '') or '',
+        'pages': item.get('page', '') or '',
+        'doi': doi,
+        'url': item.get('URL', '') or (f"https://doi.org/{doi}" if doi else ""),
+        'publisher': item.get('publisher', '') or '',
+        'type': item.get('type', '') or ''
+    }
+
+
+def openalex_to_record(work):
+    """Normalise an OpenAlex 'work' object into a common record dict."""
+    title = work.get('title') or work.get('display_name') or ""
+
+    authors = []
+    for a in work.get('authorships', []) or []:
+        name = a.get('author', {}).get('display_name', '') if a.get('author') else ''
+        if name:
+            authors.append(name)
+
+    primary_location = work.get('primary_location') or {}
+    source = primary_location.get('source') if isinstance(primary_location, dict) else None
+    journal = source.get('display_name', '') if isinstance(source, dict) else ''
+
+    biblio = work.get('biblio', {}) or {}
+    first_page = biblio.get('first_page', '') or ''
+    last_page = biblio.get('last_page', '') or ''
+    pages = f"{first_page}--{last_page}" if first_page and last_page else (first_page or '')
+
+    doi = normalize_doi(work.get('doi', '') or '')
+
+    return {
+        'source': 'openalex',
+        'title': title,
+        'authors': authors,
+        'year': work.get('publication_year'),
+        'journal': journal,
+        'volume': biblio.get('volume', '') or '',
+        'issue': biblio.get('issue', '') or '',
+        'pages': pages,
+        'doi': doi,
+        'url': work.get('id', '') or (f"https://doi.org/{doi}" if doi else ""),
+        'publisher': '',
+        'type': work.get('type', '') or ''
+    }
+
+
+def lookup_doi(doi, session, timeout=15):
+    """Look up a DOI via Crossref, falling back to OpenAlex.
+    Returns (status, record, error) where status is 'found' | 'not_found' | 'error'."""
+    cr_status, cr_data, cr_err = _http_get(
+        session, f"https://api.crossref.org/works/{doi}", timeout=timeout, headers=CROSSREF_HEADERS
+    )
+    if cr_status == 200 and cr_data and cr_data.get('message'):
+        return 'found', crossref_to_record(cr_data['message']), None
+
+    oa_status, oa_data, oa_err = _http_get(
+        session, f"https://api.openalex.org/works/https://doi.org/{doi}", timeout=timeout
+    )
+    if oa_status == 200 and oa_data:
+        return 'found', openalex_to_record(oa_data), None
+
+    if cr_status == 404 and oa_status == 404:
+        return 'not_found', None, None
+
+    if cr_status is None and oa_status is None:
+        return 'error', None, cr_err or oa_err or "Unknown network error"
+
+    # One source errored but the other gave a definitive 404 -> treat as not found,
+    # but note the partial error for transparency.
+    if cr_status == 404 or oa_status == 404:
+        return 'not_found', None, None
+
+    return 'error', None, cr_err or oa_err or "Unknown error contacting Crossref/OpenAlex"
+
+
+def lookup_title(title, session, timeout=15):
+    """Search Crossref (then OpenAlex) for a title. Returns (status, record, error)."""
+    cr_status, cr_data, cr_err = _http_get(
+        session, "https://api.crossref.org/works",
+        params={"query.bibliographic": title, "rows": 3}, timeout=timeout, headers=CROSSREF_HEADERS
+    )
+    if cr_status == 200 and cr_data:
+        items = (cr_data.get('message', {}) or {}).get('items', [])
+        if items:
+            return 'found', crossref_to_record(items[0]), None
+
+    oa_status, oa_data, oa_err = _http_get(
+        session, "https://api.openalex.org/works",
+        params={"search": title, "per-page": 3}, timeout=timeout
+    )
+    if oa_status == 200 and oa_data:
+        results = oa_data.get('results', [])
+        if results:
+            return 'found', openalex_to_record(results[0]), None
+
+    if cr_status is None and oa_status is None:
+        return 'error', None, cr_err or oa_err or "Unknown network error"
+
+    if cr_status in (200, 404) or oa_status in (200, 404):
+        return 'not_found', None, None
+
+    return 'error', None, cr_err or oa_err or "Unknown error contacting Crossref/OpenAlex"
+
+
+def compare_metadata(bib_entry, record):
+    """Compare a parsed BibTeX entry against an authoritative record.
+    Returns a dict with per-field scores, an overall confidence and a
+    human-readable explanation (transparent scoring, not a black box)."""
+    fields = bib_entry.get('fields', {})
+    bib_title = fields.get('title', '')
+    bib_authors = fields.get('author', '')
+    bib_year = fields.get('year', '')
+    bib_journal = fields.get('journal', '') or fields.get('booktitle', '')
+    bib_doi = normalize_doi(fields.get('doi', ''))
+
+    rec_title = record.get('title', '') if record else ''
+    rec_authors = record.get('authors', []) if record else []
+    rec_year = record.get('year') if record else None
+    rec_journal = record.get('journal', '') if record else ''
+    rec_doi = record.get('doi', '') if record else ''
+
+    title_sim = title_similarity(bib_title, rec_title) if bib_title and rec_title else 0.0
+    author_sim = author_similarity(bib_authors, rec_authors) if bib_authors and rec_authors else 0.0
+
+    year_match = False
+    try:
+        if bib_year and rec_year:
+            year_match = abs(int(str(bib_year)[:4]) - int(str(rec_year)[:4])) <= 1
+    except (ValueError, TypeError):
+        year_match = False
+
+    journal_sim = title_similarity(bib_journal, rec_journal) if bib_journal and rec_journal else 0.0
+    journal_match = journal_sim >= 0.6
+
+    doi_match = bool(bib_doi) and bool(rec_doi) and bib_doi == rec_doi
+
+    weights = {'title': 0.45, 'author': 0.25, 'year': 0.10, 'journal': 0.10, 'doi': 0.10}
+    confidence = (
+        weights['title'] * title_sim +
+        weights['author'] * author_sim +
+        weights['year'] * (1.0 if year_match else 0.0) +
+        weights['journal'] * (1.0 if journal_match else 0.0) +
+        weights['doi'] * (1.0 if doi_match else 0.0)
+    )
+
+    parts = [f"title similarity = {title_sim * 100:.0f}%"]
+    if bib_authors and rec_authors:
+        parts.append(f"author overlap = {author_sim * 100:.0f}%")
+    if bib_year and rec_year:
+        parts.append(f"year {'matches' if year_match else 'differs'} (bib={bib_year}, record={rec_year})")
+    if bib_journal and rec_journal:
+        parts.append(f"journal {'matches' if journal_match else 'differs'}")
+    if bib_doi:
+        parts.append(f"DOI {'matches' if doi_match else 'differs'}")
+
+    return {
+        'title_similarity': title_sim,
+        'author_similarity': author_sim,
+        'year_match': year_match,
+        'journal_match': journal_match,
+        'doi_match': doi_match,
+        'confidence': confidence,
+        'explanation': "; ".join(parts)
+    }
+
+
+def _cached_title_lookup(title, session, cache, timeout):
+    norm = normalize_title(title)
+    cache_key = f"title:{norm}"
+    if cache_key in cache:
+        return cache[cache_key]
+    result = lookup_title(title, session, timeout=timeout)
+    cache[cache_key] = result
+    return result
+
+
+def validate_bib_entry(entry, session, cache, timeout=15):
+    """Validate a single BibTeX entry against Crossref/OpenAlex.
+    Uses conservative matching: a DOI resolving is not sufficient on its own,
+    metadata must also line up. Network/API failures yield UNVERIFIED, never
+    a 'fake' verdict."""
+    fields = entry.get('fields', {})
+    title = (fields.get('title', '') or '').strip()
+    doi = normalize_doi(fields.get('doi', ''))
+
+    result = {
+        'key': entry.get('key', ''),
+        'type': entry.get('type', ''),
+        'fields': fields,
+        'status': 'UNVERIFIED',
+        'confidence': 0.0,
+        'comparison': None,
+        'matched_record': None,
+        'explanation': '',
+    }
+
+    if not title and not doi:
+        result['status'] = 'INSUFFICIENT DATA'
+        result['explanation'] = "Entry has no title and no DOI; cannot verify."
+        return result
+
+    if doi:
+        cache_key = f"doi:{doi}"
+        if cache_key in cache:
+            doi_status, record, err = cache[cache_key]
+        else:
+            doi_status, record, err = lookup_doi(doi, session, timeout=timeout)
+            cache[cache_key] = (doi_status, record, err)
+
+        if doi_status == 'found' and record:
+            comparison = compare_metadata(entry, record)
+            result['comparison'] = comparison
+            result['matched_record'] = record
+            result['confidence'] = comparison['confidence']
+
+            if comparison['title_similarity'] < BIB_TITLE_MISMATCH:
+                result['status'] = 'DOI VALID - metadata mismatch'
+                result['explanation'] = (
+                    f"DOI resolves, but title similarity = {comparison['title_similarity'] * 100:.0f}%; "
+                    f"possible incorrect DOI. {comparison['explanation']}"
+                )
+            elif comparison['confidence'] >= BIB_CONF_VALID and comparison['title_similarity'] >= BIB_TITLE_STRONG:
+                result['status'] = 'VALID'
+                result['explanation'] = comparison['explanation']
+            elif comparison['confidence'] >= BIB_CONF_WEAK:
+                result['status'] = 'VALID - minor metadata difference'
+                result['explanation'] = comparison['explanation']
+            else:
+                result['status'] = 'SUSPICIOUS'
+                result['explanation'] = "DOI resolves but overall metadata match is weak. " + comparison['explanation']
+            return result
+
+        elif doi_status == 'not_found':
+            if title:
+                t_status, t_record, t_err = _cached_title_lookup(title, session, cache, timeout)
+                if t_status == 'found' and t_record:
+                    comparison = compare_metadata(entry, t_record)
+                    result['comparison'] = comparison
+                    result['matched_record'] = t_record
+                    result['confidence'] = comparison['confidence']
+                    result['status'] = 'DOI NOT FOUND'
+                    if comparison['title_similarity'] >= BIB_TITLE_STRONG:
+                        result['explanation'] = (
+                            f"DOI '{doi}' does not exist in Crossref/OpenAlex, but a matching paper was found "
+                            f"by title (similarity {comparison['title_similarity'] * 100:.0f}%). "
+                            f"Suggested DOI: {t_record.get('doi', 'N/A')}"
+                        )
+                    else:
+                        result['explanation'] = (
+                            f"DOI '{doi}' does not exist in Crossref/OpenAlex and no strong title match was found."
+                        )
+                    return result
+                elif t_status == 'error':
+                    result['status'] = 'DOI NOT FOUND'
+                    result['explanation'] = f"DOI '{doi}' does not exist. Additional title search failed: {t_err}"
+                    return result
+            result['status'] = 'DOI NOT FOUND'
+            result['explanation'] = f"DOI '{doi}' does not exist in Crossref or OpenAlex."
+            return result
+
+        else:  # error
+            result['status'] = 'UNVERIFIED'
+            result['explanation'] = f"Could not verify DOI due to a network/API error: {err}"
+            return result
+
+    # No DOI provided - try to find the paper by title
+    if title:
+        t_status, t_record, t_err = _cached_title_lookup(title, session, cache, timeout)
+        if t_status == 'found' and t_record:
+            comparison = compare_metadata(entry, t_record)
+            result['comparison'] = comparison
+            result['matched_record'] = t_record
+            result['confidence'] = comparison['confidence']
+
+            if comparison['confidence'] >= BIB_CONF_MINOR and comparison['title_similarity'] >= BIB_TITLE_STRONG:
+                result['status'] = 'VALID - minor metadata difference'
+                result['explanation'] = "No DOI in original entry; matching record found. " + comparison['explanation']
+            elif comparison['confidence'] >= BIB_CONF_WEAK:
+                result['status'] = 'SUSPICIOUS'
+                result['explanation'] = "Weak match to an existing record; please verify manually. " + comparison['explanation']
+            else:
+                result['status'] = 'PAPER NOT FOUND'
+                result['explanation'] = "No matching paper found in Crossref/OpenAlex for this title."
+            return result
+        elif t_status == 'not_found':
+            result['status'] = 'PAPER NOT FOUND'
+            result['explanation'] = "No matching paper found in Crossref/OpenAlex."
+            return result
+        else:
+            result['status'] = 'UNVERIFIED'
+            result['explanation'] = f"Could not verify title due to a network/API error: {t_err}"
+            return result
+
+    result['status'] = 'INSUFFICIENT DATA'
+    result['explanation'] = "No DOI and no usable title to verify."
+    return result
+
+
+def detect_duplicates(entries):
+    """Detect probable duplicate entries by DOI, normalised title, or
+    title+year+first-author. Returns (group_of_index, groups_dict)."""
+    doi_map = {}
+    title_map = {}
+    tya_map = {}
+    group_of = {}
+    groups = {}
+    next_id = [0]
+
+    def union(idx1, idx2):
+        g1 = group_of.get(idx1)
+        g2 = group_of.get(idx2)
+        if g1 is not None and g2 is not None:
+            if g1 != g2:
+                for idx in groups[g2]:
+                    group_of[idx] = g1
+                groups[g1].extend(groups[g2])
+                del groups[g2]
+        elif g1 is not None:
+            groups[g1].append(idx2)
+            group_of[idx2] = g1
+        elif g2 is not None:
+            groups[g2].append(idx1)
+            group_of[idx1] = g2
+        else:
+            gid = next_id[0]
+            next_id[0] += 1
+            groups[gid] = [idx1, idx2]
+            group_of[idx1] = gid
+            group_of[idx2] = gid
+
+    for idx, entry in enumerate(entries):
+        fields = entry.get('fields', {})
+        doi = normalize_doi(fields.get('doi', ''))
+        title_norm = normalize_title(fields.get('title', ''))
+        year = fields.get('year', '')
+        authors = extract_surnames(fields.get('author', ''))
+        first_author = sorted(authors)[0] if authors else ''
+        tya_key = f"{title_norm}|{year}|{first_author}" if title_norm else None
+
+        if doi:
+            if doi in doi_map:
+                union(doi_map[doi], idx)
+            else:
+                doi_map[doi] = idx
+
+        if title_norm and len(title_norm) > 8:
+            if title_norm in title_map:
+                union(title_map[title_norm], idx)
+            else:
+                title_map[title_norm] = idx
+
+        if tya_key:
+            if tya_key in tya_map:
+                union(tya_map[tya_key], idx)
+            else:
+                tya_map[tya_key] = idx
+
+    return group_of, groups
+
+
+def validate_bib_file(entries, progress_callback=None, log_callback=None, should_stop=None,
+                       cache=None, rate_limit_delay=0.3, timeout=15):
+    """Validate a full list of parsed BibTeX entries sequentially (rate-limited),
+    folding in duplicate detection. Returns a list of result dicts aligned with
+    `entries` (same order/length)."""
+    if cache is None:
+        cache = {}
+    session = build_bib_session()
+
+    group_of, groups = detect_duplicates(entries)
+    seen_groups = set()
+    results = []
+    total = len(entries)
+
+    for idx, entry in enumerate(entries):
+        if should_stop and should_stop():
+            break
+
+        key = entry.get('key', f'entry{idx}')
+        if log_callback:
+            log_callback(f"🔎 Validating [{idx + 1}/{total}]: {key}")
+
+        try:
+            result = validate_bib_entry(entry, session, cache, timeout=timeout)
+        except Exception as e:
+            result = {
+                'key': key, 'type': entry.get('type', ''), 'fields': entry.get('fields', {}),
+                'status': 'UNVERIFIED', 'confidence': 0.0, 'comparison': None,
+                'matched_record': None, 'explanation': f"Unexpected error during validation: {e}"
+            }
+
+        gid = group_of.get(idx)
+        result['duplicate_group'] = gid
+        if gid is not None:
+            members = groups.get(gid, [])
+            if gid in seen_groups:
+                result['status'] = 'POSSIBLE DUPLICATE'
+                suffix = "ies" if len(members) > 2 else "y"
+                result['explanation'] = (
+                    f"Possible duplicate of {len(members) - 1} other entr{suffix} "
+                    f"(matched by DOI/title). {result.get('explanation', '')}"
+                )
+            else:
+                seen_groups.add(gid)
+
+        results.append(result)
+
+        if progress_callback:
+            progress_callback(idx + 1, total, result)
+
+        if rate_limit_delay:
+            time.sleep(rate_limit_delay)
+
+    return results
+
+
+def fix_bib_entry(entry, matched_record):
+    """Produce a corrected copy of a BibTeX entry's fields using an authoritative
+    record, preserving the original citation key."""
+    fields = dict(entry.get('fields', {}))
+    if not matched_record:
+        return {'key': entry.get('key'), 'type': entry.get('type'), 'fields': fields}
+
+    if matched_record.get('title'):
+        fields['title'] = matched_record['title']
+
+    if matched_record.get('authors'):
+        authors_bib = []
+        for name in matched_record['authors']:
+            parts = name.split()
+            if len(parts) > 1:
+                last = parts[-1]
+                initials = " ".join(parts[:-1])
+                authors_bib.append(f"{last}, {initials}")
+            else:
+                authors_bib.append(name)
+        fields['author'] = " and ".join(authors_bib)
+
+    if matched_record.get('year'):
+        fields['year'] = str(matched_record['year'])
+    if matched_record.get('journal'):
+        fields['journal'] = matched_record['journal']
+    if matched_record.get('volume'):
+        fields['volume'] = str(matched_record['volume'])
+    if matched_record.get('issue'):
+        fields['number'] = str(matched_record['issue'])
+    if matched_record.get('pages'):
+        fields['pages'] = matched_record['pages']
+    if matched_record.get('doi'):
+        fields['doi'] = matched_record['doi']
+    if matched_record.get('url'):
+        fields['url'] = matched_record['url']
+    if matched_record.get('publisher'):
+        fields['publisher'] = matched_record['publisher']
+
+    return {'key': entry.get('key'), 'type': entry.get('type'), 'fields': fields}
+
+
+def remove_bib_entries(entries, keys_to_remove):
+    """Return a new list of entries excluding those whose key is in keys_to_remove."""
+    keys_to_remove = set(keys_to_remove)
+    return [e for e in entries if e.get('key') not in keys_to_remove]
+
+
+def bib_entry_to_string(entry):
+    """Serialise an entry dict back to a BibTeX entry string."""
+    key = entry.get('key', 'unknown')
+    entry_type = entry.get('type', 'misc')
+    fields = entry.get('fields', {})
+
+    ordered_keys = [k for k in BIB_FIELD_ORDER if fields.get(k)]
+    ordered_keys += [k for k in fields if k not in BIB_FIELD_ORDER and fields.get(k)]
+
+    body_lines = [f"  {k:<10}= {{{fields[k]}}}" for k in ordered_keys]
+    body = ",\n".join(body_lines)
+    return f"@{entry_type}{{{key},\n{body}\n}}"
+
+
+def save_validated_bib(entries, output_path):
+    """Write a list of entry dicts to a new .bib file. Never overwrites the
+    original source file (caller is responsible for choosing a new path)."""
+    with open(output_path, 'w', encoding='utf8') as f:
+        for entry in entries:
+            f.write(bib_entry_to_string(entry))
+            f.write("\n\n")
+    return output_path
+
+
+def is_result_fixable(result):
+    """Conservative check: only offer automatic correction when we have a
+    reliable authoritative record that genuinely corresponds to this entry
+    (never for DOI/metadata mismatches, where the resolved record may be the
+    WRONG paper)."""
+    if not result or not result.get('matched_record'):
+        return False
+    status = result.get('status')
+    comparison = result.get('comparison') or {}
+    if status in ('VALID', 'VALID - minor metadata difference'):
+        return True
+    if status == 'DOI NOT FOUND' and comparison.get('title_similarity', 0) >= BIB_TITLE_STRONG:
+        return True
+    return False
+
+
+def recommend_bib_action(status):
+    mapping = {
+        'VALID': 'Keep',
+        'VALID - minor metadata difference': 'Keep (review minor differences)',
+        'DOI VALID - metadata mismatch': 'Review - possible incorrect DOI',
+        'DOI NOT FOUND': 'Review / fix DOI',
+        'PAPER NOT FOUND': 'Review - could not verify',
+        'POSSIBLE DUPLICATE': 'Review - choose one entry to keep',
+        'INSUFFICIENT DATA': 'Add more metadata',
+        'SUSPICIOUS': 'Review - manually verify',
+        'UNVERIFIED': 'Retry validation later',
+        'PENDING': 'Validation not yet run',
+    }
+    return mapping.get(status, 'Review')
+
+
+def export_validation_report(results, output_path):
+    """Export validation results to CSV or XLSX (based on output_path extension)."""
+    rows = []
+    for r in results:
+        fields = r.get('fields', {})
+        matched = r.get('matched_record') or {}
+        comparison = r.get('comparison') or {}
+        rows.append({
+            'BibTeX Key': r.get('key', ''),
+            'Original Title': fields.get('title', ''),
+            'Corrected Title': matched.get('title', ''),
+            'Original DOI': fields.get('doi', ''),
+            'Verified DOI': matched.get('doi', ''),
+            'Status': r.get('status', ''),
+            'Title Similarity': f"{comparison.get('title_similarity', 0) * 100:.0f}%" if comparison else '',
+            'Author Match': f"{comparison.get('author_similarity', 0) * 100:.0f}%" if comparison else '',
+            'Year Match': comparison.get('year_match', '') if comparison else '',
+            'Journal Match': comparison.get('journal_match', '') if comparison else '',
+            'Confidence': f"{r.get('confidence', 0) * 100:.0f}%",
+            'Explanation': r.get('explanation', ''),
+            'Recommended Action': recommend_bib_action(r.get('status', ''))
+        })
+
+    df = pd.DataFrame(rows)
+    ext = os.path.splitext(output_path)[1].lower()
+    if ext == '.xlsx':
+        df.to_excel(output_path, index=False, engine='openpyxl')
+    else:
+        df.to_csv(output_path, index=False, encoding='utf-8-sig')
+    return output_path
+
 
 # ==========================================================
 # Paper Explorer Window
@@ -1124,6 +1967,593 @@ class PaperExplorerWindow(QMainWindow):
 
 
 # ==========================================================
+# BibTeX Validator Window
+# ==========================================================
+
+BIB_STATUS_COLORS_LIGHT = {
+    'VALID': '#2e7d32',
+    'VALID - minor metadata difference': '#558b2f',
+    'DOI VALID - metadata mismatch': '#f57c00',
+    'DOI NOT FOUND': '#c62828',
+    'PAPER NOT FOUND': '#c62828',
+    'POSSIBLE DUPLICATE': '#6a1b9a',
+    'INSUFFICIENT DATA': '#757575',
+    'SUSPICIOUS': '#e65100',
+    'UNVERIFIED': '#757575',
+    'PENDING': '#9e9e9e',
+}
+
+BIB_STATUS_COLORS_DARK = {
+    'VALID': '#a6e3a1',
+    'VALID - minor metadata difference': '#94e2d5',
+    'DOI VALID - metadata mismatch': '#f9e2af',
+    'DOI NOT FOUND': '#f38ba8',
+    'PAPER NOT FOUND': '#f38ba8',
+    'POSSIBLE DUPLICATE': '#cba6f7',
+    'INSUFFICIENT DATA': '#a6adc8',
+    'SUSPICIOUS': '#fab387',
+    'UNVERIFIED': '#a6adc8',
+    'PENDING': '#6c7086',
+}
+
+
+class BibValidatorWindow(QMainWindow):
+    """Window for validating a .bib file's references against Crossref/OpenAlex,
+    reviewing results, fixing reliable metadata, removing invalid/duplicate
+    entries and exporting a cleaned .bib file plus a validation report.
+
+    The original .bib file is never modified; all output is written to new
+    files chosen by the user.
+    """
+
+    COL_STATUS = 0
+    COL_KEY = 1
+    COL_TITLE = 2
+    COL_DOI = 3
+    COL_MATCH = 4
+    COL_YEAR = 5
+    COL_ACTION = 6
+
+    def __init__(self, bib_path, entries, parent=None):
+        super().__init__(parent)
+        self.bib_path = bib_path
+        self.original_entries = entries          # never mutated
+        self.entries = [copy.deepcopy(e) for e in entries]
+        self.results = [None] * len(self.entries)  # aligned with self.entries
+        self.current_theme = getattr(parent, 'current_theme', 'light') if parent else 'light'
+        self.threadpool = QThreadPool()
+        self.worker = None
+
+        self.setWindowTitle("🔎 BibTeX Reference Checker")
+        self.setMinimumSize(1400, 800)
+
+        self.setup_ui()
+        self.apply_theme()
+        self.populate_table()
+        self.update_stats()
+
+    # ------------------------------------------------------------------
+    # UI construction
+    # ------------------------------------------------------------------
+    def setup_ui(self):
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        main_layout = QVBoxLayout(central_widget)
+        main_layout.setSpacing(10)
+        main_layout.setContentsMargins(15, 15, 15, 15)
+
+        # Header
+        header_layout = QHBoxLayout()
+        title = QLabel(f"🔎 BibTeX Reference Checker — {os.path.basename(self.bib_path)}")
+        title.setStyleSheet("font-size: 18px; font-weight: bold;")
+        header_layout.addWidget(title)
+        header_layout.addStretch()
+
+        self.search_input = QLineEdit()
+        self.search_input.setPlaceholderText("🔍 Search references...")
+        self.search_input.setMinimumWidth(280)
+        self.search_input.textChanged.connect(self.apply_filter)
+        header_layout.addWidget(self.search_input)
+
+        self.status_filter_combo = QComboBox()
+        self.status_filter_combo.addItem("All statuses")
+        self.status_filter_combo.addItems([
+            'VALID', 'VALID - minor metadata difference', 'DOI VALID - metadata mismatch',
+            'DOI NOT FOUND', 'PAPER NOT FOUND', 'POSSIBLE DUPLICATE',
+            'INSUFFICIENT DATA', 'SUSPICIOUS', 'UNVERIFIED', 'PENDING'
+        ])
+        self.status_filter_combo.currentIndexChanged.connect(self.apply_filter)
+        header_layout.addWidget(self.status_filter_combo)
+
+        close_btn = QPushButton("✕ Close")
+        close_btn.setObjectName("danger")
+        close_btn.clicked.connect(self.close)
+        header_layout.addWidget(close_btn)
+
+        main_layout.addLayout(header_layout)
+
+        # Stats bar
+        self.stats_label = QLabel()
+        self.stats_label.setStyleSheet("padding: 5px; font-size: 13px; font-weight: bold;")
+        main_layout.addWidget(self.stats_label)
+
+        # Progress bar + current-entry status
+        progress_layout = QHBoxLayout()
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setVisible(False)
+        progress_layout.addWidget(self.progress_bar)
+        main_layout.addLayout(progress_layout)
+
+        self.current_status_label = QLabel("")
+        self.current_status_label.setStyleSheet("font-size: 11px; padding: 2px;")
+        main_layout.addWidget(self.current_status_label)
+
+        # Table
+        self.table = QTableWidget()
+        self.table.setColumnCount(7)
+        self.table.setHorizontalHeaderLabels(
+            ["Status", "BibTeX Key", "Title", "DOI", "Match", "Year", "Explanation / Action"]
+        )
+        self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.table.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.table.setSortingEnabled(True)
+        self.table.horizontalHeader().setStretchLastSection(True)
+        self.table.horizontalHeader().setSectionResizeMode(self.COL_TITLE, QHeaderView.ResizeMode.Stretch)
+        self.table.verticalHeader().setVisible(False)
+        self.table.itemSelectionChanged.connect(self.on_selection_changed)
+        main_layout.addWidget(self.table)
+
+        # Detail panel for the selected entry
+        self.detail_label = QLabel("Select a reference to see full details and explanation.")
+        self.detail_label.setWordWrap(True)
+        self.detail_label.setStyleSheet("padding: 8px; font-size: 12px;")
+        self.detail_label.setMinimumHeight(60)
+        main_layout.addWidget(self.detail_label)
+
+        # Action buttons
+        action_layout = QHBoxLayout()
+
+        self.validate_btn = QPushButton("🚀 Start Validation")
+        self.validate_btn.setObjectName("primary")
+        self.validate_btn.clicked.connect(self.start_validation)
+        action_layout.addWidget(self.validate_btn)
+
+        self.stop_btn = QPushButton("⏹️ Stop")
+        self.stop_btn.setObjectName("danger")
+        self.stop_btn.setEnabled(False)
+        self.stop_btn.clicked.connect(self.stop_validation)
+        action_layout.addWidget(self.stop_btn)
+
+        self.fix_btn = QPushButton("🛠️ Fix References")
+        self.fix_btn.setObjectName("success")
+        self.fix_btn.clicked.connect(self.fix_references)
+        action_layout.addWidget(self.fix_btn)
+
+        self.remove_selected_btn = QPushButton("🗑️ Remove Selected")
+        self.remove_selected_btn.clicked.connect(self.remove_selected)
+        action_layout.addWidget(self.remove_selected_btn)
+
+        self.remove_invalid_btn = QPushButton("🚫 Remove All Invalid")
+        self.remove_invalid_btn.setObjectName("danger")
+        self.remove_invalid_btn.clicked.connect(self.remove_all_invalid)
+        action_layout.addWidget(self.remove_invalid_btn)
+
+        action_layout.addStretch()
+
+        self.export_report_btn = QPushButton("📊 Export Report")
+        self.export_report_btn.clicked.connect(self.export_report)
+        action_layout.addWidget(self.export_report_btn)
+
+        self.save_bib_btn = QPushButton("💾 Save Validated BibTeX")
+        self.save_bib_btn.setObjectName("success")
+        self.save_bib_btn.clicked.connect(self.save_validated)
+        action_layout.addWidget(self.save_bib_btn)
+
+        main_layout.addLayout(action_layout)
+
+        self.status_bar = self.statusBar()
+        self.status_bar.showMessage(f"Loaded {len(self.entries)} references from {os.path.basename(self.bib_path)}")
+
+    def apply_theme(self):
+        if self.current_theme == 'dark':
+            self.setStyleSheet("""
+                QMainWindow { background-color: #1e1e2e; }
+                QLabel { color: #cdd6f4; }
+                QLineEdit, QComboBox {
+                    background-color: #1a1b26; color: #cdd6f4;
+                    border: 1px solid #45475a; border-radius: 6px; padding: 6px;
+                }
+                QTableWidget {
+                    background-color: #181825; color: #cdd6f4;
+                    gridline-color: #45475a; border: 1px solid #45475a;
+                }
+                QHeaderView::section {
+                    background-color: #313244; color: #cdd6f4; padding: 6px; border: none;
+                }
+                QPushButton {
+                    background-color: #45475a; color: #cdd6f4; border: none;
+                    border-radius: 6px; padding: 8px 14px; font-weight: bold;
+                }
+                QPushButton:hover { background-color: #585b70; }
+                QPushButton#primary { background-color: #89b4fa; color: #1e1e2e; }
+                QPushButton#success { background-color: #a6e3a1; color: #1e1e2e; }
+                QPushButton#danger { background-color: #f38ba8; color: #1e1e2e; }
+                QProgressBar {
+                    border: 1px solid #45475a; border-radius: 6px; text-align: center;
+                    color: #cdd6f4; background-color: #313244;
+                }
+                QProgressBar::chunk { background-color: #89b4fa; border-radius: 6px; }
+            """)
+        else:
+            self.setStyleSheet("""
+                QMainWindow { background-color: #f5f5f7; }
+                QLabel { color: #1a1b26; }
+                QLineEdit, QComboBox {
+                    background-color: #ffffff; color: #1a1b26;
+                    border: 1px solid #c4c4c9; border-radius: 6px; padding: 6px;
+                }
+                QTableWidget {
+                    background-color: #ffffff; color: #1a1b26;
+                    gridline-color: #e0e0e5; border: 1px solid #c4c4c9;
+                }
+                QHeaderView::section {
+                    background-color: #e8e8ed; color: #1a1b26; padding: 6px; border: none;
+                }
+                QPushButton {
+                    background-color: #e8e8ed; color: #1a1b26; border: none;
+                    border-radius: 6px; padding: 8px 14px; font-weight: bold;
+                }
+                QPushButton:hover { background-color: #d4d4d9; }
+                QPushButton#primary { background-color: #1e66f5; color: #ffffff; }
+                QPushButton#success { background-color: #2e7d32; color: #ffffff; }
+                QPushButton#danger { background-color: #c62828; color: #ffffff; }
+                QProgressBar {
+                    border: 1px solid #c4c4c9; border-radius: 6px; text-align: center;
+                    color: #1a1b26; background-color: #e8e8ed;
+                }
+                QProgressBar::chunk { background-color: #1e66f5; border-radius: 6px; }
+            """)
+
+    def _status_color(self, status):
+        palette = BIB_STATUS_COLORS_DARK if self.current_theme == 'dark' else BIB_STATUS_COLORS_LIGHT
+        return QColor(palette.get(status, '#9e9e9e'))
+
+    # ------------------------------------------------------------------
+    # Table population
+    # ------------------------------------------------------------------
+    def populate_table(self):
+        self.table.setSortingEnabled(False)
+        self.table.setRowCount(len(self.entries))
+        for row, entry in enumerate(self.entries):
+            self.refresh_row(row)
+        self.table.setSortingEnabled(True)
+
+    def refresh_row(self, row):
+        entry = self.entries[row]
+        result = self.results[row]
+        fields = entry.get('fields', {})
+
+        status = result['status'] if result else 'PENDING'
+        confidence = result.get('confidence', 0.0) if result else 0.0
+        explanation = result.get('explanation', '') if result else 'Not yet validated.'
+
+        status_item = QTableWidgetItem(status)
+        status_item.setForeground(self._status_color(status))
+        font = status_item.font()
+        font.setBold(True)
+        status_item.setFont(font)
+        status_item.setData(Qt.ItemDataRole.UserRole, row)
+
+        key_item = QTableWidgetItem(entry.get('key', ''))
+        title_item = QTableWidgetItem(fields.get('title', ''))
+
+        doi_display = fields.get('doi', '') or '—'
+        if status == 'DOI NOT FOUND':
+            doi_display = f"{fields.get('doi', '') or '(none)'} — NOT FOUND"
+        doi_item = QTableWidgetItem(doi_display)
+
+        match_item = QTableWidgetItem(f"{confidence * 100:.0f}%")
+        match_item.setData(Qt.ItemDataRole.EditRole, confidence)
+
+        year_item = QTableWidgetItem(str(fields.get('year', '') or ''))
+
+        action_item = QTableWidgetItem(explanation if result else '')
+
+        for item in (status_item, key_item, title_item, doi_item, match_item, year_item, action_item):
+            item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+
+        self.table.setItem(row, self.COL_STATUS, status_item)
+        self.table.setItem(row, self.COL_KEY, key_item)
+        self.table.setItem(row, self.COL_TITLE, title_item)
+        self.table.setItem(row, self.COL_DOI, doi_item)
+        self.table.setItem(row, self.COL_MATCH, match_item)
+        self.table.setItem(row, self.COL_YEAR, year_item)
+        self.table.setItem(row, self.COL_ACTION, action_item)
+
+    def apply_filter(self):
+        text = self.search_input.text().strip().lower()
+        status_filter = self.status_filter_combo.currentText()
+
+        for row in range(self.table.rowCount()):
+            entry = self.entries[row]
+            fields = entry.get('fields', {})
+            result = self.results[row]
+            status = result['status'] if result else 'PENDING'
+
+            matches_status = (status_filter == "All statuses" or status == status_filter)
+
+            if text:
+                haystack = " ".join([
+                    entry.get('key', ''), fields.get('title', ''), fields.get('author', ''),
+                    fields.get('doi', ''), fields.get('journal', ''), str(fields.get('year', ''))
+                ]).lower()
+                matches_text = text in haystack
+            else:
+                matches_text = True
+
+            self.table.setRowHidden(row, not (matches_status and matches_text))
+
+    def on_selection_changed(self):
+        rows = sorted(set(idx.row() for idx in self.table.selectedIndexes()))
+        if len(rows) != 1:
+            if len(rows) > 1:
+                self.detail_label.setText(f"{len(rows)} references selected.")
+            return
+        row = rows[0]
+        if row >= len(self.entries):
+            return
+        entry = self.entries[row]
+        result = self.results[row]
+        fields = entry.get('fields', {})
+
+        lines = [f"<b>{entry.get('key', '')}</b> — {fields.get('title', '(no title)')}"]
+        lines.append(f"Authors: {fields.get('author', 'N/A')} | Year: {fields.get('year', 'N/A')} | "
+                     f"Journal: {fields.get('journal', fields.get('booktitle', 'N/A'))}")
+        lines.append(f"DOI: {fields.get('doi', 'N/A')} | URL: {fields.get('url', 'N/A')}")
+
+        if result:
+            lines.append(f"<br><b>Status:</b> {result['status']} (confidence {result.get('confidence', 0) * 100:.0f}%)")
+            lines.append(f"<b>Explanation:</b> {result.get('explanation', '')}")
+            matched = result.get('matched_record')
+            if matched:
+                lines.append(f"<b>Matched record ({matched.get('source')}):</b> {matched.get('title', '')} "
+                              f"({matched.get('year', 'N/A')}) — DOI: {matched.get('doi', 'N/A')}")
+        else:
+            lines.append("<br><i>Not yet validated.</i>")
+
+        self.detail_label.setText("<br>".join(lines))
+
+    # ------------------------------------------------------------------
+    # Stats
+    # ------------------------------------------------------------------
+    def update_stats(self):
+        total = len(self.entries)
+        valid = sum(1 for r in self.results if r and r['status'] in BIB_VALID_STATUSES)
+        warnings = sum(1 for r in self.results if r and r['status'] in BIB_WARNING_STATUSES)
+        invalid = sum(1 for r in self.results if r and r['status'] in BIB_INVALID_STATUSES)
+        duplicates = sum(1 for r in self.results if r and r['status'] in BIB_DUPLICATE_STATUSES)
+        unverified = sum(1 for r in self.results if r and r['status'] in BIB_UNVERIFIED_STATUSES)
+        pending = sum(1 for r in self.results if not r)
+
+        text = (f"📊 Total: {total}   |   ✅ Valid: {valid}   |   ⚠️ Warnings: {warnings}   |   "
+                f"❌ Invalid: {invalid}   |   🧬 Duplicates: {duplicates}   |   "
+                f"❓ Unverified: {unverified}")
+        if pending:
+            text += f"   |   ⏳ Pending: {pending}"
+        self.stats_label.setText(text)
+
+    # ------------------------------------------------------------------
+    # Validation lifecycle
+    # ------------------------------------------------------------------
+    def start_validation(self):
+        if not self.entries:
+            QMessageBox.information(self, "No References", "There are no BibTeX entries to validate.")
+            return
+
+        self.validate_btn.setEnabled(False)
+        self.stop_btn.setEnabled(True)
+        self.progress_bar.setVisible(True)
+        self.progress_bar.setMaximum(len(self.entries))
+        self.progress_bar.setValue(0)
+        self.status_bar.showMessage("Validating references...")
+
+        self.worker = BibValidationWorker(self.entries, rate_limit_delay=0.3, timeout=15)
+        self.worker.signals.progress.connect(self.on_progress)
+        self.worker.signals.entry_validated.connect(self.on_entry_validated)
+        self.worker.signals.log.connect(self.on_log)
+        self.worker.signals.error.connect(self.on_validation_error)
+        self.worker.signals.finished.connect(self.on_validation_finished)
+        self.threadpool.start(self.worker)
+
+    def stop_validation(self):
+        if self.worker:
+            self.worker.stop()
+            self.stop_btn.setEnabled(False)
+            self.current_status_label.setText("Stopping after current reference...")
+
+    def on_progress(self, current, total):
+        self.progress_bar.setMaximum(total)
+        self.progress_bar.setValue(current)
+
+    def on_entry_validated(self, index, result):
+        if 0 <= index < len(self.results):
+            self.results[index] = result
+            self.refresh_row(index)
+            self.update_stats()
+            key = self.entries[index].get('key', '')
+            self.current_status_label.setText(f"Validated: {key} → {result['status']}")
+
+    def on_log(self, message):
+        self.status_bar.showMessage(message)
+
+    def on_validation_error(self, message):
+        self.validate_btn.setEnabled(True)
+        self.stop_btn.setEnabled(False)
+        self.progress_bar.setVisible(False)
+        QMessageBox.critical(self, "Validation Error", message)
+
+    def on_validation_finished(self, results):
+        self.validate_btn.setEnabled(True)
+        self.stop_btn.setEnabled(False)
+        self.progress_bar.setVisible(False)
+        self.status_bar.showMessage("Validation complete.")
+        self.update_stats()
+        self.apply_filter()
+
+    # ------------------------------------------------------------------
+    # Fix / remove / save / export
+    # ------------------------------------------------------------------
+    def _selected_rows(self):
+        return sorted(set(idx.row() for idx in self.table.selectedIndexes()))
+
+    def fix_references(self):
+        """Apply automatic correction to entries with a reliable authoritative
+        match. Never touches entries without a trustworthy match."""
+        fixable_rows = [i for i, r in enumerate(self.results) if is_result_fixable(r)]
+        if not fixable_rows:
+            QMessageBox.information(
+                self, "Nothing to Fix",
+                "No references currently have a reliable authoritative match to fix.\n"
+                "Run validation first, or review warnings/invalid entries manually."
+            )
+            return
+
+        reply = QMessageBox.question(
+            self, "Fix References",
+            f"{len(fixable_rows)} reference(s) have a reliable match and can be "
+            f"automatically corrected (title, authors, journal, year, volume, issue, "
+            f"pages, DOI, URL, publisher).\n\nThis only changes the in-memory copy; "
+            f"the original file is never modified. Continue?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+
+        for row in fixable_rows:
+            fixed = fix_bib_entry(self.entries[row], self.results[row].get('matched_record'))
+            self.entries[row] = fixed
+            self.refresh_row(row)
+
+        QMessageBox.information(self, "Fixed", f"Updated metadata for {len(fixable_rows)} reference(s).\n"
+                                               f"Use 'Save Validated BibTeX' to write a new file.")
+
+    def remove_selected(self):
+        rows = self._selected_rows()
+        if not rows:
+            QMessageBox.information(self, "No Selection", "Select one or more rows to remove.")
+            return
+
+        keys = [self.entries[r].get('key', '') for r in rows]
+        reply = QMessageBox.question(
+            self, "Remove Selected",
+            f"Remove {len(rows)} selected reference(s)?\n\n" + "\n".join(f"• {k}" for k in keys[:15]) +
+            ("\n..." if len(keys) > 15 else ""),
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+
+        self._remove_rows(rows)
+
+    def remove_all_invalid(self):
+        invalid_rows = [i for i, r in enumerate(self.results)
+                        if r and r['status'] in BIB_INVALID_STATUSES]
+        if not invalid_rows:
+            QMessageBox.information(self, "No Invalid References",
+                                   "No references are currently marked INVALID "
+                                   "(DOI NOT FOUND / PAPER NOT FOUND).")
+            return
+
+        keys = [self.entries[r].get('key', '') for r in invalid_rows]
+        reply = QMessageBox.question(
+            self, "Remove All Invalid",
+            f"This will remove {len(invalid_rows)} reference(s) currently marked as invalid:\n\n" +
+            "\n".join(f"• {k}" for k in keys[:15]) + ("\n..." if len(keys) > 15 else "") +
+            "\n\nThis action cannot be undone within this session. Continue?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+
+        self._remove_rows(invalid_rows)
+
+    def _remove_rows(self, rows):
+        rows = sorted(set(rows), reverse=True)
+        for row in rows:
+            del self.entries[row]
+            del self.results[row]
+        self.populate_table()
+        self.update_stats()
+        self.apply_filter()
+        self.status_bar.showMessage(f"Removed {len(rows)} reference(s). {len(self.entries)} remaining.")
+
+    def save_validated(self):
+        if not self.entries:
+            QMessageBox.information(self, "Nothing to Save", "There are no references left to save.")
+            return
+
+        base_dir = os.path.dirname(self.bib_path) or os.getcwd()
+        base_name = os.path.splitext(os.path.basename(self.bib_path))[0]
+        default_path = os.path.join(base_dir, f"{base_name}_validated.bib")
+
+        path, _ = QFileDialog.getSaveFileName(
+            self, "Save Validated BibTeX", default_path, "BibTeX Files (*.bib)"
+        )
+        if not path:
+            return
+        if not path.lower().endswith('.bib'):
+            path += '.bib'
+
+        try:
+            save_validated_bib(self.entries, path)
+            QMessageBox.information(self, "Saved",
+                                   f"✅ Saved {len(self.entries)} reference(s) to:\n{path}\n\n"
+                                   f"The original file was not modified.")
+            self.status_bar.showMessage(f"Saved validated BibTeX to {path}")
+        except Exception as e:
+            QMessageBox.critical(self, "Save Failed", f"Could not save file:\n{e}")
+
+    def export_report(self):
+        if not any(self.results):
+            QMessageBox.information(self, "No Results", "Run validation before exporting a report.")
+            return
+
+        base_dir = os.path.dirname(self.bib_path) or os.getcwd()
+        base_name = os.path.splitext(os.path.basename(self.bib_path))[0]
+        default_path = os.path.join(base_dir, f"{base_name}_validation_report.csv")
+
+        path, _ = QFileDialog.getSaveFileName(
+            self, "Export Validation Report", default_path,
+            "CSV Files (*.csv);;Excel Files (*.xlsx)"
+        )
+        if not path:
+            return
+
+        full_results = []
+        for entry, result in zip(self.entries, self.results):
+            if result:
+                full_results.append(result)
+            else:
+                full_results.append({
+                    'key': entry.get('key', ''), 'fields': entry.get('fields', {}),
+                    'status': 'PENDING', 'confidence': 0.0, 'comparison': None,
+                    'matched_record': None, 'explanation': 'Not yet validated.'
+                })
+
+        try:
+            export_validation_report(full_results, path)
+            QMessageBox.information(self, "Report Exported", f"✅ Validation report saved to:\n{path}")
+        except Exception as e:
+            QMessageBox.critical(self, "Export Failed", f"Could not export report:\n{e}")
+
+    def closeEvent(self, event):
+        if self.worker:
+            self.worker.stop()
+        event.accept()
+
+
+# ==========================================================
 # Main GUI Application
 # ==========================================================
 
@@ -1220,6 +2650,68 @@ class FetchWorker(QRunnable):
             
         except Exception as e:
             self.signals.error.emit(f"Error: {str(e)}")
+
+
+class BibValidationSignals(QObject):
+    """Signals emitted by BibValidationWorker to keep the GUI responsive."""
+    progress = pyqtSignal(int, int)          # current, total
+    entry_validated = pyqtSignal(int, dict)  # index, result dict
+    log = pyqtSignal(str)
+    finished = pyqtSignal(list)              # final list of result dicts
+    error = pyqtSignal(str)
+
+
+class BibValidationWorker(QRunnable):
+    """Background worker that validates a list of parsed BibTeX entries against
+    Crossref/OpenAlex without freezing the GUI. Rate-limited, retries transient
+    failures, and caches lookups for the duration of the run."""
+
+    def __init__(self, entries, rate_limit_delay=0.3, timeout=15):
+        super().__init__()
+        self.entries = entries
+        self.rate_limit_delay = rate_limit_delay
+        self.timeout = timeout
+        self.signals = BibValidationSignals()
+        self._stop_requested = False
+        self._cache = {}
+
+    def stop(self):
+        self._stop_requested = True
+
+    def _should_stop(self):
+        return self._stop_requested
+
+    def run(self):
+        try:
+            total = len(self.entries)
+            self.signals.log.emit(f"🔎 Starting validation of {total} BibTeX entries...")
+
+            results = []
+
+            def on_progress(current, total_count, result):
+                results.append(result)
+                self.signals.entry_validated.emit(current - 1, result)
+                self.signals.progress.emit(current, total_count)
+
+            results = validate_bib_file(
+                self.entries,
+                progress_callback=on_progress,
+                log_callback=self.signals.log.emit,
+                should_stop=self._should_stop,
+                cache=self._cache,
+                rate_limit_delay=self.rate_limit_delay,
+                timeout=self.timeout
+            )
+
+            if self._stop_requested:
+                self.signals.log.emit("⏹️ Validation stopped by user.")
+            else:
+                self.signals.log.emit("✅ Validation complete.")
+
+            self.signals.finished.emit(results)
+        except Exception as e:
+            self.signals.error.emit(f"Error during validation: {str(e)}")
+
 
 class ThemeManager:
     DARK = {
@@ -1472,6 +2964,7 @@ class OpenAlexGUI(QMainWindow):
         self.output_dir = os.path.join(os.getcwd(), "refsfinder")
         self.generated_files = {}
         self.fetched_papers = []
+        self.bib_validator_windows = []
         
         self.setup_ui()
         self.apply_theme()
@@ -1600,6 +3093,13 @@ class OpenAlexGUI(QMainWindow):
         self.explore_btn.clicked.connect(self.open_explorer)
         action_layout.addWidget(self.explore_btn)
         
+        self.check_bib_btn = QPushButton("🔎 Check BibTeX References")
+        self.check_bib_btn.setObjectName("primary")
+        self.check_bib_btn.setMinimumWidth(220)
+        self.check_bib_btn.setToolTip("Select a .bib file and verify each reference against Crossref/OpenAlex")
+        self.check_bib_btn.clicked.connect(self.open_bib_validator)
+        action_layout.addWidget(self.check_bib_btn)
+        
         self.clear_btn = QPushButton("🗑️ Clear Log")
         self.clear_btn.clicked.connect(self.clear_log)
         action_layout.addWidget(self.clear_btn)
@@ -1660,6 +3160,11 @@ class OpenAlexGUI(QMainWindow):
                 <li>✓ Click DOI to open paper in browser</li>
                 <li>✓ Remove papers from collection</li>
                 <li>✓ Save changes after removal</li>
+                <li>✓ BibTeX Reference Checker - verify existing .bib files against Crossref/OpenAlex</li>
+                <li>✓ Conservative validation status (VALID, warnings, invalid, duplicate, unverified)</li>
+                <li>✓ Automatic metadata correction for reliably matched references</li>
+                <li>✓ Remove invalid/duplicate references with confirmation, export cleaned .bib</li>
+                <li>✓ Validation report export (CSV/Excel) for pre-publication checks</li>
             </ul>
             
             <h3 style="margin-top: 20px;">Tips:</h3>
@@ -1671,6 +3176,9 @@ class OpenAlexGUI(QMainWindow):
                 <li>Click "Remove" to delete papers from your collection</li>
                 <li>Click "Save Changes" to regenerate files without removed papers</li>
                 <li>Toggle between Dark and Light themes using the button in the header</li>
+                <li>Click "Check BibTeX References" to validate an existing .bib file against Crossref/OpenAlex</li>
+                <li>In the Reference Checker, use "Fix References" to auto-correct reliable matches, then "Save Validated BibTeX"</li>
+                <li>The original .bib file is never modified - results are always saved to a new file</li>
             </ul>
         """)
         about_layout.addWidget(about_text)
@@ -1855,6 +3363,41 @@ class OpenAlexGUI(QMainWindow):
         # Open explorer with papers
         explorer = PaperExplorerWindow(self.fetched_papers, self)
         explorer.show()
+    
+    def open_bib_validator(self):
+        """Prompt the user to select a .bib file and open the BibTeX Reference
+        Checker window. This is fully independent of the OpenAlex fetch workflow
+        and never modifies the selected file."""
+        path, _ = QFileDialog.getOpenFileName(
+            self, "Select BibTeX File to Check", self.output_dir, "BibTeX Files (*.bib);;All Files (*)"
+        )
+        if not path:
+            return
+        
+        try:
+            entries, parse_errors = parse_bib_file(path)
+        except Exception as e:
+            QMessageBox.critical(self, "Error Reading File", f"Could not read/parse the BibTeX file:\n{e}")
+            return
+        
+        if parse_errors:
+            self.log_message(f"⚠️ {len(parse_errors)} issue(s) while parsing {os.path.basename(path)}:")
+            for err in parse_errors[:10]:
+                self.log_message(f"   • {err}")
+        
+        if not entries:
+            QMessageBox.warning(
+                self, "No Entries Found",
+                f"No valid BibTeX entries could be parsed from:\n{path}\n\n"
+                + ("\n".join(parse_errors[:5]) if parse_errors else "The file may be empty or malformed.")
+            )
+            return
+        
+        self.log_message(f"🔎 Loaded {len(entries)} BibTeX entries from {os.path.basename(path)}")
+        
+        validator = BibValidatorWindow(path, entries, self)
+        self.bib_validator_windows.append(validator)
+        validator.show()
 
 def main():
     app = QApplication(sys.argv)
