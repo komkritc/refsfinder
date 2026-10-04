@@ -883,6 +883,47 @@ def lookup_title(title, session, timeout=15):
 
     return 'error', None, cr_err or oa_err or "Unknown error contacting Crossref/OpenAlex"
 
+UNPAYWALL_EMAIL = "refsfinder@example.com"
+
+def find_pdf_url_for_doi(doi, session, timeout=15):
+    """Try to resolve a real, directly-downloadable PDF URL for a DOI using
+    Unpaywall (preferred, returns genuine OA PDF links) and falling back to
+    OpenAlex's best_oa_location/locations PDF URLs. Returns the PDF URL
+    string, or None if no open-access PDF could be found."""
+    doi = normalize_doi(doi)
+    if not doi:
+        return None
+
+    status, data, err = _http_get(
+        session, f"https://api.unpaywall.org/v2/{doi}",
+        params={"email": UNPAYWALL_EMAIL}, timeout=timeout
+    )
+    if status == 200 and data:
+        best = data.get('best_oa_location') or {}
+        pdf_url = best.get('url_for_pdf') or best.get('url')
+        if pdf_url:
+            return pdf_url
+        for loc in data.get('oa_locations', []) or []:
+            pdf_url = loc.get('url_for_pdf') or loc.get('url')
+            if pdf_url:
+                return pdf_url
+
+    oa_status, oa_data, oa_err = _http_get(
+        session, f"https://api.openalex.org/works/https://doi.org/{doi}", timeout=timeout
+    )
+    if oa_status == 200 and oa_data:
+        for loc_key in ('best_oa_location', 'primary_location'):
+            loc = oa_data.get(loc_key) or {}
+            if isinstance(loc, dict):
+                pdf_url = loc.get('pdf_url')
+                if pdf_url:
+                    return pdf_url
+        for loc in oa_data.get('locations', []) or []:
+            if isinstance(loc, dict) and loc.get('pdf_url'):
+                return loc['pdf_url']
+
+    return None
+
 
 def compare_metadata(bib_entry, record):
     """Compare a parsed BibTeX entry against an authoritative record.
@@ -2125,10 +2166,9 @@ class BibValidatorWindow(QMainWindow):
         self.stop_btn.clicked.connect(self.stop_validation)
         action_layout.addWidget(self.stop_btn)
 
-        self.fix_btn = QPushButton("🛠️ Fix References")
-        self.fix_btn.setObjectName("success")
-        self.fix_btn.clicked.connect(self.fix_references)
-        action_layout.addWidget(self.fix_btn)
+        self.open_pdf_btn = QPushButton("📄 Open Paper (PDF)")
+        self.open_pdf_btn.clicked.connect(self.open_selected_pdf)
+        action_layout.addWidget(self.open_pdf_btn)
 
         self.remove_selected_btn = QPushButton("🗑️ Remove Selected")
         self.remove_selected_btn.clicked.connect(self.remove_selected)
@@ -2407,36 +2447,65 @@ class BibValidatorWindow(QMainWindow):
     def _selected_rows(self):
         return sorted(set(idx.row() for idx in self.table.selectedIndexes()))
 
-    def fix_references(self):
-        """Apply automatic correction to entries with a reliable authoritative
-        match. Never touches entries without a trustworthy match."""
-        fixable_rows = [i for i, r in enumerate(self.results) if is_result_fixable(r)]
-        if not fixable_rows:
-            QMessageBox.information(
-                self, "Nothing to Fix",
-                "No references currently have a reliable authoritative match to fix.\n"
-                "Run validation first, or review warnings/invalid entries manually."
-            )
+    def open_selected_pdf(self):
+        """Resolve and open the real PDF (open-access full text) for the
+        selected reference's DOI, falling back to the DOI landing page / URL
+        if no direct PDF link can be found."""
+        rows = self._selected_rows()
+        if not rows:
+            QMessageBox.information(self, "No Selection", "Select a reference to open its paper.")
+            return
+        if len(rows) > 1:
+            QMessageBox.information(self, "Select One Reference", "Please select only one reference to open.")
             return
 
+        row = rows[0]
+        entry = self.entries[row]
+        fields = entry.get('fields', {})
+        result = self.results[row]
+
+        doi = normalize_doi(fields.get('doi', ''))
+        if not doi and result and result.get('matched_record'):
+            doi = normalize_doi(result['matched_record'].get('doi', ''))
+
+        if not doi:
+            url = fields.get('url', '')
+            if url:
+                webbrowser.open(url)
+            else:
+                QMessageBox.information(self, "No DOI", "This reference has no DOI or URL to open.")
+            return
+
+        self.status_bar.showMessage(f"🔎 Looking up PDF for DOI {doi}...")
+        self.open_pdf_btn.setEnabled(False)
+
+        worker = PdfLookupWorker(row, doi, timeout=15)
+        worker.signals.found.connect(self.on_pdf_found)
+        worker.signals.not_found.connect(self.on_pdf_not_found)
+        worker.signals.error.connect(self.on_pdf_error)
+        self.threadpool.start(worker)
+
+    def on_pdf_found(self, row, pdf_url):
+        self.open_pdf_btn.setEnabled(True)
+        self.status_bar.showMessage(f"✅ Opening PDF: {pdf_url}")
+        webbrowser.open(pdf_url)
+
+    def on_pdf_not_found(self, row, reason):
+        self.open_pdf_btn.setEnabled(True)
+        doi = normalize_doi(self.entries[row].get('fields', {}).get('doi', '')) if row < len(self.entries) else ''
         reply = QMessageBox.question(
-            self, "Fix References",
-            f"{len(fixable_rows)} reference(s) have a reliable match and can be "
-            f"automatically corrected (title, authors, journal, year, volume, issue, "
-            f"pages, DOI, URL, publisher).\n\nThis only changes the in-memory copy; "
-            f"the original file is never modified. Continue?",
+            self, "No PDF Found",
+            f"{reason}\n\nOpen the DOI landing page instead?",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
-        if reply != QMessageBox.StandardButton.Yes:
-            return
+        if reply == QMessageBox.StandardButton.Yes and doi:
+            webbrowser.open(f"https://doi.org/{doi}")
+        self.status_bar.showMessage(reason)
 
-        for row in fixable_rows:
-            fixed = fix_bib_entry(self.entries[row], self.results[row].get('matched_record'))
-            self.entries[row] = fixed
-            self.refresh_row(row)
-
-        QMessageBox.information(self, "Fixed", f"Updated metadata for {len(fixable_rows)} reference(s).\n"
-                                               f"Use 'Save Validated BibTeX' to write a new file.")
+    def on_pdf_error(self, row, message):
+        self.open_pdf_btn.setEnabled(True)
+        QMessageBox.warning(self, "PDF Lookup Failed", f"Could not look up PDF: {message}")
+        self.status_bar.showMessage(f"⚠️ PDF lookup failed: {message}")
 
     def remove_selected(self):
         rows = self._selected_rows()
@@ -2711,6 +2780,35 @@ class BibValidationWorker(QRunnable):
             self.signals.finished.emit(results)
         except Exception as e:
             self.signals.error.emit(f"Error during validation: {str(e)}")
+
+class PdfLookupSignals(QObject):
+    """Signals emitted by PdfLookupWorker."""
+    found = pyqtSignal(int, str)        # row, pdf_url
+    not_found = pyqtSignal(int, str)    # row, reason
+    error = pyqtSignal(int, str)        # row, error message
+
+class PdfLookupWorker(QRunnable):
+    """Background worker that resolves a real, open-access PDF URL for a
+    single BibTeX entry's DOI (via Unpaywall, falling back to OpenAlex),
+    without freezing the GUI."""
+
+    def __init__(self, row, doi, timeout=15):
+        super().__init__()
+        self.row = row
+        self.doi = doi
+        self.timeout = timeout
+        self.signals = PdfLookupSignals()
+
+    def run(self):
+        try:
+            session = build_bib_session()
+            pdf_url = find_pdf_url_for_doi(self.doi, session, timeout=self.timeout)
+            if pdf_url:
+                self.signals.found.emit(self.row, pdf_url)
+            else:
+                self.signals.not_found.emit(self.row, "No open-access PDF could be found for this DOI.")
+        except Exception as e:
+            self.signals.error.emit(self.row, str(e))
 
 
 class ThemeManager:
@@ -3363,6 +3461,7 @@ class OpenAlexGUI(QMainWindow):
         # Open explorer with papers
         explorer = PaperExplorerWindow(self.fetched_papers, self)
         explorer.show()
+        center_window_on_screen(explorer)
     
     def open_bib_validator(self):
         """Prompt the user to select a .bib file and open the BibTeX Reference
@@ -3398,6 +3497,17 @@ class OpenAlexGUI(QMainWindow):
         validator = BibValidatorWindow(path, entries, self)
         self.bib_validator_windows.append(validator)
         validator.show()
+        center_window_on_screen(validator)
+
+def center_window_on_screen(window):
+    """Move a top-level window so it is centered on the primary screen."""
+    screen = window.screen() if window.screen() else QApplication.primaryScreen()
+    if not screen:
+        return
+    screen_geometry = screen.availableGeometry()
+    frame_geometry = window.frameGeometry()
+    frame_geometry.moveCenter(screen_geometry.center())
+    window.move(frame_geometry.topLeft())
 
 def main():
     app = QApplication(sys.argv)
@@ -3406,6 +3516,7 @@ def main():
     
     window = OpenAlexGUI()
     window.show()
+    center_window_on_screen(window)
     
     sys.exit(app.exec())
 
